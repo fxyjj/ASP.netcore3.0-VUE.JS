@@ -568,11 +568,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\Borgwarner_MisSys\\aspVue7\\aspVue7.csproj",
+      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
       "projectName": "aspVue7",
-      "projectPath": "C:\\Users\\Administrator\\Desktop\\Borgwarner_MisSys\\aspVue7\\aspVue7.csproj",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\Desktop\\Borgwarner_MisSys\\aspVue7\\obj\\",
+      "outputPath": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UfqASPkRpt0WDDbarYnrg+v3jUlnaQp53iB8mimjxbak/chTXwt1iaAl9pDq6hR14rjP1m7uAIUSQUFRrNfCzQ==",
+  "dgSpecHash": "+SndJJoXtfQTl8G4NdvpsIlbDay4JnKdhaplXc/lDkzmiT/hmDaZ1+T9NnYTKN6BwVgLAHIY0/a/XKZreRVkVg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\Borgwarner_MisSys\\aspVue7\\aspVue7.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.nodeservices\\3.0.0\\microsoft.aspnetcore.nodeservices.3.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.spaservices\\3.0.0\\microsoft.aspnetcore.spaservices.3.0.0.nupkg.sha512",
