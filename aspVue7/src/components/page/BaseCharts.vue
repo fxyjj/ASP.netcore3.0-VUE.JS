@@ -22,12 +22,14 @@
                     v-model="value2"
                     type="daterange"
                     align="right"
+                    value-format="yyyy-MM-dd"
                     unlink-panels
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     :picker-options="pickerOptions">
                 </el-date-picker>
+                <el-button @click="startPlant">开始渲染</el-button>
 
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
@@ -45,8 +47,9 @@
                 >vue-schart</a>
             </div>
             <div class="schart-box">
-                <div class="content-title">柱状图</div>
-                <schart class="schart" canvasId="bar" :options="options1"></schart>
+                <!-- <div class="content-title">柱状图</div>
+                <schart class="schart" canvasId="bar" :options="options1"></schart> -->
+                <v-Echart></v-Echart>
             </div>
             <div class="schart-box">
                 <div class="content-title">折线图</div>
@@ -66,10 +69,13 @@
 
 <script>
 import Schart from 'vue-schart';
+import vEchart from './charts/OEEchart';
+import bus from '../common/bus'
 export default {
     name: 'basecharts',
     components: {
-        Schart
+        Schart,
+        vEchart
     },
     data() {
         return {
@@ -89,34 +95,34 @@ export default {
                        {indexId:2,name:"周"},
                        {indexId:3,name:"月"}],
             
-             pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        value2: '',
+            pickerOptions: {
+                shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }]
+            },
+            value2: '',
 
 
             options1: {
@@ -212,6 +218,12 @@ export default {
             this.dtUnit = indx;
             // eslint-disable-next-line no-console
             console.log(indx)
+        },
+        startPlant(){
+           
+            bus.$emit("Query",{dateunit:this.dtUnit,prodline:this.plName,starttime:this.value2[0],endtime:this.value2[1]})
+            // eslint-disable-next-line no-console
+            console.log(this.dtUnit+" "+this.plName+" "+this.value2[0]+" "+this.value2[1]);
         }
     }
 };

@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VueCliMiddleware;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Newtonsoft.Json;
 
 namespace aspVue7
 {
@@ -25,6 +28,8 @@ namespace aspVue7
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);   
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
@@ -45,9 +50,21 @@ namespace aspVue7
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+              {
+                  endpoints.MapControllerRoute(
+                      name: "default",
+                      pattern: "{controller=Home}/{action=Index}/{id?}");
+ 
+             });
+
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     // endpoints.MapControllers();
+            //     endpoints.MapControllerRoute(
+            //         name:"default",
+            //         pattern:"api/{controller=Home}/{action=Index}/{id?}"
+            //     );
+            // });
 
             app.UseSpa(spa =>
             {
@@ -62,6 +79,18 @@ namespace aspVue7
                 }
 
             });
+            // app.UseCors("cors");
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+
+            //     routes.MapSpaFallbackRoute(
+            //         name: "spa-fallback",
+            //         defaults: new { controller = "Home", action = "Index" });
+            // });
+            
         }
     }
 }
