@@ -1,5 +1,5 @@
 <template>
- <div id="OEEchart" :style="{width:'600px',height:'320px'}"></div> 
+ <div id="FTTchart" :style="{width:'600px',height:'320px'}"></div> 
 
 </template>
 <script>
@@ -12,7 +12,7 @@ import bus from '../../common/bus';
 // }
 
 export default {
-    name:"OEEchart",
+    name:"FTTchart",
     data() {
         return{
             input2: 'i2',
@@ -36,19 +36,19 @@ export default {
             prodLine:"",
             option : {
                 title: {
-                    text: 'OEE'
+                    text: 'FTT'
                 },
                 tooltip: {},
                 legend: {
                     selectMode:true,
-                    data:['OEE','目标']
+                    data:['FTT','目标']
                 },
                 xAxis: {
                     data: ["1","2","3","4","5","6"]
                 },
                 yAxis: {},
                 series: [{
-                            name: 'OEE',
+                            name: 'FTT',
                             type: 'bar',
                             // data: [5,20,36,10,10,20],
                             data:[{value:5,color:'#000'},
@@ -124,7 +124,7 @@ export default {
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 
-                var index = {value:Number(i.oee.toFixed(1)),color:i.oee>i.目标?'#B5C334':'#C1232B'};
+                var index = {value:Number(i.一次合格率.toFixed(1)),color:i.一次合格率>i.目标?'#B5C334':'#C1232B'};
                 this.barYdata.push(index);
                 this.lineYdata.push(i.目标);
             }
@@ -134,7 +134,7 @@ export default {
             this.option.series[0].data = this.barYdata;
             this.option.series[1].data = this.lineYdata;
 
-            // this.jack = document.getElementById("OEEchart");
+            // this.jack = document.getElementById("FTTchart");
             // this.charts = echarts.init(this.jack);
             // eslint-disable-next-line no-console
             console.log("this is the param: ");
@@ -142,7 +142,7 @@ export default {
         },
          //后端数据请求。
         getInfor(){
-            fetch('api/Chartdata/OEEchartQuery' ,{
+            fetch('api/Chartdata/FTTchartQuery' ,{
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ export default {
                 // console.log("data from back end : "+this.cdate[0].目标);
                 // eslint-disable-next-line no-console
                 console.log("data from back end : "+this.cdate.length);
-                // alert('jack'+data);
+                // alert('jack'+this.cdate);
             }).catch(data => {
                 alert(data);
             })
@@ -179,15 +179,15 @@ export default {
             this.prodLine = stime.prodline;
             this.getInfor()
             // eslint-disable-next-line no-console
-            console.log("oeethis is start time : "+this.startTime)
+            console.log("fttthis is start time : "+this.startTime)
              // eslint-disable-next-line no-console
-            console.log("oeethis is end time : "+this.endTime)
+            console.log("fttthis is end time : "+this.endTime)
              // eslint-disable-next-line no-console
-            console.log("oeethis is date unit : "+this.dateUnit)
+            console.log("fttthis is date unit : "+this.dateUnit)
              // eslint-disable-next-line no-console
-            console.log("oeethis is product line : "+this.prodLine)
+            console.log("fttthis is product line : "+this.prodLine)
             });
-            var jack = document.getElementById("OEEchart");
+            var jack = document.getElementById("FTTchart");
             this.charts = echarts.init(jack);
             // eslint-disable-next-line no-console
             console.log("this is the param: ");

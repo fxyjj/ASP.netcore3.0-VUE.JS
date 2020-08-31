@@ -73,17 +73,19 @@ namespace aspVue7.Controllers
             return testData; 
         }
 
+        [Route("api/[controller]")]
         [HttpPost("[action]")]
-        public List<Effset> EffchartQuery([FromBody] queryParam prm){
+        public List<EFFset> EFFchartQuery([FromBody] queryParam prm){
             var model = new BorgWarnerMisSQLContext();
             var p1 = prm.prodLine;
             var p2 = prm.dateUnit;
             var s = prm.start.Date;
             var e = prm.end.Date;
-            var testData = model.Database.SqlQuery<Effset>($"EXECUTE dbo.QforEff @prodline='{p1}',@du='{p2}',@start='{s}',@end='{e}'").ToList();
+            var testData = model.Database.SqlQuery<EFFset>($"EXECUTE dbo.QforEff @prodline='{p1}',@du='{p2}',@start='{s}',@end='{e}'").ToList();
             return testData; 
         }
 
+        [Route("api/[controller]")]
         [HttpPost("[action]")]
         public List<FTTset> FTTchartQuery([FromBody] queryParam prm){
             var model = new BorgWarnerMisSQLContext();
@@ -122,7 +124,7 @@ namespace aspVue7.Controllers
         public double 目标 { get; set; }
     }
 
-    public class Effset{
+    public class EFFset{
         public string dateunit { get; set; }
         public double 员工效率 { get; set; }
         public double 目标 { get; set; }

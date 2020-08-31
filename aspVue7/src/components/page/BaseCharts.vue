@@ -49,15 +49,17 @@
             <div class="schart-box">
                 <!-- <div class="content-title">柱状图</div>
                 <schart class="schart" canvasId="bar" :options="options1"></schart> -->
-                <v-Echart></v-Echart>
+                <o-e-echart></o-e-echart>
             </div>
             <div class="schart-box">
-                <div class="content-title">折线图</div>
-                <schart class="schart" canvasId="line" :options="options2"></schart>
+                <!-- <div class="content-title">折线图</div>
+                <schart class="schart" canvasId="line" :options="options2"></schart> -->
+               <e-f-fchart></e-f-fchart>
             </div>
             <div class="schart-box">
-                <div class="content-title">饼状图</div>
-                <schart class="schart" canvasId="pie" :options="options3"></schart>
+                <!-- <div class="content-title">饼状图</div>
+                <schart class="schart" canvasId="pie" :options="options3"></schart> -->
+                <f-t-tchart></f-t-tchart>
             </div>
             <div class="schart-box">
                 <div class="content-title">环形图</div>
@@ -69,13 +71,18 @@
 
 <script>
 import Schart from 'vue-schart';
-import vEchart from './charts/OEEchart';
+import OEEchart from './charts/OEEchart.vue';
+import EFFchart from './charts/EFFchart.vue';
+import FTTchart from './charts/FTTchart.vue';
+
 import bus from '../common/bus'
 export default {
     name: 'basecharts',
     components: {
         Schart,
-        vEchart
+        OEEchart,
+        EFFchart,
+        FTTchart
     },
     data() {
         return {
