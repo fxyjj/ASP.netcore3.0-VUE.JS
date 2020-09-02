@@ -31,8 +31,49 @@
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
+                <el-table-column prop="id" label="班次日期" width="55" align="center"></el-table-column>
+                <el-table-column prop="name" label="加工人员"></el-table-column>
+                <el-table-column prop="name" label="合格率"></el-table-column>
+                <el-table-column prop="name" label="员工效率"></el-table-column>
+                <el-table-column prop="name" label="设备开动率"></el-table-column>
+                <el-table-column prop="name" label="OEE"></el-table-column>
+                <el-table-column prop="name" label="一次合格率"></el-table-column>
+                <el-table-column prop="name" label="返工合格数量"></el-table-column>
+                <el-table-column prop="name" label="停机率"></el-table-column>
+                <el-table-column prop="name" label="所属班组"></el-table-column>
+                <el-table-column prop="name" label="加工单元"></el-table-column>
+                <el-table-column prop="name" label="作业单号"></el-table-column>
+                <el-table-column prop="name" label="物料编号"></el-table-column>
+                <el-table-column prop="name" label="物料描述"></el-table-column>
+                <el-table-column prop="name" label="工序号"></el-table-column>
+                <el-table-column prop="name" label="工序名称"></el-table-column>
+                <el-table-column prop="name" label="定额件数"></el-table-column>
+                <el-table-column prop="name" label="定额人数"></el-table-column>
+                <el-table-column prop="name" label="生产人数"></el-table-column>
+                <el-table-column prop="name" label="调试开始时间"></el-table-column>
+                <el-table-column prop="name" label="调试时间"></el-table-column>
+                <el-table-column prop="name" label="调试暂停"></el-table-column>
+                <el-table-column prop="name" label="调试结束时间"></el-table-column>
+                <el-table-column prop="name" label="作业开始时间"></el-table-column>
+                <el-table-column prop="name" label="作业完工时间"></el-table-column>
+                <el-table-column prop="name" label="计划停机时间"></el-table-column>
+                <el-table-column prop="name" label="非计划停机时间"></el-table-column>
+                <el-table-column prop="name" label="完工数量"></el-table-column>
+                <el-table-column prop="name" label="合格数量"></el-table-column>
+                <el-table-column prop="name" label="不良数量"></el-table-column>
+                <el-table-column prop="name" label="料废"></el-table-column>
+                <el-table-column prop="name" label="机废"></el-table-column>
+                <el-table-column prop="name" label="调废"></el-table-column>
+                <el-table-column prop="name" label="工废"></el-table-column>
+                <el-table-column prop="name" label="待处理"></el-table-column>
+                <el-table-column prop="name" label="理论时间"></el-table-column>
+                <el-table-column prop="name" label="计划工作时间"></el-table-column>
+                <el-table-column prop="name" label="操作时间"></el-table-column>
+                <el-table-column prop="name" label="定额产量"></el-table-column>
+                <el-table-column prop="name" label="报工类别"></el-table-column>
+                <el-table-column prop="name" label="状态"></el-table-column>
+                <el-table-column prop="name" label="调试到完工"></el-table-column>
+                <el-table-column prop="name" label="作业到完工"></el-table-column>
                 <el-table-column label="账户余额">
                     <template slot-scope="scope">￥{{scope.row.money}}</template>
                 </el-table-column>
@@ -102,7 +143,7 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+// import { fetchData } from '../../api/index';
 export default {
     name: 'basetable',
     data() {
@@ -129,13 +170,22 @@ export default {
     },
     methods: {
         // 获取 easy-mock 的模拟数据
-        getData() {
-            fetchData(this.query).then(res => {
+        // getData() {
+        //     fetchData(this.query).then(res => {
+        //         // eslint-disable-next-line no-console
+        //         console.log(res);
+        //         this.tableData = res.list;
+        //         this.pageTotal = res.pageTotal || 50;
+        //     });
+        // },
+        getData(){
+              fetch('../../../static/table.json')
+            // .then(response => response.json())
+            .then(response => {
                 // eslint-disable-next-line no-console
-                console.log(res);
-                this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
-            });
+                console.log(response.body);
+                alert(response.text());
+                });
         },
         // 触发搜索按钮
         handleSearch() {

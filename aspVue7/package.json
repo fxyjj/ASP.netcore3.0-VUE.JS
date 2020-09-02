@@ -15,7 +15,9 @@
     "element-ui": "^2.13.2",
     "file-loader": "^6.0.0",
     "vue": "^2.6.10",
+    "vue-cli": "^2.9.6",
     "vue-router": "^3.4.3",
+    "vue-schart": "^2.0.0",
     "vuedraggable": "^2.24.1"
   },
   "devDependencies": {

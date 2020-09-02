@@ -35,11 +35,11 @@ export default new Router({
                 //     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
                 //     meta: { title: 'tab选项卡' }
                 // },
-                // {
-                //     path: '/form',
-                //     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                //     meta: { title: '基本表单' }
-                // },
+                {
+                    path: '/form',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
+                    meta: { title: '基本表单' }
+                },
                 // {
                 //     // 富文本编辑器组件
                 //     path: '/editor',

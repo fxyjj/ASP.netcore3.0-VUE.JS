@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj": {}
+    "C:\\Users\\sexiao\\Desktop\\WebAPP\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj": {
+    "C:\\Users\\sexiao\\Desktop\\WebAPP\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
+        "projectUniqueName": "C:\\Users\\sexiao\\Desktop\\WebAPP\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
         "projectName": "aspVue7",
-        "projectPath": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\Desktop\\ASP.netcore3.0-VUE.JS\\aspVue7\\obj\\",
+        "projectPath": "C:\\Users\\sexiao\\Desktop\\WebAPP\\ASP.netcore3.0-VUE.JS\\aspVue7\\aspVue7.csproj",
+        "packagesPath": "C:\\Users\\sexiao\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sexiao\\Desktop\\WebAPP\\ASP.netcore3.0-VUE.JS\\aspVue7\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\sexiao\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -46,13 +44,13 @@
               "target": "Package",
               "version": "[3.1.7, )"
             },
-            "Microsoft.AspNetCore.Mvc.Routing": {
-              "target": "Package",
-              "version": "[*, )"
-            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[3.1.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer.Design": {
+              "target": "Package",
+              "version": "[1.1.6, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -83,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

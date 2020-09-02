@@ -1,5 +1,5 @@
 <template>
- <div id="EFFchart" :style="{width:'700px',height:'320px'}"></div> 
+ <div id="TJLchart" :style="{width:'700px',height:'320px'}"></div> 
 
 </template>
 <script>
@@ -12,7 +12,7 @@ import bus from '../../common/bus';
 // }
 
 export default {
-    name:"EFFchart",
+    name:"TJLchart",
     data() {
         return{
             input2: 'i2',
@@ -36,22 +36,22 @@ export default {
             prodLine:"",
             option : {
                 title: {
-                    text: '员工效率'
+                    text: '停机率'
                 },
                 tooltip: {},
                 legend: {
                     selectMode:true,
-                    data:['员工效率','目标']
+                    data:['停机率','目标']
                 },
                 xAxis: {
                     data: ["1","2","3","4","5","6"]
                 },
                 yAxis: {},
                 series: [{
-                            name: '员工效率',
+                            name: '停机率',
                             type: 'bar',
                             // data: [5,20,36,10,10,20],
-                             data:[{value:3,color:'#C0504D'},
+                            data:[{value:3,color:'#C0504D'},
                                 {value:7,color:'#C0504D'},
                                 {value:12,color:'#C0504D'},
                                 {value:6,color:'#C0504D'},
@@ -108,7 +108,7 @@ export default {
             handler:function(newval,oldval){
                 if(newval !== oldval){
                     // eslint-disable-next-line no-console
-                    console.log(newval+" 到 "+oldval)
+                    console.log('tjl'+oldval+" 到 "+newval)
                     this.getPage()
                 }
                 
@@ -129,7 +129,7 @@ export default {
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 
-                var index = {value:Number(i.员工效率.toFixed(1)),color:i.员工效率>i.目标?'#3CB371':'#C0504D'};
+                var index = {value:Number(i.停机率.toFixed(1)),color:i.停机率>i.目标?'#3CB371':'#C0504D'};
                 this.barYdata.push(index);
                 this.lineYdata.push(i.目标);
             }
@@ -147,7 +147,7 @@ export default {
         },
          //后端数据请求。
         getInfor(){
-            fetch('api/Chartdata/EFFchartQuery' ,{
+            fetch('api/Chartdata/TJLchartQuery' ,{
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -168,7 +168,7 @@ export default {
                 // eslint-disable-next-line no-console
                 // console.log("data from back end : "+this.cdate[0].目标);
                 // eslint-disable-next-line no-console
-                console.log("data from back end : "+this.cdate.length);
+                console.log("tjl : "+this.cdate);
                 // alert('jack'+this.cdate);
             }).catch(data => {
                 alert(data);
@@ -192,7 +192,7 @@ export default {
              // eslint-disable-next-line no-console
             console.log("effthis is product line : "+this.prodLine)
             });
-            var jack = document.getElementById("EFFchart");
+            var jack = document.getElementById("TJLchart");
             this.charts = echarts.init(jack);
             // eslint-disable-next-line no-console
             console.log("effthis is the param: ");

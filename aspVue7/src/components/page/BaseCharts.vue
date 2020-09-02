@@ -2,7 +2,25 @@
 <template>
     <div>
         <div class="crumbs">
+               
+
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <i class="el-icon-pie-chart"></i> OEE
+                </el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container">
+            <div class="plugins-tips">
                 <el-dropdown trigger="click">
+                    <span class="el-dropdown-link">
+                        <el-button>{{group}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item v-for="item in stationGroup" :key="item.indexId" v-bind:value="item.indexId" ><a @click="setGroupVal(item.name)">{{item.name}}</a></el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+               <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
                         <el-button>{{plName}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                     </span>
@@ -29,22 +47,7 @@
                     end-placeholder="结束日期"
                     :picker-options="pickerOptions">
                 </el-date-picker>
-                <el-button @click="startPlant">开始渲染</el-button>
-
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-pie-chart"></i> schart图表
-                </el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-            <div class="plugins-tips">
-                vue-schart：vue.js封装sChart.js的图表组件。
-                访问地址：
-                <a
-                    href="https://github.com/lin-xin/vue-schart"
-                    target="_blank"
-                >vue-schart</a>
+                <el-button @click="startPlant" :style="{float:'right'}">开始渲染</el-button>
             </div>
             <div class="schart-box">
                 <!-- <div class="content-title">柱状图</div>
@@ -62,30 +65,31 @@
                 <f-t-tchart></f-t-tchart>
             </div>
             <div class="schart-box">
-                <div class="content-title">环形图</div>
-                <schart class="schart" canvasId="ring" :options="options4"></schart>
+                <t-j-lchart></t-j-lchart>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import Schart from 'vue-schart';
+// import Schart from 'vue-schart';
 import OEEchart from './charts/OEEchart.vue';
 import EFFchart from './charts/EFFchart.vue';
 import FTTchart from './charts/FTTchart.vue';
+import TJLchart from './charts/TJLchart.vue';
 
 import bus from '../common/bus'
 export default {
     name: 'basecharts',
     components: {
-        Schart,
         OEEchart,
         EFFchart,
-        FTTchart
+        FTTchart,
+        TJLchart
     },
     data() {
         return {
+            group:"工作组",
             plName: "产线名称",
             dtUnit: "日期单位",
             prodLine:[{indexId:1,name:"GEN_III_A+M"},
@@ -101,6 +105,9 @@ export default {
             dateUnit:[{indexId:1,name:"日"},
                        {indexId:2,name:"周"},
                        {indexId:3,name:"月"}],
+            stationGroup:[{indexId:1,name:"EGR线"},
+                          {indexId:2,name:"Cooler/Module线"},
+                          {indexId:3,name:"电子线"}],
             
             pickerOptions: {
                 shortcuts: [{
@@ -231,6 +238,11 @@ export default {
             bus.$emit("Query",{dateunit:this.dtUnit,prodline:this.plName,starttime:this.value2[0],endtime:this.value2[1]})
             // eslint-disable-next-line no-console
             console.log(this.dtUnit+" "+this.plName+" "+this.value2[0]+" "+this.value2[1]);
+        },
+        setGroupVal(indx){
+            this.group = indx;
+            // eslint-disable-next-line no-console
+            console.log(indx);
         }
     }
 };
@@ -239,7 +251,7 @@ export default {
 <style scoped>
 .schart-box {
     display: inline-block;
-    margin: 20px;
+    margin: 10px;
 }
 .schart {
     width: 600px;

@@ -1,5 +1,5 @@
 <template>
- <div id="FTTchart" :style="{width:'600px',height:'320px'}"></div> 
+ <div id="FTTchart" :style="{width:'700px',height:'320px'}"></div> 
 
 </template>
 <script>
@@ -36,27 +36,27 @@ export default {
             prodLine:"",
             option : {
                 title: {
-                    text: 'FTT'
+                    text: '一次合格率'
                 },
                 tooltip: {},
                 legend: {
                     selectMode:true,
-                    data:['FTT','目标']
+                    data:['一次合格率','目标']
                 },
                 xAxis: {
                     data: ["1","2","3","4","5","6"]
                 },
                 yAxis: {},
                 series: [{
-                            name: 'FTT',
+                            name: '一次合格率',
                             type: 'bar',
                             // data: [5,20,36,10,10,20],
-                            data:[{value:5,color:'#000'},
-                                {value:20,color:'#C1232B'},
-                                {value:36,color:'#C1232B'},
-                                {value:10,color:'#C1232B'},
-                                {value:10,color:'#C1232B'},
-                                {value:20,color:'#C1232B'}],
+                          data:[{value:3,color:'#C0504D'},
+                                {value:7,color:'#C0504D'},
+                                {value:12,color:'#C0504D'},
+                                {value:6,color:'#C0504D'},
+                                {value:5,color:'#C0504D'},
+                                {value:1,color:'#C0504D'}],
                             itemStyle:{
                                 normal:{
                                     label:{
@@ -91,7 +91,12 @@ export default {
                             type: 'line',
                             data: [5,20,36,10,10,20],
                             itemStyle:{
-                                color: ["#000"]
+                                color: ["#0070C0"]
+                            },
+                            lineStyle:{
+                                normal:{
+                                    width:3
+                                }
                             }
                         }
                         ],
@@ -124,7 +129,7 @@ export default {
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 
-                var index = {value:Number(i.一次合格率.toFixed(1)),color:i.一次合格率>i.目标?'#B5C334':'#C1232B'};
+                var index = {value:Number(i.一次合格率.toFixed(1)),color:i.一次合格率>i.目标?'#3CB371':'#C0504D'};
                 this.barYdata.push(index);
                 this.lineYdata.push(i.目标);
             }

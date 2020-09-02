@@ -81,7 +81,7 @@ namespace aspVue7.Controllers
             var p2 = prm.dateUnit;
             var s = prm.start.Date;
             var e = prm.end.Date;
-            var testData = model.Database.SqlQuery<EFFset>($"EXECUTE dbo.QforEff @prodline='{p1}',@du='{p2}',@start='{s}',@end='{e}'").ToList();
+            var testData = model.Database.SqlQuery<EFFset>($"EXECUTE dbo.QforEFF @prodline='{p1}',@du='{p2}',@start='{s}',@end='{e}'").ToList();
             return testData; 
         }
 
@@ -97,25 +97,25 @@ namespace aspVue7.Controllers
             return testData; 
         }
 
-
+        [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<TJLset> TJLchartQuery([FromBody] queryParam prm){
+            var model = new BorgWarnerMisSQLContext();
+            var p1 = prm.prodLine;
+            var p2 = prm.dateUnit;
+            var s = prm.start.Date;
+            var e = prm.end.Date;
+            var testData = model.Database.SqlQuery<TJLset>($"EXECUTE dbo.QforTJL @prodline='{p1}',@du='{p2}',@start='{s}',@end='{e}'").ToList();
+            return testData; 
+        }
     }
+    
     public class seDate{
         public DateTime start { get; set; }
         public DateTime end { get; set; }
     }
 
-    public class corssChartData{
-         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Age { get; set; }
-        public string Phone { get; set; }
-        public string Addr { get; set; }
-        public DateTime Birthdate { get; set; }
-        public DateTime Birthdate2 { get; set; }
-        public int Column1 { get; set; }
-        public string Column2 { get; set; }
-        public string Column3 { get; set; }
-    }
+
 
      //OEEset类用于存放数据库返回的数据集
     public class OEEset{
@@ -133,6 +133,13 @@ namespace aspVue7.Controllers
     public class FTTset{
         public string dateunit { get; set; }
         public double 一次合格率 { get; set; }
+        public double 目标 { get; set; }
+    }
+
+    public class TJLset{
+
+        public string dateunit { get; set; }
+        public double 停机率 { get; set; }
         public double 目标 { get; set; }
     }
     

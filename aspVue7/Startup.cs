@@ -13,7 +13,7 @@ using VueCliMiddleware;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.AspNetCore.Mvc.Cors;
 using Newtonsoft.Json;
-
+using aspVue7.Model;
 namespace aspVue7
 {
     public class Startup
@@ -28,7 +28,8 @@ namespace aspVue7
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            //数据库连接语句
+            BorgWarnerMisSQLContext.ConnectionString = Configuration.GetConnectionString("nbjsMESContext"); 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);   
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>

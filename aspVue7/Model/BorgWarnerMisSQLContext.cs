@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Collections.Generic;
 
+
 namespace aspVue7.Model
 {
     public static class EntityFrameworkCoreExtensions
@@ -61,6 +62,7 @@ namespace aspVue7.Model
             return list;
         }
     }
+
     public partial class BorgWarnerMisSQLContext : DbContext
     {
         public BorgWarnerMisSQLContext()
@@ -90,14 +92,21 @@ namespace aspVue7.Model
         public virtual DbSet<Testfalsk> Testfalsk { get; set; }
         public virtual DbSet<User> User { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=NBELTOFF0007;Database=BorgWarnerMisSQL;Trusted_Connection=True;");
-            }
-        }
+        //数据库链接语句
+        public static string ConnectionString { get; set; } 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(ConnectionString);
+        } 
+
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                 optionsBuilder.UseSqlServer("Server=NBEVSSQL1A;Database=BorgwarnerMisSQL;uid=mis_user;pwd=6yhgt54rf;");
+//             }
+//         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
