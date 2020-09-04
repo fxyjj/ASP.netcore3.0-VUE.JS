@@ -1,5 +1,5 @@
 <template>
- <div id="FTTchart" :style="{width:'700px',height:'320px'}"></div> 
+ <div id="FTTchart" :style="{width:'550px',height:'320px'}"></div> 
 
 </template>
 <script>

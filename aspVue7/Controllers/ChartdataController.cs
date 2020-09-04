@@ -7,9 +7,12 @@ using aspVue7.Model;
 using System.Data;
 using System.Data.SqlClient;//reference from SqlParameter!!!
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json;
+
 namespace aspVue7.Controllers
 {
+    
     [Route("api/[controller]")]
     public class ChartdataController : Controller
     {
@@ -61,7 +64,9 @@ namespace aspVue7.Controllers
         //     // param = JsonConvert.DeserializeAnonymousType(datestr,param);
         //     return date;
         // }
+        
         [Route("api/[controller]")]
+        // [EnableCors]
         [HttpPost("[action]")]
         public List<OEEset> OEEchartQuery([FromBody] queryParam prm){
             var model = new BorgWarnerMisSQLContext();
@@ -87,6 +92,7 @@ namespace aspVue7.Controllers
 
         [Route("api/[controller]")]
         [HttpPost("[action]")]
+
         public List<FTTset> FTTchartQuery([FromBody] queryParam prm){
             var model = new BorgWarnerMisSQLContext();
             var p1 = prm.prodLine;
@@ -99,6 +105,7 @@ namespace aspVue7.Controllers
 
         [Route("api/[controller]")]
         [HttpPost("[action]")]
+
         public List<TJLset> TJLchartQuery([FromBody] queryParam prm){
             var model = new BorgWarnerMisSQLContext();
             var p1 = prm.prodLine;

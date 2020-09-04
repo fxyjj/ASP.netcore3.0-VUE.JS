@@ -5,7 +5,7 @@
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                        <el-button slot="prepend" icon="el-icon-user"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -15,7 +15,7 @@
                         v-model="param.password"
                         @keyup.enter.native="submitForm()"
                     >
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        <el-button slot="prepend" icon="el-icon-lock"></el-button>
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
@@ -32,8 +32,8 @@ export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123123',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -43,18 +43,40 @@ export default {
     },
     methods: {
         submitForm() {
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    // eslint-disable-next-line no-console
-                    console.log("submit error");
-                    return false;
-                }
-            });
+            console.log(this.param.username);
+            if(this.param.username == null || this.param.password == null){
+                this.$message.error('请输入账号户密码！');
+            }else{
+                fetch('api/Login/validate',{
+                            method:'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                username:this.param.username
+                            })
+                        })
+                        // .then(response => response.json())
+                        .then(response => response.text())
+                        .then(data => {
+                            if(this.param.password = data){
+                                this.$message.success('登录成功');
+                                localStorage.setItem('ms_username', this.param.username);
+                                this.$router.push('/');
+                            }else{
+                                this.$message.error('账号或密码错误，请重新输入！');
+                                // eslint-disable-next-line no-console
+                                console.log("submit error");
+                                return false;
+                            }
+                            // eslint-disable-next-line no-console
+                            console.log("pwd : " + data);
+                            // alert('jack'+data);
+                        }).catch(data => {
+                            alert(data);
+                        })
+            }
+           
         },
     },
 };

@@ -1,22 +1,14 @@
 <template>
- <div id="EFFchart" :style="{width:'700px',height:'320px'}"></div> 
-
+ <div id="EFFchart" :style="{width:'550px',height:'320px'}"></div> 
 </template>
 <script>
 import echarts from 'echarts';
 import bus from '../../common/bus';
-// queryData:{
-//     dateunit:'';
-//     oee:0.0;
-//     目标:0.0
-// }
-
 export default {
     name:"EFFchart",
     data() {
         return{
             input2: 'i2',
-            // jack : new HTMLDivElement(),
             cdate : [],
             stime:{
                 dateunit:'',
@@ -61,23 +53,18 @@ export default {
                                 normal:{
                                     label:{
                                         show:true,
-                                        position:'top',
-                                        // textStyle:{}
+                                        position:'top' 
                                     },
-                                    // color:function(params: { dataIndex: string | number;data: number; }) {
                                     color:function(params) {
                                         // build a color map as your need.
                                         var colorList = [
                                             '#C1232B','#B5C334'
                                         ];
-                                        //console.log(params);
                                         // eslint-disable-next-line no-console
                                         console.log("this is dataindex : "+params.data)
-                                        
-                                        //console.log(colorList[params.dataIndex])
                                         //按条件修改柱状图颜色
                                         if(params.data['color'] != undefined){
-                                            // console.log("this one is larger than 10 : "+params.data);
+                                            
                                             return params.data['color'];
                                         }else{
                                             return colorList[1]
@@ -110,12 +97,10 @@ export default {
                     // eslint-disable-next-line no-console
                     console.log(newval+" 到 "+oldval)
                     this.getPage()
-                }
-                
+                }    
         },
         deep:true//对象内部的属性监听，也叫深度监听
       },
-
     },
     methods: {
         //初始化表格横纵坐标
@@ -128,7 +113,6 @@ export default {
             this.lineYdata = [];
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
-                
                 var index = {value:Number(i.员工效率.toFixed(1)),color:i.员工效率>i.目标?'#3CB371':'#C0504D'};
                 this.barYdata.push(index);
                 this.lineYdata.push(i.目标);
@@ -138,9 +122,6 @@ export default {
             this.option.xAxis.data=this.barXdata;
             this.option.series[0].data = this.barYdata;
             this.option.series[1].data = this.lineYdata;
-
-            // this.jack = document.getElementById("EFFchart");
-            // this.charts = echarts.init(this.jack);
             // eslint-disable-next-line no-console
             console.log("this is the param: ");
             this.charts.setOption(this.option);
@@ -160,16 +141,10 @@ export default {
                 })
             })
             .then(response => response.json())
-            // .then(response => response.text())
             .then(data => {
                 this.cdate = data;
-                // eslint-disable-next-line no-console
-                // console.log("data from back end : "+this.cdate[0].oee);
-                // eslint-disable-next-line no-console
-                // console.log("data from back end : "+this.cdate[0].目标);
-                // eslint-disable-next-line no-console
+                 // eslint-disable-next-line no-console
                 console.log("data from back end : "+this.cdate.length);
-                // alert('jack'+this.cdate);
             }).catch(data => {
                 alert(data);
             })
@@ -198,7 +173,5 @@ export default {
             console.log("effthis is the param: ");
             this.charts.setOption(this.option);
     }
-
-    
 }
 </script>

@@ -4,28 +4,29 @@
         <div class="crumbs">
                
 
-            <el-breadcrumb separator="/">
+            <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
                     <i class="el-icon-pie-chart"></i> OEE
                 </el-breadcrumb-item>
-            </el-breadcrumb>
+            </el-breadcrumb> -->
         </div>
-        <div class="container">
-            <div class="plugins-tips">
+        <div class="container" style = "margin-top:-10px">
+            
+            <div class="plugins-tips" style="padding:10px;margin-top:-20px;margin-right:-20px;margin-left:-20px;">
                 <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
                         <el-button>{{group}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="item in stationGroup" :key="item.indexId" v-bind:value="item.indexId" ><a @click="setGroupVal(item.name)">{{item.name}}</a></el-dropdown-item>
+                        <el-dropdown-item v-for="item in stationGroup" :key="item.indexId" v-bind:value="item.indexId" ><el-button type="text" :style="{color:'#808080'}" @click="setGroupVal(item.name)">{{item.name}}</el-button></el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
-                        <el-button>{{plName}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                        <el-button @click="checkline">{{plName}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="item in prodLine" :key="item.indexId" v-bind:value="item.indexId" ><a @click="setProdLineVal(item.name)">{{item.name}}</a></el-dropdown-item>
+                        <el-dropdown-item v-for="item in prodLine" :key="item.indexId" v-bind:value="item.indexId" ><el-button type="text" :style="{color:'#808080'}" @click="setProdLineVal(item.name)">{{item.name}}</el-button></el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-dropdown trigger="click">
@@ -33,7 +34,7 @@
                         <el-button>{{dtUnit}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="item in dateUnit" :key="item.indexId" v-bind:value="item.indexId" ><a @click="setDateUnitVal(item.name)">{{item.name}}</a></el-dropdown-item>
+                        <el-dropdown-item v-for="item in dateUnit" :key="item.indexId" v-bind:value="item.indexId" ><el-button type="text" :style="{color:'#808080'}" @click="setDateUnitVal(item.name)">{{item.name}}</el-button></el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-date-picker
@@ -45,9 +46,9 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickerOptions">
+                    :picker-options="pickerOptions" style="height:33px;padding-top:2px">
                 </el-date-picker>
-                <el-button @click="startPlant" :style="{float:'right'}">开始渲染</el-button>
+                <el-button @click="startPlant" :style="{height:'33px','margin-bottom':'-12px'}">查询</el-button>
             </div>
             <div class="schart-box">
                 <!-- <div class="content-title">柱状图</div>
@@ -92,7 +93,8 @@ export default {
             group:"工作组",
             plName: "产线名称",
             dtUnit: "日期单位",
-            prodLine:[{indexId:1,name:"GEN_III_A+M"},
+            prodLine:[],
+            EGRLine:[{indexId:1,name:"GEN_III_A+M"},
                       {indexId:2,name:"GEN_III_V+F"},
                       {indexId:3,name:"GEN_III_BPV"},
                       {indexId:4,name:"GDI阀装配线"},
@@ -101,6 +103,36 @@ export default {
                       {indexId:7,name:"ETV装配线"},
                       {indexId:8,name:"GEN_II阀装配线"},
                       {indexId:9,name:"EGR_Group"}],
+            CMLine:[{indexId:1,name:"混合管装配线1"},
+                      {indexId:2,name:"混合管装配线2"},
+                      {indexId:3,name:"Cooler Line1"},
+                      {indexId:4,name:"Cooler Line2"},
+                      {indexId:5,name:"Cooler Line3"},
+                      {indexId:6,name:"Cooler Line4"},
+                      {indexId:7,name:"钎焊炉1"},
+                      {indexId:8,name:"钎焊炉2"},
+                      {indexId:9,name:"测试台1"},
+                      {indexId:10,name:"测试台2"},
+                      {indexId:11,name:"测试台3"},
+                      {indexId:12,name:"测试台4"},
+                      {indexId:13,name:"模块线1"}],
+            ELELine:[{indexId:1,name:"HV Air PTC Line"},
+                      {indexId:2,name:"LV Air PTC Line"},
+                      {indexId:3,name:"Liquid Heater Line"},
+                      {indexId:4,name:"eCRV Line"},
+                      {indexId:5,name:"Marsilli 1"},
+                      {indexId:6,name:"Marsilli 2"},
+                      {indexId:7,name:"IPTE 1"},
+                      {indexId:8,name:"IPTE 2"},
+                      {indexId:9,name:"Huebers 1"},
+                      {indexId:10,name:"Huebers 2"},
+                      {indexId:11,name:"Ford节温器线"},
+                      {indexId:12,name:"HKMC节温器线"},
+                      {indexId:13,name:"GAC节温器线"},
+                      {indexId:14,name:"JLR节温器线"},
+                      {indexId:15,name:"蜡包装配线"},
+                      {indexId:16,name:"SGMM节温器线"},
+                      {indexId:17,name:"SGME节温器线"}],
 
             dateUnit:[{indexId:1,name:"日"},
                        {indexId:2,name:"周"},
@@ -136,90 +168,7 @@ export default {
                     }
                 }]
             },
-            value2: '',
-
-
-            options1: {
-                type: 'bar',
-                title: {
-                    text: '最近一周各品类销售图'
-                },
-                bgColor: '#fbfbfb',
-                labels: ['周一', '周二', '周三', '周四', '周五'],
-                datasets: [
-                    {
-                        label: '家电',
-                        fillColor: 'rgba(241, 49, 74, 0.5)',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
-                    }
-                ]
-            },
-            options2: {
-                type: 'line',
-                title: {
-                    text: '最近几个月各品类销售趋势图'
-                },
-                bgColor: '#fbfbfb',
-                labels: ['6月', '7月', '8月', '9月', '10月'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 150, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [114, 138, 200, 235, 190]
-                    }
-                ]
-            },
-            options3: {
-                type: 'pie',
-                title: {
-                    text: '服装品类销售饼状图'
-                },
-                legend: {
-                    position: 'left'
-                },
-                bgColor: '#fbfbfb',
-                labels: ['T恤', '牛仔裤', '连衣裙', '毛衣', '七分裤', '短裙', '羽绒服'],
-                datasets: [
-                    {
-                        data: [334, 278, 190, 235, 260, 200, 141]
-                    }
-                ]
-            },
-            options4: {
-                type: 'ring',
-                title: {
-                    text: '环形三等分'
-                },
-                tooltip:{},
-                showValue: false,
-                legend: {
-                    selectMode:true,
-                    position: 'bottom',
-                    bottom: 40
-                },
-                bgColor: '#fbfbfb',
-                labels: ['vue', 'react', 'angular'],
-                datasets: [
-                    {
-                        data: [500, 500, 500]
-                    }
-                ]
-            }
+            value2: ''
         };
     },
     methods: {
@@ -241,8 +190,21 @@ export default {
         },
         setGroupVal(indx){
             this.group = indx;
+            this.plName = "产线名称";
             // eslint-disable-next-line no-console
             console.log(indx);
+            if(indx == 'EGR线'){
+                this.prodLine = this.EGRLine;
+            }else if(indx == 'Cooler/Module线'){
+                this.prodLine = this.CMLine;
+            }else{
+                this.prodLine = this.ELELine;
+            }
+        },
+        checkline(){
+            if(this.prodLine.length == 0){
+                this.$message.warning('请首先选择工作组！！');
+            }
         }
     }
 };
@@ -251,10 +213,13 @@ export default {
 <style scoped>
 .schart-box {
     display: inline-block;
-    margin: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 0px;
+    margin-bottom: -20px;
 }
 .schart {
-    width: 600px;
+    width: 500px;
     height: 400px;
 }
 .content-title {

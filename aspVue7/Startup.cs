@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.AspNetCore.Mvc.Cors;
 using Newtonsoft.Json;
 using aspVue7.Model;
+
 namespace aspVue7
 {
     public class Startup
@@ -22,14 +23,12 @@ namespace aspVue7
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //数据库连接语句
-            BorgWarnerMisSQLContext.ConnectionString = Configuration.GetConnectionString("nbjsMESContext"); 
+            BorgWarnerMisSQLContext.ConnectionString = Configuration.GetConnectionString("nbjsMESContext"); 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);   
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
@@ -37,7 +36,6 @@ namespace aspVue7
                 configuration.RootPath = "ClientApp";
             });
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -45,7 +43,6 @@ namespace aspVue7
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthorization();
@@ -55,17 +52,7 @@ namespace aspVue7
                   endpoints.MapControllerRoute(
                       name: "default",
                       pattern: "{controller=Home}/{action=Index}/{id?}");
- 
              });
-
-            // app.UseEndpoints(endpoints =>
-            // {
-            //     // endpoints.MapControllers();
-            //     endpoints.MapControllerRoute(
-            //         name:"default",
-            //         pattern:"api/{controller=Home}/{action=Index}/{id?}"
-            //     );
-            // });
 
             app.UseSpa(spa =>
             {
@@ -76,22 +63,16 @@ namespace aspVue7
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseVueCli(npmScript: "serve");
+                    spa.UseVueCli(npmScript: "serve",port:8080);
                 }
 
             });
-            // app.UseCors("cors");
             // app.UseMvc(routes =>
-            // {
+            // { 
             //     routes.MapRoute(
-            //         name: "default",
-            //         template: "{controller=Home}/{action=Index}/{id?}");
-
-            //     routes.MapSpaFallbackRoute(
-            //         name: "spa-fallback",
-            //         defaults: new { controller = "Home", action = "Index" });
+            //         name: "api",
+            //         template: "api/{controller}/{action=Index}/{id?}");
             // });
-            
         }
     }
 }

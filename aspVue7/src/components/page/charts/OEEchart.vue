@@ -1,10 +1,11 @@
 <template>
- <div id="OEEchart" :style="{width:'700px',height:'320px'}"></div> 
+ <div id="OEEchart" :style="{width:'550px',height:'320px'}"></div> 
 
 </template>
 <script>
 import echarts from 'echarts';
 import bus from '../../common/bus';
+
 // queryData:{
 //     dateunit:'';
 //     oee:0.0;
@@ -163,11 +164,7 @@ export default {
             // .then(response => response.text())
             .then(data => {
                 this.cdate = data;
-                // eslint-disable-next-line no-console
-                // console.log("data from back end : "+this.cdate[0].oee);
-                // eslint-disable-next-line no-console
-                // console.log("data from back end : "+this.cdate[0].目标);
-                // eslint-disable-next-line no-console
+                 // eslint-disable-next-line no-console
                 console.log("data from back end : "+this.cdate.length);
                 // alert('jack'+data);
             }).catch(data => {

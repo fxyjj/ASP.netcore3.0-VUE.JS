@@ -1,5 +1,5 @@
 <template>
- <div id="TJLchart" :style="{width:'700px',height:'320px'}"></div> 
+ <div id="TJLchart" :style="{width:'550px',height:'320px'}"></div> 
 
 </template>
 <script>
@@ -129,7 +129,7 @@ export default {
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 
-                var index = {value:Number(i.停机率.toFixed(1)),color:i.停机率>i.目标?'#3CB371':'#C0504D'};
+                var index = {value:Number(i.停机率.toFixed(1)),color:i.停机率>i.目标?'#C0504D':'#3CB371'};
                 this.barYdata.push(index);
                 this.lineYdata.push(i.目标);
             }
