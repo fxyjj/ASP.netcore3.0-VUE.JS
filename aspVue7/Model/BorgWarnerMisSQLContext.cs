@@ -99,14 +99,6 @@ namespace aspVue7.Model
             optionsBuilder.UseSqlServer(ConnectionString);
         } 
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                 optionsBuilder.UseSqlServer("Server=NBEVSSQL1A;Database=BorgwarnerMisSQL;uid=mis_user;pwd=6yhgt54rf;");
-//             }
-//         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -81,9 +81,7 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcore
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.Design.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.Design.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Configuration.dll

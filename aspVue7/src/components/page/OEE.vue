@@ -1,15 +1,7 @@
 /* eslint-disable no-console */
 <template>
     <div>
-        <div class="crumbs">
-               
 
-            <!-- <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-pie-chart"></i> OEE
-                </el-breadcrumb-item>
-            </el-breadcrumb> -->
-        </div>
         <div class="container" style = "margin-top:-10px">
             
             <div class="plugins-tips" style="padding:10px;margin-top:-20px;margin-right:-20px;margin-left:-20px;">
@@ -74,14 +66,14 @@
 
 <script>
 // import Schart from 'vue-schart';
-import OEEchart from './charts/OEEchart.vue';
-import EFFchart from './charts/EFFchart.vue';
-import FTTchart from './charts/FTTchart.vue';
-import TJLchart from './charts/TJLchart.vue';
+import OEEchart from './OEEcharts/OEEchart.vue';
+import EFFchart from './OEEcharts/EFFchart.vue';
+import FTTchart from './OEEcharts/FTTchart.vue';
+import TJLchart from './OEEcharts/TJLchart.vue';
 
 import bus from '../common/bus'
 export default {
-    name: 'basecharts',
+    name: 'OEEpage',
     components: {
         OEEchart,
         EFFchart,

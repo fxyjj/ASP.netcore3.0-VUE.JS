@@ -10,12 +10,12 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 
-let base = process.env.NODE_ENV === 'production'? 'http://10.225.116.24:5008':'http://localhost:8081';
+let base = process.env.NODE_ENV === 'production'? 'http://10.225.116.24:5008':'http://localhost:8080';
 Vue.prototype.baseURL = base;
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-  // // document.title = `${to.meta.title} | vue-manage-system`;
+  document.title = `${to.meta.title} | MiS`;
   // // eslint-disable-next-line no-console
   // console.log(to.path);
   // // eslint-disable-next-line no-console

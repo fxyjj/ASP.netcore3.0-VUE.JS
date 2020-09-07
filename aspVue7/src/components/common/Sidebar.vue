@@ -104,14 +104,36 @@ export default {
                 //         }
                 //     ]
                 // },
-                // {
-                //     icon: 'el-icon-s-marketing',
-                //     index: 'icon',
-                //     title: '自定义图标'
-                // },
+                {
+                    icon: 'el-icon-s-opportunity',
+                    index: '4',
+                    title: 'Andon',
+                    subs:[
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'Andon',
+                            title: '安灯信息汇总'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonNum',
+                            title: '安灯数量'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonCate',
+                            title: '安灯类别'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'TopIssue',
+                            title: 'Top Issues'
+                        }
+                    ]
+                },
                 {
                     icon: 'el-icon-pie-chart',
-                    index: 'charts',
+                    index: 'OEE',
                     title: 'OEE'
                 },
                 // {

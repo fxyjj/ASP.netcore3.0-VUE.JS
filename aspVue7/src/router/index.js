@@ -20,11 +20,26 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
-                // {
-                //     path: '/icon',
-                //     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                //     meta: { title: '自定义图标' }
-                // },
+                {
+                    path: '/Andon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/AndonMenu.vue'),
+                    meta: { title: '安灯信息汇总' }
+                },
+                {
+                    path: '/AndonNum',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/AndonNum.vue'),
+                    meta: { title: '安灯数量' }
+                },
+                {
+                    path: '/AndonCate',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/AndonCate.vue'),
+                    meta: { title: '安灯类别' }
+                },
+                {
+                    path: '/TopIssue',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/TopIssue.vue'),
+                    meta: { title: 'TopIssue' }
+                },
                 // {
                 //     path: '/table',
                 //     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
@@ -60,8 +75,8 @@ export default new Router({
                 // },
                 {
                     // vue-schart组件
-                    path: '/charts',
-                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
+                    path: '/OEE',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/OEE.vue'),
                     meta: { title: 'OEE' }
                 },
                 // {

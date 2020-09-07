@@ -34,6 +34,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 `dotnet run`
 
+--publish the project:
+
+`dotnet publish -c Release`
+`npm run build`
+
 --SQL setup:
 
 

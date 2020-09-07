@@ -173,6 +173,4 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreap
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.pdb
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.genruntimeconfig.cache
-C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.Design.dll
-C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.Design.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\static\table.json

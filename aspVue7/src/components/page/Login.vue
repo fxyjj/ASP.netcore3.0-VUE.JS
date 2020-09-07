@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
+            <div class="ms-title">用户登录</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips">Tips : 这里还没想好给什么tips。</p>
             </el-form>
         </div>
     </div>
@@ -32,8 +32,8 @@ export default {
     data: function() {
         return {
             param: {
-                username: '',
-                password: '',
+                username: "",
+                password: "",
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -44,9 +44,10 @@ export default {
     methods: {
         submitForm() {
             console.log(this.param.username);
-            if(this.param.username == null || this.param.password == null){
+            if(this.param.username == "" || this.param.password == ""){
                 this.$message.error('请输入账号户密码！');
             }else{
+                console.log("new pwd:"+this.param.password)
                 fetch('api/Login/validate',{
                             method:'POST',
                             headers: {
@@ -56,10 +57,11 @@ export default {
                                 username:this.param.username
                             })
                         })
-                        // .then(response => response.json())
-                        .then(response => response.text())
+                        .then(response => response.json())
+                        // .then(response => response.text())
                         .then(data => {
-                            if(this.param.password = data){
+
+                            if(this.param.password == data[0].txtPassword){
                                 this.$message.success('登录成功');
                                 localStorage.setItem('ms_username', this.param.username);
                                 this.$router.push('/');
@@ -70,7 +72,7 @@ export default {
                                 return false;
                             }
                             // eslint-disable-next-line no-console
-                            console.log("pwd : " + data);
+                            console.log("pwd : " + data[0].txtPassword);
                             // alert('jack'+data);
                         }).catch(data => {
                             alert(data);
