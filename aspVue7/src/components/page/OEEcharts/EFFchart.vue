@@ -125,6 +125,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log("this is the param: ");
             this.charts.setOption(this.option);
+            // this.cdate = []
         },
          //后端数据请求。
         getInfor(){
@@ -153,6 +154,7 @@ export default {
     
      mounted(){
         bus.$on("Query", (stime) =>{
+            this.cdate = []
             this.startTime = stime.starttime;
             this.endTime = stime.endtime;
             this.dateUnit = stime.dateunit;

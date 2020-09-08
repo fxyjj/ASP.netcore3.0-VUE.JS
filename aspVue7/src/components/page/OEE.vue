@@ -4,7 +4,7 @@
 
         <div class="container" style = "margin-top:-10px">
             
-            <div class="plugins-tips" style="padding:10px;margin-top:-20px;margin-right:-20px;margin-left:-20px;">
+            <div class="plugins-tips" >
                 <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
                         <el-button>{{group}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>

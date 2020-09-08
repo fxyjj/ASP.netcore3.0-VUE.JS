@@ -178,6 +178,7 @@ export default {
     
      mounted(){
         bus.$on("Query", (stime) =>{
+            this.cdate = []
             this.startTime = stime.starttime;
             this.endTime = stime.endtime;
             this.dateUnit = stime.dateunit;
