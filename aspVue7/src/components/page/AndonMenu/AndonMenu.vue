@@ -17,23 +17,26 @@
                     <el-radio v-model="radio" label="周">周</el-radio>
                     <el-radio v-model="radio" label="月">月</el-radio>
                 </div>
-                 <el-button @click="startPlant" :style="{height:'33px','margin-bottom':'-12px'}">查询</el-button>
+                 <el-checkbox v-model="checked1" style="padding-left:20px">已停机</el-checkbox>
+                 <el-checkbox v-model="checked2">未停机</el-checkbox>
+                 <el-button @click="startPlant" :style="{'margin-left':'30px',height:'33px','margin-bottom':'-12px'}">查询</el-button>
         </div>
         <el-row>
-        <div id="chart1" :style="{width:'550px',height:'320px',display:'inline-block'}"></div> 
-        </el-row>
-        <el-row>
-            <div id="chart2" :style="{width:'550px',height:'320px',display:'inline-block'}"></div> 
+        <div id="chart1" :style="{width:'750px',height:'500px',display:'inline-block'}"></div>
+        <div id="chart2" :style="{width:'750px',height:'500px',display:'inline-block'}"></div>
         </el-row>
     </div>
 </template>
 
 <script>
 import echarts from 'echarts';
+
 export default {
     name:'AndonMenu',
     data(){
         return {
+            checked1:true,
+            checked2:true,
             charts1: null,
             charts2: null,
             queryData:[],
@@ -77,7 +80,7 @@ export default {
                             scale: true,
                             name: 'Rate',
                             min:0,
-                            max:100,
+                            max:20,
                             axisLabel: {  
                                 show: true,  
                                 interval: 'auto',  
@@ -93,6 +96,12 @@ export default {
                             data:[3,7,12,6,5,1],
                             yAxisIndex: 0,
                             itemStyle:{
+                                normal:{
+                                     label:{
+                                        show:true,
+                                        position:'top'
+                                    },
+                                },
                                 color:"#c0504d"
                             },
                             lineStyle:{
@@ -105,9 +114,15 @@ export default {
                             name: '安灯工时占比',
                             type: 'line',
                             yAxisIndex: 1,
-                            data: [5,20,36,10,10,20],
+                            data: [1,4,7,2,2,4],
                             itemStyle:{
-                                color: ["#0070C0"]
+                                 normal:{
+                                     label:{
+                                        show:true,
+                                        position:'top'
+                                    },
+                                },
+                                color: ["#FFD306"]
                             },
                             lineStyle:{
                                 normal:{
@@ -145,7 +160,13 @@ export default {
                             // data: [5,20,36,10,10,20],
                                 data:[3,7,12,6,5,1],
                             itemStyle:{
-                                color:"#c0504d"
+                                 normal:{
+                                     label:{
+                                        show:true,
+                                        position:'top'
+                                    },
+                                },
+                                color:"#0070C0"
                             },
                             lineStyle:{
                                 normal:{
@@ -158,7 +179,13 @@ export default {
                             type: 'line',
                             data: [5,20,36,10,10,20],
                             itemStyle:{
-                                color: ["#0070C0"]
+                                 normal:{
+                                     label:{
+                                        show:true,
+                                        position:'top'
+                                    },
+                                },
+                                color: ["#c0504d"]
                             },
                             lineStyle:{
                                 normal:{
@@ -171,6 +198,12 @@ export default {
                             type: 'line',
                             data: [1.5,2.0,3.6,1.0,1.0,2.0],
                             itemStyle:{
+                                 normal:{
+                                     label:{
+                                        show:true,
+                                        position:'top'
+                                    },
+                                },
                                 color: ["#C0C0C0"]
                             },
                             lineStyle:{
@@ -207,7 +240,7 @@ export default {
                     }
                 }]
             },
-            value1: '',
+            value1: null,
             radio:''
         }
     },
@@ -230,12 +263,12 @@ export default {
                         // console.log(res);    
                         this.cxAxis.push(res.dateunit);
 
-                        this.c1yAxis1.push(res.procssTime);
-                        this.c1yAxis2.push(res.planTime);
+                        this.c1yAxis1.push(res.planTime);
+                        this.c1yAxis2.push(res.procssTime);
 
                         this.c2yAxis1.push(res.andonNum);
                         this.c2yAxis2.push(res.repairTime);
-                        this.c2yAxis3.push(res.AvgRpsTime);
+                        this.c2yAxis3.push(res.avgRpsTime);
                         
                         }
                     // eslint-disable-next-line no-console
@@ -262,8 +295,28 @@ export default {
     },
     methods:{
         startPlant(){
+            if(this.radio == ''){
+                this.$message.warning('请选择日期单位！');
+                return;
+            }
+            if(this.value1 == null){
+                this.$message.warning('请选择日期范围！');
+                return;
+            }
+            if(!this.checked1 && !this.checked2){
+                this.$message.warning('请选择设备状态！');
+                return;
+            }
             this.queryData = []
             console.log("jack "+this.radio)
+            var status = '';
+            if(this.checked1 && this.checked2){
+                status = '全部';
+            }else if(this.checked1){
+                status = '已停机';
+            }else{
+                status = '未停机';
+            }
             fetch('api/Andon/hourRate',{
                 method:'POST',
                 headers:{
@@ -272,7 +325,9 @@ export default {
                 body: JSON.stringify({
                     start: this.value1[0],
                     end: this.value1[1],
-                    dateUnit: String(this.radio)
+                    dateunit: String(this.radio),
+                    stus:status
+
                 })
             })
             .then(response => response.json())
@@ -280,6 +335,8 @@ export default {
             .then(data =>{
                 this.queryData = data;
                 // alert(data);
+                // eslint-disable-next-line no-console
+                console.log(this.queryData)
             })
             .catch(data =>{
                 alert('error')

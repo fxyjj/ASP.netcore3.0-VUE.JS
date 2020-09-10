@@ -4,15 +4,31 @@
 
 <script>
 import echarts from 'echarts';
-
+import bus from '../../../common/bus';
 export default {
     name:'ICchart',
     data(){
         return {
             chart: null,
+            //queryData
+            starttime: null,
+            endtime:null,
+            dateunit:null,
+            //querydata from database
+            queryData:[],
+             //option data
+            Xdata:[],
+            hb1Ydata:[],
+            hb2Ydata:[],
+            ipte1Ydata:[],
+            ipte2Ydata:[],
+            msl1Ydata:[],
+            msl2Ydata:[],
             option: {
                 title: {
-                    text: 'IC'
+                    text: 'IC Value Line 安灯数量',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -115,10 +131,78 @@ export default {
             },
         }
     },
+    watch:{
+        'queryData.length':{
+            handler:function(oldVal,newVal){
+                // eslint-disable-next-line no-console
+                console.log(oldVal+'到'+newVal);
+                this.Xdata = []
+                this.hb1Ydata = []
+                this.hb2Ydata = []
+                this.ipte1Ydata = []
+                this.ipte2Ydata = []
+                this.msl1Ydata = []
+                this.msl2Ydata = []
+                for(var item of this.queryData){
+                    this.Xdata.push(item.日期单位);
+                    this.hb1Ydata.push(item.hb1Num);
+                    this.hb2Ydata.push(item.hb2Num);
+                    this.ipte1Ydata.push(item.iptE1Num);
+                    this.ipte2Ydata.push(item.iptE2Num);
+                    this.msl1Ydata.push(item.msl1Num);
+                    this.msl2Ydata.push(item.msl2Num);
+                }
+                this.option.xAxis.data = this.Xdata;
+                this.option.series[0].data = this.hb1Ydata;
+                this.option.series[1].data = this.ipte1Ydata;
+                this.option.series[2].data = this.msl1Ydata;
+                this.option.series[3].data = this.hb2Ydata;
+                this.option.series[4].data = this.ipte2Ydata;
+                this.option.series[5].data = this.msl2Ydata;
+
+                var c1 = document.getElementById("ICchart");
+                this.chart = echarts.init(c1);
+                this.chart.setOption(this.option);
+
+            }
+        }
+    },
+    methods:{
+        getData(){
+            fetch('api/Andon/ICdata',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    start: this.starttime,
+                    end: this.endtime,
+                    dateunit:this.dateunit
+                })
+            })
+            .then(response => response.json())
+            // .then(response => response.text())
+            .then(data =>{
+                this.queryData = data
+                // alert(data)
+            })
+            .catch(data =>{
+                alert('error!')
+            })
+        }
+    },
     mounted(){
         var c1 = document.getElementById("ICchart");
         this.chart = echarts.init(c1);
         this.chart.setOption(this.option);
+
+         bus.$on('AndonNumquery', msg =>{
+            this.queryData = [];
+            this.dateunit = msg.dateunit;
+            this.starttime = msg.start;
+            this.endtime = msg.end;
+            this.getData()
+        })
     }
 }
 </script>

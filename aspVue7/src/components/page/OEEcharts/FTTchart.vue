@@ -1,5 +1,5 @@
 <template>
- <div id="FTTchart" :style="{width:'550px',height:'320px'}"></div> 
+ <el-card shadow = "hover"><div id="FTTchart" :style="{width:'550px',height:'320px'}"></div></el-card>
 
 </template>
 <script>
@@ -141,8 +141,8 @@ export default {
 
             // this.jack = document.getElementById("FTTchart");
             // this.charts = echarts.init(this.jack);
-            // eslint-disable-next-line no-console
-            console.log("this is the param: ");
+            // // eslint-disable-next-line no-console
+            // console.log("this is the param: ");
             this.charts.setOption(this.option);
         },
          //后端数据请求。
@@ -168,7 +168,7 @@ export default {
                 // eslint-disable-next-line no-console
                 // console.log("data from back end : "+this.cdate[0].目标);
                 // eslint-disable-next-line no-console
-                console.log("data from back end : "+this.cdate.length);
+                console.log("fttdata from back end : "+this.cdate.length);
                 // alert('jack'+this.cdate);
             }).catch(data => {
                 alert(data);
@@ -184,14 +184,14 @@ export default {
             this.dateUnit = stime.dateunit;
             this.prodLine = stime.prodline;
             this.getInfor()
-            // eslint-disable-next-line no-console
-            console.log("fttthis is start time : "+this.startTime)
-             // eslint-disable-next-line no-console
-            console.log("fttthis is end time : "+this.endTime)
-             // eslint-disable-next-line no-console
-            console.log("fttthis is date unit : "+this.dateUnit)
-             // eslint-disable-next-line no-console
-            console.log("fttthis is product line : "+this.prodLine)
+            // // eslint-disable-next-line no-console
+            // console.log("fttthis is start time : "+this.startTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("fttthis is end time : "+this.endTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("fttthis is date unit : "+this.dateUnit)
+            //  // eslint-disable-next-line no-console
+            // console.log("fttthis is product line : "+this.prodLine)
             });
             var jack = document.getElementById("FTTchart");
             this.charts = echarts.init(jack);

@@ -1,5 +1,5 @@
 <template>
- <div id="OEEchart" :style="{width:'550px',height:'320px'}"></div> 
+ <el-card shadow = "hover"><div id="OEEchart" :style="{width:'550px',height:'320px'}"></div> </el-card>
 
 </template>
 <script>
@@ -143,7 +143,7 @@ export default {
             // this.jack = document.getElementById("OEEchart");
             // this.charts = echarts.init(this.jack);
             // eslint-disable-next-line no-console
-            console.log("this is the param: ");
+            // console.log("this is the param: ");
             this.charts.setOption(this.option);
         },
          //后端数据请求。
@@ -165,7 +165,7 @@ export default {
             .then(data => {
                 this.cdate = data;
                  // eslint-disable-next-line no-console
-                console.log("data from back end : "+this.cdate.length);
+                console.log("oeedata from back end : "+this.cdate.length);
                 // alert('jack'+data);
             }).catch(data => {
                 alert(data);
@@ -181,19 +181,19 @@ export default {
             this.dateUnit = stime.dateunit;
             this.prodLine = stime.prodline;
             this.getInfor()
-            // eslint-disable-next-line no-console
-            console.log("oeethis is start time : "+this.startTime)
-             // eslint-disable-next-line no-console
-            console.log("oeethis is end time : "+this.endTime)
-             // eslint-disable-next-line no-console
-            console.log("oeethis is date unit : "+this.dateUnit)
-             // eslint-disable-next-line no-console
-            console.log("oeethis is product line : "+this.prodLine)
+            // // eslint-disable-next-line no-console
+            // console.log("oeethis is start time : "+this.startTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("oeethis is end time : "+this.endTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("oeethis is date unit : "+this.dateUnit)
+            //  // eslint-disable-next-line no-console
+            // console.log("oeethis is product line : "+this.prodLine)
             });
             var jack = document.getElementById("OEEchart");
             this.charts = echarts.init(jack);
             // eslint-disable-next-line no-console
-            console.log("this is the param: ");
+            // console.log("this is the param: ");
             this.charts.setOption(this.option);
     }
 

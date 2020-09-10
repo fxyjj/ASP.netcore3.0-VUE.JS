@@ -1,5 +1,5 @@
 <template>
- <div id="EFFchart" :style="{width:'550px',height:'320px'}"></div> 
+ <el-card shadow = "hover"><div id="EFFchart" :style="{width:'550px',height:'320px'}"></div> </el-card>
 </template>
 <script>
 import echarts from 'echarts';
@@ -122,8 +122,8 @@ export default {
             this.option.xAxis.data=this.barXdata;
             this.option.series[0].data = this.barYdata;
             this.option.series[1].data = this.lineYdata;
-            // eslint-disable-next-line no-console
-            console.log("this is the param: ");
+            // // eslint-disable-next-line no-console
+            // console.log("this is the param: ");
             this.charts.setOption(this.option);
             // this.cdate = []
         },
@@ -145,7 +145,7 @@ export default {
             .then(data => {
                 this.cdate = data;
                  // eslint-disable-next-line no-console
-                console.log("data from back end : "+this.cdate.length);
+                console.log("effdata from back end : "+this.cdate.length);
             }).catch(data => {
                 alert(data);
             })
@@ -160,14 +160,14 @@ export default {
             this.dateUnit = stime.dateunit;
             this.prodLine = stime.prodline;
             this.getInfor()
-            // eslint-disable-next-line no-console
-            console.log("effthis is start time : "+this.startTime)
-             // eslint-disable-next-line no-console
-            console.log("effthis is end time : "+this.endTime)
-             // eslint-disable-next-line no-console
-            console.log("effthis is date unit : "+this.dateUnit)
-             // eslint-disable-next-line no-console
-            console.log("effthis is product line : "+this.prodLine)
+            // // eslint-disable-next-line no-console
+            // console.log("effthis is start time : "+this.startTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is end time : "+this.endTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is date unit : "+this.dateUnit)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is product line : "+this.prodLine)
             });
             var jack = document.getElementById("EFFchart");
             this.charts = echarts.init(jack);

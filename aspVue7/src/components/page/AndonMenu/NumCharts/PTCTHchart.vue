@@ -4,15 +4,34 @@
 
 <script>
 import echarts from 'echarts';
-
+import bus from '../../../common/bus';
 export default {
     name:'PTCTHchart',
     data(){
         return {
             chart: null,
+            //queryData
+            starttime: null,
+            endtime:null,
+            dateunit:null,
+            //querydata from database
+            queryData:[],
+             //option data
+            Xdata:[],
+            ecrvYdata:[],
+            hvYdata:[],
+            lvYdata:[],
+            fordYdata:[],
+            gacYdata:[],
+            hkmcYdata:[],
+            jlrYdata:[],
+            sgmeYdata:[],
+            laYdata:[],
             option: {
                 title: {
-                    text: 'PTC&T/H'
+                   text: 'PTCTH Value Line 安灯数量',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -154,10 +173,88 @@ export default {
             },
         }
     },
+    watch:{
+         'queryData.length':{
+            handler:function(oldVal,newVal){
+                // eslint-disable-next-line no-console
+                console.log(oldVal+'到'+newVal);
+                this.Xdata = []
+                this.ecrvYdata = []
+                this.hvYdata = []
+                this.lvYdata = []
+                this.fordYdata = []
+                this.gacYdata = []
+                this.hkmcYdata = []
+                this.jlrYdata = []
+                this.sgmeYdata = []
+                this.laYdata = []
+                for(var item of this.queryData){
+                    this.Xdata.push(item.日期单位);
+                    this.ecrvYdata.push(item.ecrvNum);
+                    this.hvYdata.push(item.hvNum);
+                    this.lvYdata.push(item.lvNum);
+                    this.fordYdata.push(item.fordNum);
+                    this.gacYdata.push(item.gacNum);
+                    this.hkmcYdata.push(item.hkmcNum);
+                    this.jlrYdata.push(item.jlrNum);
+                    this.sgmeYdata.push(item.sgmeNum);
+                    this.laYdata.push(item.laNum);
+
+                }
+                this.option.xAxis.data = this.Xdata;
+                this.option.series[0].data = this.ecrvYdata;
+                this.option.series[1].data = this.hvYdata;
+                this.option.series[2].data = this.lvYdata;
+                this.option.series[3].data = this.fordYdata;
+                this.option.series[4].data = this.gacYdata;
+                this.option.series[5].data = this.hkmcYdata;
+                this.option.series[6].data = this.jlrYdata;
+                this.option.series[7].data = this.sgmeYdata;
+                this.option.series[8].data = this.laYdata;
+
+                var c1 = document.getElementById("PTCTHchart");
+                this.chart = echarts.init(c1);
+                this.chart.setOption(this.option);
+
+            }
+        }
+    },
+    methods:{
+        getData(){
+            fetch('api/Andon/PTCTHdata',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    start: this.starttime,
+                    end: this.endtime,
+                    dateunit:this.dateunit
+                })
+            })
+            .then(response => response.json())
+            // .then(response => response.text())
+            .then(data =>{
+                this.queryData = data
+                // alert(data)
+            })
+            .catch(data =>{
+                alert('error!')
+            })
+        }
+    },
     mounted(){
         var c1 = document.getElementById("PTCTHchart");
         this.chart = echarts.init(c1);
         this.chart.setOption(this.option);
+
+         bus.$on('AndonNumquery', msg =>{
+            this.queryData = [];
+            this.dateunit = msg.dateunit;
+            this.starttime = msg.start;
+            this.endtime = msg.end;
+            this.getData()
+        })
     }
 }
 </script>

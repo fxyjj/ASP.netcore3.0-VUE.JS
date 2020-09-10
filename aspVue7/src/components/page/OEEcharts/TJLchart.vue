@@ -1,5 +1,5 @@
 <template>
- <div id="TJLchart" :style="{width:'550px',height:'320px'}"></div> 
+ <el-card shadow = "hover"><div id="TJLchart" :style="{width:'550px',height:'320px'}"></div> </el-card>
 
 </template>
 <script>
@@ -142,7 +142,7 @@ export default {
             // this.jack = document.getElementById("EFFchart");
             // this.charts = echarts.init(this.jack);
             // eslint-disable-next-line no-console
-            console.log("this is the param: ");
+            // console.log("this is the param: ");
             this.charts.setOption(this.option);
         },
          //后端数据请求。
@@ -184,19 +184,19 @@ export default {
             this.dateUnit = stime.dateunit;
             this.prodLine = stime.prodline;
             this.getInfor()
-            // eslint-disable-next-line no-console
-            console.log("effthis is start time : "+this.startTime)
-             // eslint-disable-next-line no-console
-            console.log("effthis is end time : "+this.endTime)
-             // eslint-disable-next-line no-console
-            console.log("effthis is date unit : "+this.dateUnit)
-             // eslint-disable-next-line no-console
-            console.log("effthis is product line : "+this.prodLine)
+            // // eslint-disable-next-line no-console
+            // console.log("effthis is start time : "+this.startTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is end time : "+this.endTime)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is date unit : "+this.dateUnit)
+            //  // eslint-disable-next-line no-console
+            // console.log("effthis is product line : "+this.prodLine)
             });
             var jack = document.getElementById("TJLchart");
             this.charts = echarts.init(jack);
             // eslint-disable-next-line no-console
-            console.log("effthis is the param: ");
+            // console.log("effthis is the param: ");
             this.charts.setOption(this.option);
     }
 

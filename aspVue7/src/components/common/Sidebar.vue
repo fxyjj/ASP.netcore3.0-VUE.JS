@@ -132,7 +132,7 @@ export default {
                     ]
                 },
                 {
-                    icon: 'el-icon-pie-chart',
+                    icon: 'el-icon-data-analysis',
                     index: 'OEE',
                     title: 'OEE'
                 },

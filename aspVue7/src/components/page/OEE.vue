@@ -30,7 +30,7 @@
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-date-picker
-                    v-model="value2"
+                    v-model="value1"
                     type="daterange"
                     align="right"
                     value-format="yyyy-MM-dd"
@@ -97,10 +97,10 @@ export default {
                       {indexId:9,name:"EGR_Group"}],
             CMLine:[{indexId:1,name:"混合管装配线1"},
                       {indexId:2,name:"混合管装配线2"},
-                      {indexId:3,name:"Cooler Line1"},
-                      {indexId:4,name:"Cooler Line2"},
-                      {indexId:5,name:"Cooler Line3"},
-                      {indexId:6,name:"Cooler Line4"},
+                      {indexId:3,name:"Cooler Line 1"},
+                      {indexId:4,name:"Cooler Line 2"},
+                      {indexId:5,name:"Cooler Line 3"},
+                      {indexId:6,name:"Cooler Line 4"},
                       {indexId:7,name:"钎焊炉1"},
                       {indexId:8,name:"钎焊炉2"},
                       {indexId:9,name:"测试台1"},
@@ -160,7 +160,7 @@ export default {
                     }
                 }]
             },
-            value2: ''
+            value1: null
         };
     },
     methods: {
@@ -175,10 +175,27 @@ export default {
             console.log(indx)
         },
         startPlant(){
+            if(this.group == '工作组'){
+                this.$message.warning('请选择工作组！');
+                return;
+            }
+            if(this.plName == '产线名称'){
+                this.$message.warning('请选择产线名称！');
+                return;
+            }
+            if(this. dtUnit == '时间单位'){
+                this.$message.warning('请选择日期单位！');
+                return;
+            }
            
-            bus.$emit("Query",{dateunit:this.dtUnit,prodline:this.plName,starttime:this.value2[0],endtime:this.value2[1]})
+            if(this.value1 == null){
+                this.$message.warning('请选择日期范围！');
+                return;
+            }
+            
+            bus.$emit("Query",{dateunit:this.dtUnit,prodline:this.plName,starttime:this.value1[0],endtime:this.value1[1]})
             // eslint-disable-next-line no-console
-            console.log(this.dtUnit+" "+this.plName+" "+this.value2[0]+" "+this.value2[1]);
+            console.log(this.dtUnit+" "+this.plName+" "+this.value1[0]+" "+this.value1[1]);
         },
         setGroupVal(indx){
             this.group = indx;

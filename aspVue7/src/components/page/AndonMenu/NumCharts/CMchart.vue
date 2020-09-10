@@ -4,15 +4,31 @@
 
 <script>
 import echarts from 'echarts';
-
+import bus from '../../../common/bus';
 export default {
     name:'CMchart',
     data(){
         return {
             chart: null,
+             //queryData
+            starttime: null,
+            endtime:null,
+            dateunit:null,
+            //querydata from database
+            queryData:[],
+             //option data
+            Xdata:[],
+            cm1Ydata:[],
+            cm2Ydata:[],
+            cm3Ydata:[],
+            mixYdata:[],
+            mod1Ydata:[],
+            mod2Ydata:[],
             option: {
                 title: {
-                    text: 'CM'
+                    text: 'CM Value Line 安灯数量',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                 tooltip: { 
                     trigger: 'axis',
@@ -27,14 +43,14 @@ export default {
                     left:'right',
                     orient:'vertical',
                     selectMode:true,
-                    data:['Cooler Line1','Cooler Line2','Cooler Line3','混合管装配线','模块线1','模块线2']
+                    data:['Cooler Line 1','Cooler Line 2','Cooler Line 3','混合管装配线','模块线1','模块线2']
                 },
                 xAxis: {
                     data: ["1","2","3","4","5","6","7"]
                 },
                 yAxis: {},
                 series: [{
-                            name: 'Cooler Line1',
+                            name: 'Cooler Line 1',
                             type: 'line',
                             // data: [5,20,36,10,10,20],
                                 data:[3,7,12,6,5,1,9],
@@ -48,7 +64,7 @@ export default {
                             }
                         },
                         {
-                            name: 'Cooler Line2',
+                            name: 'Cooler Line 2',
                             type: 'line',
                             data: [5,20,36,10,10,20,8],
                             itemStyle:{
@@ -61,7 +77,7 @@ export default {
                             }
                         },
                         {
-                            name: 'Cooler Line3',
+                            name: 'Cooler Line 3',
                             type: 'line',
                             data: [5,50,21,30,13,24,7],
                             itemStyle:{
@@ -115,10 +131,78 @@ export default {
             },
         }
     },
+    watch:{
+        'queryData.length':{
+            handler:function(oldVal,newVal){
+                // eslint-disable-next-line no-console
+                console.log(oldVal+'到'+newVal);
+                this.Xdata = []
+                this.cm1Ydata = []
+                this.cm2Ydata = []
+                this.cm3Ydata = []
+                this.mixYdata = []
+                this.mod1Ydata = []
+                this.mod2Ydata = []
+                for(var item of this.queryData){
+                    this.Xdata.push(item.日期单位);
+                    this.cm1Ydata.push(item.cM1Num);
+                    this.cm2Ydata.push(item.cM2Num);
+                    this.cm3Ydata.push(item.cM3Num);
+                    this.mixYdata.push(item.mixNum);
+                    this.mod1Ydata.push(item.mod1Num);
+                    this.mod2Ydata.push(item.mod2Num);
+                }
+                this.option.xAxis.data = this.Xdata;
+                this.option.series[0].data = this.cm1Ydata;
+                this.option.series[1].data = this.cm2Ydata;
+                this.option.series[2].data = this.cm3Ydata;
+                this.option.series[3].data = this.mixYdata;
+                this.option.series[4].data = this.mod1Ydata;
+                this.option.series[5].data = this.mod2Ydata;
+
+                var c1 = document.getElementById("CMchart");
+                this.chart = echarts.init(c1);
+                this.chart.setOption(this.option);
+
+            }
+        }
+    },
+    methods:{
+        getData(){
+            fetch('api/Andon/CMdata',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    start: this.starttime,
+                    end: this.endtime,
+                    dateunit:this.dateunit
+                })
+            })
+            .then(response => response.json())
+            // .then(response => response.text())
+            .then(data =>{
+                this.queryData = data
+                // alert(data)
+            })
+            .catch(data =>{
+                alert('error!')
+            })
+        }
+    },
     mounted(){
         var c1 = document.getElementById("CMchart");
         this.chart = echarts.init(c1);
         this.chart.setOption(this.option);
+
+        bus.$on('AndonNumquery', msg =>{
+            this.queryData = [];
+            this.dateunit = msg.dateunit;
+            this.starttime = msg.start;
+            this.endtime = msg.end;
+            this.getData()
+        })
     }
 }
 </script>
