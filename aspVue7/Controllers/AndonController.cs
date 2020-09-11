@@ -16,6 +16,7 @@ namespace aspVue7.Controllers
     [Route("api/[controller]")]
     public class AndonController : Controller
     {
+        //按灯信息汇总
         [Route("api/[controller]")]
         [HttpPost("[action]")]
         public List<AndonHourRate> hourRate([FromBody] queryPrm prm){
@@ -28,6 +29,7 @@ namespace aspVue7.Controllers
             return testData; 
         }
 
+        //安灯数量
         [Route("api/[controller]")]
         [HttpPost("[action]")]
         public List<EGRNum> EGRdata([FromBody] AndonNumPrm prm){
@@ -69,6 +71,19 @@ namespace aspVue7.Controllers
             var s = prm.start;
             var e = prm.end;
             var testData = model.Database.SqlQuery<PTCTHNum>($"EXECUTE dbo.QforAndonNumPTCTH @dateunit='{p1}',@starttime='{s}',@endtime='{e}'").ToList();
+            return testData; 
+        }
+
+        //按灯类别
+         [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<catePrm> category([FromBody] queryPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var p1 = prm.dateunit;
+            var s = prm.start;
+            var e = prm.end;
+            var stats = prm.stus;
+            var testData = model.Database.SqlQuery<catePrm>($"EXECUTE dbo.QforAndonCategoryPie @dateunit='{p1}',@start='{s}',@end='{e}',@status='{stats}'").ToList();
             return testData; 
         }
         public class queryPrm{
@@ -136,6 +151,32 @@ namespace aspVue7.Controllers
             public int jlrNum{get;set;}
             public int sgmeNum{get;set;}
             public int laNum{get;set;}
+        }
+
+        public class catePrm{
+            public string 日期单位{get;set;}
+            public double gProcessT{get;set;}
+            public double gAndonN{get;set;}
+            public double gRespT{get;set;}
+            public double gRepairT{get;set;}
+            public double gWorkRate{get;set;}
+             public double sProcessT{get;set;}
+            public double sAndonN{get;set;}
+            public double sRespT{get;set;}
+            public double sRepairT{get;set;}
+            public double sWorkRate{get;set;}
+             public double cProcessT{get;set;}
+            public double cAndonN{get;set;}
+            public double cRespT{get;set;}
+            public double cRepairT{get;set;}
+            public double cWorkRate{get;set;}
+             public double zProcessT{get;set;}
+            public double zAndonN{get;set;}
+            public double zRespT{get;set;}
+            public double zRepairT{get;set;}
+            public double zWorkRate{get;set;}
+            public double plantimeSum{get;set;}
+
         }
     }
 }

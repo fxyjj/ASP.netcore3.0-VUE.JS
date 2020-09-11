@@ -3,6 +3,7 @@ import App from './App.vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router';
+import "babel-polyfill";
 // import axios from 'axios';
 // Vue.prototype.$axios = axios
 Vue.config.productionTip = false

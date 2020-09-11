@@ -9,6 +9,7 @@
 
 <script>
 import echarts from 'echarts';
+import bus from '../../../common/bus';
 export default {
 	name:"Piechart",
  data(){
@@ -107,6 +108,9 @@ export default {
 		var c4 = document.getElementById("AndonPie4");
 		this.Hourchart = echarts.init(c4);
 		this.Hourchart.setOption(this.optionPie4);
+		bus.$on('backData',msg=>{
+			console.log("从lintchart过来的参数："+msg);
+		})
 	}
 }
 </script>
