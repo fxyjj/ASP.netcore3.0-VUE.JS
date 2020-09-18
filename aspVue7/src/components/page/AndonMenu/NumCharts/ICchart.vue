@@ -1,5 +1,5 @@
 <template>
-        <div id="ICchart" :style="{width:'750px',height:'320px',display:'inline-block'}"></div>
+        <div id="ICchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 </template>
 
 <script>
@@ -143,8 +143,14 @@ export default {
                 this.ipte2Ydata = []
                 this.msl1Ydata = []
                 this.msl2Ydata = []
+                 var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov'] 
                 for(var item of this.queryData){
-                    this.Xdata.push(item.日期单位);
+                    if(this.dateunit == '月'){
+                        this.Xdata.push(monthName[Number(item.日期单位-1)]);
+                    }else{
+                        this.Xdata.push(item.日期单位);
+                    }
+                    // this.Xdata.push(item.日期单位);
                     this.hb1Ydata.push(item.hb1Num);
                     this.hb2Ydata.push(item.hb2Num);
                     this.ipte1Ydata.push(item.iptE1Num);

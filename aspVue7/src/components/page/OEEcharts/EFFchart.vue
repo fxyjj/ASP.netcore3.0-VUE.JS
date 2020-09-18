@@ -1,5 +1,5 @@
 <template>
- <el-card shadow = "hover"><div id="EFFchart" :style="{width:'550px',height:'320px'}"></div> </el-card>
+<div id="EFFchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 </template>
 <script>
 import echarts from 'echarts';
@@ -28,17 +28,36 @@ export default {
             prodLine:"",
             option : {
                 title: {
-                    text: '员工效率'
+                    text: '员工效率',
+                    textStyle:{
+                        color:"#000"
+                    }
                 },
                 tooltip: {},
                 legend: {
                     selectMode:true,
-                    data:['员工效率','目标']
+                    data:['员工效率','目标'],
+                    textStyle:{
+                        color:"#000"
+                    }
                 },
                 xAxis: {
-                    data: ["1","2","3","4","5","6"]
+                    data: ["1","2","3","4","5","6"],
+                    axisLine:{
+                        lineStyle:{
+                            color:'#000',
+                            // width:8,//这里是为了突出显示加上的
+                        }
+                    }
                 },
-                yAxis: {},
+                yAxis: {
+                    axisLine:{
+                        lineStyle:{
+                            color:'#000',
+                            // width:8,//这里是为了突出显示加上的
+                        }
+                    }
+                },
                 series: [{
                             name: '员工效率',
                             type: 'bar',
@@ -61,7 +80,7 @@ export default {
                                             '#C1232B','#B5C334'
                                         ];
                                         // eslint-disable-next-line no-console
-                                        console.log("this is dataindex : "+params.data)
+                                        // console.log("this is dataindex : "+params.data)
                                         //按条件修改柱状图颜色
                                         if(params.data['color'] != undefined){
                                             
@@ -95,7 +114,7 @@ export default {
             handler:function(newval,oldval){
                 if(newval !== oldval){
                     // eslint-disable-next-line no-console
-                    console.log(newval+" 到 "+oldval)
+                    // console.log(newval+" 到 "+oldval)
                     this.getPage()
                 }    
         },
@@ -145,7 +164,7 @@ export default {
             .then(data => {
                 this.cdate = data;
                  // eslint-disable-next-line no-console
-                console.log("effdata from back end : "+this.cdate.length);
+                // console.log("effdata from back end : "+this.cdate.length);
             }).catch(data => {
                 alert(data);
             })
@@ -169,11 +188,27 @@ export default {
             //  // eslint-disable-next-line no-console
             // console.log("effthis is product line : "+this.prodLine)
             });
-            var jack = document.getElementById("EFFchart");
-            this.charts = echarts.init(jack);
-            // eslint-disable-next-line no-console
-            console.log("effthis is the param: ");
-            this.charts.setOption(this.option);
+        var jack = document.getElementById("EFFchart");
+        this.charts = echarts.init(jack);
+        // eslint-disable-next-line no-console
+        // console.log("effthis is the param: ");
+        this.charts.setOption(this.option);
+
+        bus.$on("colorMod",sts =>{
+            if(sts){
+                this.option.title.textStyle.color = "#000";
+                this.option.legend.textStyle.color = "#000";
+                this.option.xAxis.axisLine.lineStyle.color = "#000";
+                this.option.yAxis.axisLine.lineStyle.color = "#000";
+                this.charts.setOption(this.option);
+            }else{
+                this.option.title.textStyle.color = "#fff";
+                this.option.legend.textStyle.color = "#fff";
+                this.option.xAxis.axisLine.lineStyle.color = "#fff";
+                this.option.yAxis.axisLine.lineStyle.color = "#fff";
+                this.charts.setOption(this.option);
+            }
+        })
     }
 }
 </script>

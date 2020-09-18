@@ -1,5 +1,5 @@
 <template>
- <el-card shadow = "hover"><div id="FTTchart" :style="{width:'550px',height:'320px'}"></div></el-card>
+<div id="FTTchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 
 </template>
 <script>
@@ -36,17 +36,36 @@ export default {
             prodLine:"",
             option : {
                 title: {
-                    text: '一次合格率'
+                    text: '一次合格率',
+                    textStyle:{
+                        color:"#000"
+                    }
                 },
                 tooltip: {},
                 legend: {
                     selectMode:true,
-                    data:['一次合格率','目标']
+                    data:['一次合格率','目标'],
+                    textStyle:{
+                        color:"#000"
+                    }
                 },
                 xAxis: {
-                    data: ["1","2","3","4","5","6"]
+                    data: ["1","2","3","4","5","6"],
+                    axisLine:{
+                        lineStyle:{
+                            color:'#000',
+                            // width:8,//这里是为了突出显示加上的
+                        }
+                    }
                 },
-                yAxis: {},
+                yAxis: {
+                    axisLine:{
+                        lineStyle:{
+                            color:'#000',
+                            // width:8,//这里是为了突出显示加上的
+                        }
+                    }
+                },
                 series: [{
                             name: '一次合格率',
                             type: 'bar',
@@ -72,7 +91,7 @@ export default {
                                         ];
                                         //console.log(params);
                                         // eslint-disable-next-line no-console
-                                        console.log("this is dataindex : "+params.data)
+                                        // console.log("this is dataindex : "+params.data)
                                         
                                         //console.log(colorList[params.dataIndex])
                                         //按条件修改柱状图颜色
@@ -108,7 +127,7 @@ export default {
             handler:function(newval,oldval){
                 if(newval !== oldval){
                     // eslint-disable-next-line no-console
-                    console.log(newval+" 到 "+oldval)
+                    // console.log(newval+" 到 "+oldval)
                     this.getPage()
                 }
                 
@@ -168,7 +187,7 @@ export default {
                 // eslint-disable-next-line no-console
                 // console.log("data from back end : "+this.cdate[0].目标);
                 // eslint-disable-next-line no-console
-                console.log("fttdata from back end : "+this.cdate.length);
+                // console.log("fttdata from back end : "+this.cdate.length);
                 // alert('jack'+this.cdate);
             }).catch(data => {
                 alert(data);
@@ -193,11 +212,27 @@ export default {
             //  // eslint-disable-next-line no-console
             // console.log("fttthis is product line : "+this.prodLine)
             });
-            var jack = document.getElementById("FTTchart");
-            this.charts = echarts.init(jack);
-            // eslint-disable-next-line no-console
-            console.log("this is the param: ");
-            this.charts.setOption(this.option);
+        var jack = document.getElementById("FTTchart");
+        this.charts = echarts.init(jack);
+        // eslint-disable-next-line no-console
+        // console.log("this is the param: ");
+        this.charts.setOption(this.option);
+
+        bus.$on("colorMod",sts =>{
+            if(sts){
+                this.option.title.textStyle.color = "#000";
+                this.option.legend.textStyle.color = "#000";
+                this.option.xAxis.axisLine.lineStyle.color = "#000";
+                this.option.yAxis.axisLine.lineStyle.color = "#000";
+                this.charts.setOption(this.option);
+            }else{
+                this.option.title.textStyle.color = "#fff";
+                this.option.legend.textStyle.color = "#fff";
+                this.option.xAxis.axisLine.lineStyle.color = "#fff";
+                this.option.yAxis.axisLine.lineStyle.color = "#fff";
+                this.charts.setOption(this.option);
+            }
+        })
     }
 
     

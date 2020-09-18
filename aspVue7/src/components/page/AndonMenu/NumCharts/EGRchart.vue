@@ -1,5 +1,5 @@
 <template>
-        <div id="EGRchart" :style="{width:'750px',height:'320px',display:'inline-block'}"></div>
+        <div id="EGRchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 </template>
 
 <script>
@@ -158,8 +158,14 @@ export default {
                 this.amYdata = []
                 this.etvYdata = []
                 this.lpYdata = []
+                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov'] 
                 for(var item of this.queryData){
-                    this.Xdata.push(item.日期单位);
+                    if(this.dateunit == '月'){
+                        this.Xdata.push(monthName[Number(item.日期单位-1)]);
+                    }else{
+                        this.Xdata.push(item.日期单位);
+                    }
+                    // this.Xdata.push(item.日期单位);
                     this.bpvYdata.push(item.bpvNum);
                     this.vfYdata.push(item.vfNum);
                     this.softYdata.push(item.柔性线Num);

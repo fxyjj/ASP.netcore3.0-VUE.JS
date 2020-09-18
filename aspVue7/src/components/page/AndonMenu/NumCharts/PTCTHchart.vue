@@ -1,5 +1,5 @@
 <template>
-        <div id="PTCTHchart" :style="{width:'750px',height:'320px',display:'inline-block'}"></div>
+        <div id="PTCTHchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
             laYdata:[],
             option: {
                 title: {
-                   text: 'PTCTH Value Line 安灯数量',
+                   text: 'PTC/TH Value Line 安灯数量',
                     left: '50%',
                     textAlign: 'center'
                 },
@@ -188,8 +188,14 @@ export default {
                 this.jlrYdata = []
                 this.sgmeYdata = []
                 this.laYdata = []
+                 var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov'] 
                 for(var item of this.queryData){
-                    this.Xdata.push(item.日期单位);
+                    if(this.dateunit == '月'){
+                        this.Xdata.push(monthName[Number(item.日期单位-1)]);
+                    }else{
+                        this.Xdata.push(item.日期单位);
+                    }
+                    // this.Xdata.push(item.日期单位);
                     this.ecrvYdata.push(item.ecrvNum);
                     this.hvYdata.push(item.hvNum);
                     this.lvYdata.push(item.lvNum);

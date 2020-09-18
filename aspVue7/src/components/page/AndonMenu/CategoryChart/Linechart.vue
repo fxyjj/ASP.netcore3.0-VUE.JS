@@ -1,8 +1,11 @@
 <template>
-    <div>
-    <div id="AndonCount" :style="{width:'450px',height:'320px',display:'inline-block'}"></div>
-    <div id="AndonWorkHour" :style="{width:'450px',height:'320px',display:'inline-block'}"></div>
-    <div id="AndonWorkRate" :style="{width:'450px',height:'320px',display:'inline-block'}"></div>
+    <div v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
+    <div id="AndonCount" :style="{width:'33%',height:'320px',display:'inline-block'}"></div>
+    <div id="AndonWorkHour" :style="{width:'33%',height:'320px',display:'inline-block'}"></div>
+    <div id="AndonWorkRate" :style="{width:'33%',height:'320px',display:'inline-block'}"></div>
     </div>
 </template>
 
@@ -13,6 +16,7 @@ export default {
     name:"LineChart",
     data(){
         return {
+            loading:false,
             Countchart:null,
             Hourchart:null,
             Ratechart:null,
@@ -41,7 +45,9 @@ export default {
             c3yz:[],
             optionCount:{
                  title: {
-                    text: '周安灯条数'
+                    text: '安灯条数',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -119,7 +125,9 @@ export default {
             },
              optionHour:{
                  title: {
-                    text: '周安灯工时'
+                    text: '安灯工时',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -197,7 +205,9 @@ export default {
             },
              optionRate:{
                  title: {
-                    text: '周安灯工时占排班比'
+                    text: '安灯工时占排班比',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -296,24 +306,29 @@ export default {
                 this.c3ys=[]
                 this.c3yc=[]
                 this.c3yz=[]
-
+                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
                 for(var i of this.queryData){
-                    this.xdata.push(i.日期单位);
+                    if(this.dateunit == '月'){
+                        this.xdata.push(monthName[Number(i.日期单位)-1]);
+                    }else{
+                        this.xdata.push(i.日期单位);
+                    }
+                    
 
                     this.c1yg.push(i.gAndonN);
                     this.c1ys.push(i.sAndonN);
                     this.c1yc.push(i.cAndonN);
                     this.c1yz.push(i.zAndonN);
 
-                    this.c2yg.push(i.gProcessT);
-                    this.c2ys.push(i.sProcessT);
-                    this.c2yc.push(i.cProcessT);
-                    this.c2yz.push(i.zProcessT);
+                    this.c2yg.push(i.gProcessT.toFixed(2));
+                    this.c2ys.push(i.sProcessT.toFixed(2));
+                    this.c2yc.push(i.cProcessT.toFixed(2));
+                    this.c2yz.push(i.zProcessT.toFixed(2));
 
-                    this.c3yg.push(i.gWorkRate);
-                    this.c3ys.push(i.sWorkRate);
-                    this.c3yc.push(i.cWorkRate);
-                    this.c3yz.push(i.zWorkRate);
+                    this.c3yg.push(i.gWorkRate.toFixed(2));
+                    this.c3ys.push(i.sWorkRate.toFixed(2));
+                    this.c3yc.push(i.cWorkRate.toFixed(2));
+                    this.c3yz.push(i.zWorkRate.toFixed(2));
                 }
 
                 this.optionCount.xAxis.data = this.xdata;
@@ -337,6 +352,7 @@ export default {
                 this.Countchart.setOption(this.optionCount);
                 this.Hourchart.setOption(this.optionHour);
                 this.Ratechart.setOption(this.optionRate);
+                this.loading = false;
                 }
                 
             }
@@ -388,6 +404,7 @@ export default {
             this.start = msg.starttime
             this.end = msg.endtime
             this.status = msg.status
+            this.loading = msg.loadstatus
             // console.log("bus过来的参数:"+msg.dateunit);
             // console.log("bus过来的参数:"+msg.starttime);
             // console.log("bus过来的参数:"+msg.endtime);

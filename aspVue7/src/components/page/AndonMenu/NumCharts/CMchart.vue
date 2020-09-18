@@ -1,5 +1,5 @@
 <template>
-        <div id="CMchart" :style="{width:'750px',height:'320px',display:'inline-block'}"></div>
+        <div id="CMchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
             mod2Ydata:[],
             option: {
                 title: {
-                    text: 'CM Value Line 安灯数量',
+                    text: 'Cooler & Module Value Line 安灯数量',
                     left: '50%',
                     textAlign: 'center'
                 },
@@ -143,8 +143,14 @@ export default {
                 this.mixYdata = []
                 this.mod1Ydata = []
                 this.mod2Ydata = []
+                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov'] 
                 for(var item of this.queryData){
-                    this.Xdata.push(item.日期单位);
+                    if(this.dateunit == '月'){
+                        this.Xdata.push(monthName[Number(item.日期单位-1)]);
+                    }else{
+                        this.Xdata.push(item.日期单位);
+                    }
+                    // this.Xdata.push(item.日期单位);
                     this.cm1Ydata.push(item.cM1Num);
                     this.cm2Ydata.push(item.cM2Num);
                     this.cm3Ydata.push(item.cM3Num);

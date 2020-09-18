@@ -22,8 +22,8 @@
                  <el-button @click="startPlant" :style="{'margin-left':'30px',height:'33px','margin-bottom':'-12px'}">查询</el-button>
         </div>
         <el-row>
-        <div id="chart1" :style="{width:'750px',height:'500px',display:'inline-block'}"></div>
-        <div id="chart2" :style="{width:'750px',height:'500px',display:'inline-block'}"></div>
+        <div id="chart1" :style="{width:'50%',height:'500px',display:'inline-block'}"></div>
+        <div id="chart2" :style="{width:'50%',height:'500px',display:'inline-block'}"></div>
         </el-row>
     </div>
 </template>
@@ -48,7 +48,9 @@ export default {
             c2yAxis3:[],
             option1: {
                 title: {
-                    text: '安灯工时损失及占比'
+                    text: '安灯工时损失及占比',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                 tooltip: { 
                     trigger: 'axis',
@@ -133,7 +135,9 @@ export default {
             },
             option2: {
                 title: {
-                    text: '安灯条数，修复及响应'
+                    text: '安灯条数，修复及响应',
+                    left: '50%',
+                    textAlign: 'center'
                 },
                  tooltip: { 
                     trigger: 'axis',
@@ -148,7 +152,7 @@ export default {
                     left:'right',
                     orient:'vertical',
                     selectMode:true,
-                    data:['安灯条数','HTTR修复时间','平均响应时间']
+                    data:['安灯条数','MTTR修复时间','平均响应时间']
                 },
                 xAxis: {
                     data: ["1","2","3","4","5","6"]
@@ -175,7 +179,7 @@ export default {
                             }
                         },
                         {
-                            name: 'HTTR修复时间',
+                            name: 'MTTR修复时间',
                             type: 'line',
                             data: [5,20,36,10,10,20],
                             itemStyle:{
@@ -258,17 +262,21 @@ export default {
                     this.c2yAxis1 = [];
                     this.c2yAxis2 = [];
                     this.c2yAxis3 = [];
-                    for( var res of this.queryData){
-                        // eslint-disable-next-line no-console
-                        // console.log(res);    
-                        this.cxAxis.push(res.dateunit);
+                    var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
+                    for(var res of this.queryData){
+                        if(this.radio == '月'){
+                            this.cxAxis.push(monthName[Number(res.dateunit)-1]);
+                        }else{
+                            this.cxAxis.push(res.dateunit);
+                        }
+                        // this.cxAxis.push(res.dateunit);
 
-                        this.c1yAxis1.push(res.planTime);
-                        this.c1yAxis2.push(res.procssTime);
+                        this.c1yAxis1.push(res.planTime.toFixed(2));
+                        this.c1yAxis2.push(res.procssTime.toFixed(2));
 
                         this.c2yAxis1.push(res.andonNum);
-                        this.c2yAxis2.push(res.repairTime);
-                        this.c2yAxis3.push(res.avgRpsTime);
+                        this.c2yAxis2.push(res.repairTime.toFixed(2));
+                        this.c2yAxis3.push(res.avgRpsTime.toFixed(2));
                         
                         }
                     // eslint-disable-next-line no-console

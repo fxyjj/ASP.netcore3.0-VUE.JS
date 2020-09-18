@@ -96,7 +96,7 @@ export default {
                 return;
             }
 
-            bus.$emit('catePrm',{dateunit:this.radio,starttime:this.value1[0],endtime:this.value1[1],status:status});
+            bus.$emit('catePrm',{dateunit:this.radio,starttime:this.value1[0],endtime:this.value1[1],status:status,loadstatus:true});
             
             // console.log("status:"+status)
           
