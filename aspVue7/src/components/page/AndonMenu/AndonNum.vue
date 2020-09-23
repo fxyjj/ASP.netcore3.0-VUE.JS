@@ -77,8 +77,6 @@ export default {
     },
     methods:{
         startPlant(){
-            // eslint-disable-next-line no-console
-            console.log(this.value1)
              if(this.radio == ''){
                 this.$message.warning('请选择日期单位！');
                 return;
@@ -88,16 +86,9 @@ export default {
                 return;
             }
             bus.$emit('AndonNumquery',{dateunit:this.radio,start:this.value1[0],end:this.value1[1]})
-            // eslint-disable-next-line no-console
-            console.log(this.radio); 
-            // eslint-disable-next-line no-console
-            console.log(this.value1[0]); 
-            // eslint-disable-next-line no-console
-            console.log(this.value1[1]); 
         }
     },
     mounted(){
-        
     }
 }
 </script>

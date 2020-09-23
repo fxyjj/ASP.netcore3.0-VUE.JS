@@ -16,7 +16,7 @@ export default {
             dateunit:null,
             //querydata from database
             queryData:[],
-             //option data
+             //optionPTC data
             Xdata:[],
             ecrvYdata:[],
             hvYdata:[],
@@ -27,7 +27,7 @@ export default {
             jlrYdata:[],
             sgmeYdata:[],
             laYdata:[],
-            option: {
+            optionPTC: {
                 title: {
                    text: 'PTC/TH Value Line 安灯数量',
                     left: '50%',
@@ -176,8 +176,6 @@ export default {
     watch:{
          'queryData.length':{
             handler:function(oldVal,newVal){
-                // eslint-disable-next-line no-console
-                console.log(oldVal+'到'+newVal);
                 this.Xdata = []
                 this.ecrvYdata = []
                 this.hvYdata = []
@@ -207,20 +205,20 @@ export default {
                     this.laYdata.push(item.laNum);
 
                 }
-                this.option.xAxis.data = this.Xdata;
-                this.option.series[0].data = this.ecrvYdata;
-                this.option.series[1].data = this.hvYdata;
-                this.option.series[2].data = this.lvYdata;
-                this.option.series[3].data = this.fordYdata;
-                this.option.series[4].data = this.gacYdata;
-                this.option.series[5].data = this.hkmcYdata;
-                this.option.series[6].data = this.jlrYdata;
-                this.option.series[7].data = this.sgmeYdata;
-                this.option.series[8].data = this.laYdata;
+                this.optionPTC.xAxis.data = this.Xdata;
+                this.optionPTC.series[0].data = this.ecrvYdata;
+                this.optionPTC.series[1].data = this.hvYdata;
+                this.optionPTC.series[2].data = this.lvYdata;
+                this.optionPTC.series[3].data = this.fordYdata;
+                this.optionPTC.series[4].data = this.gacYdata;
+                this.optionPTC.series[5].data = this.hkmcYdata;
+                this.optionPTC.series[6].data = this.jlrYdata;
+                this.optionPTC.series[7].data = this.sgmeYdata;
+                this.optionPTC.series[8].data = this.laYdata;
 
                 var c1 = document.getElementById("PTCTHchart");
                 this.chart = echarts.init(c1);
-                this.chart.setOption(this.option);
+                this.chart.setOption(this.optionPTC);
 
             }
         }
@@ -242,7 +240,6 @@ export default {
             // .then(response => response.text())
             .then(data =>{
                 this.queryData = data
-                // alert(data)
             })
             .catch(data =>{
                 alert('error!')
@@ -252,7 +249,7 @@ export default {
     mounted(){
         var c1 = document.getElementById("PTCTHchart");
         this.chart = echarts.init(c1);
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.optionPTC);
 
          bus.$on('AndonNumquery', msg =>{
             this.queryData = [];

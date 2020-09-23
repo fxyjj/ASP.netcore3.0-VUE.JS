@@ -95,14 +95,7 @@ export default {
                 this.$message.warning("请选择设备状态！");
                 return;
             }
-
             bus.$emit('catePrm',{dateunit:this.radio,starttime:this.value1[0],endtime:this.value1[1],status:status,loadstatus:true});
-            
-            // console.log("status:"+status)
-          
-            // console.log("radio:"+this.radio)
-            // console.log("start:"+this.value1[0])
-            // console.log("end:"+this.value1[1])
         }
     },
     mounted(){

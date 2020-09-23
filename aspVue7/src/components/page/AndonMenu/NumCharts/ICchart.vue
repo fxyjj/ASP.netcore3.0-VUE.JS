@@ -16,7 +16,7 @@ export default {
             dateunit:null,
             //querydata from database
             queryData:[],
-             //option data
+             //optionIC data
             Xdata:[],
             hb1Ydata:[],
             hb2Ydata:[],
@@ -24,7 +24,7 @@ export default {
             ipte2Ydata:[],
             msl1Ydata:[],
             msl2Ydata:[],
-            option: {
+            optionIC: {
                 title: {
                     text: 'IC Value Line 安灯数量',
                     left: '50%',
@@ -134,8 +134,6 @@ export default {
     watch:{
         'queryData.length':{
             handler:function(oldVal,newVal){
-                // eslint-disable-next-line no-console
-                console.log(oldVal+'到'+newVal);
                 this.Xdata = []
                 this.hb1Ydata = []
                 this.hb2Ydata = []
@@ -158,17 +156,17 @@ export default {
                     this.msl1Ydata.push(item.msl1Num);
                     this.msl2Ydata.push(item.msl2Num);
                 }
-                this.option.xAxis.data = this.Xdata;
-                this.option.series[0].data = this.hb1Ydata;
-                this.option.series[1].data = this.ipte1Ydata;
-                this.option.series[2].data = this.msl1Ydata;
-                this.option.series[3].data = this.hb2Ydata;
-                this.option.series[4].data = this.ipte2Ydata;
-                this.option.series[5].data = this.msl2Ydata;
+                this.optionIC.xAxis.data = this.Xdata;
+                this.optionIC.series[0].data = this.hb1Ydata;
+                this.optionIC.series[1].data = this.ipte1Ydata;
+                this.optionIC.series[2].data = this.msl1Ydata;
+                this.optionIC.series[3].data = this.hb2Ydata;
+                this.optionIC.series[4].data = this.ipte2Ydata;
+                this.optionIC.series[5].data = this.msl2Ydata;
 
                 var c1 = document.getElementById("ICchart");
                 this.chart = echarts.init(c1);
-                this.chart.setOption(this.option);
+                this.chart.setOption(this.optionIC);
 
             }
         }
@@ -190,7 +188,6 @@ export default {
             // .then(response => response.text())
             .then(data =>{
                 this.queryData = data
-                // alert(data)
             })
             .catch(data =>{
                 alert('error!')
@@ -200,7 +197,7 @@ export default {
     mounted(){
         var c1 = document.getElementById("ICchart");
         this.chart = echarts.init(c1);
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.optionIC);
 
          bus.$on('AndonNumquery', msg =>{
             this.queryData = [];

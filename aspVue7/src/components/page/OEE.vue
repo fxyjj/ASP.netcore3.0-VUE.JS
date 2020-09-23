@@ -136,7 +136,6 @@ export default {
             //复选框参数
             checkAll: false,
             checkedprodLine: [],
-            // lines: ['上海', '北京', '广州', '深圳'],
             isIndeterminate: true,
             //弹出框和轮播按钮参数
             dialogVisible:false,

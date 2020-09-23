@@ -43,7 +43,6 @@ export default {
     },
     methods: {
         submitForm() {
-            console.log(this.param.username);
             if(this.param.username == "" || this.param.password == ""){
                 this.$message.error('请输入账号户密码！');
             }else{
@@ -71,9 +70,6 @@ export default {
                                 console.log("submit error");
                                 return false;
                             }
-                            // eslint-disable-next-line no-console
-                            console.log("pwd : " + data[0].txtPassword);
-                            // alert('jack'+data);
                         }).catch(data => {
                             alert(data);
                         })

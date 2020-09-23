@@ -75,7 +75,7 @@ namespace aspVue7.Controllers
         }
 
         //按灯类别
-         [Route("api/[controller]")]
+        [Route("api/[controller]")]
         [HttpPost("[action]")]
         public List<catePrm> category([FromBody] queryPrm prm){
             var model = new BorgWarnerMisSQLContext();
@@ -86,20 +86,55 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<catePrm>($"EXECUTE dbo.QforAndonCategoryPie @dateunit='{p1}',@start='{s}',@end='{e}',@status='{stats}'").ToList();
             return testData; 
         }
+
+        //按灯TopIssue
+        [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<TIQuryPrm> topissue([FromBody] topissuePrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var p1 = prm.dateunit;
+            var s = prm.start;
+            var e = prm.end;
+            var testData = model.Database.SqlQuery<TIQuryPrm>($"EXECUTE dbo.QforTopIssueDU @dateunit='{p1}',@start='{s}',@end='{e}'").ToList();
+            return testData; 
+        }
+        //设备安灯工时分布
+        [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<equipQueryRes> equipChart([FromBody] equipPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var p1 = prm.date;
+            var p2 = prm.dateunit;
+            var p3 = prm.status;
+            var testData = model.Database.SqlQuery<equipQueryRes>($"EXECUTE dbo.QforTopIssueEquip @date='{p1}',@dateunit='{p2}',@status='{p3}'").ToList();
+            return testData; 
+        }
+        //产线安灯工时分布
+        [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<prodQueryRes> prodChart([FromBody] prodPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var p1 = prm.date;
+            var p2 = prm.dateunit;
+            var p3 = prm.status;
+            var testData = model.Database.SqlQuery<prodQueryRes>($"EXECUTE dbo.QforTopIssueProd @date='{p1}',@dateunit='{p2}',@status='{p3}'").ToList();
+            return testData; 
+        }
+        //按灯类别，按灯信息汇总 参数 front -> end
         public class queryPrm{
             public string dateunit{get;set;}
             public DateTime start{get;set;}
             public DateTime end{get;set;}
             public string stus{get;set;}
         }
-
+        //按灯信息汇总：安灯数量参数 end -> front
         public class AndonNumPrm{
             public string dateunit{get;set;}
             public DateTime start{get;set;}
             public DateTime end{get;set;}
 
         }
-
+        //按灯信息汇总：按灯工时损失参数 end -> front
         public class AndonHourRate{
             public string dateunit{get;set;}
             public double procssTime{get;set;}
@@ -108,7 +143,7 @@ namespace aspVue7.Controllers
             public double repairTime{get;set;}
             public double AvgRpsTime{get;set;}
         }
-
+        //安灯数量参数 end -> front
         public class EGRNum{
             public string 日期单位{get;set;}
             public int BPVNum{get;set;}
@@ -152,7 +187,7 @@ namespace aspVue7.Controllers
             public int sgmeNum{get;set;}
             public int laNum{get;set;}
         }
-
+        //按灯种类参数 end -> front
         public class catePrm{
             public string 日期单位{get;set;}
             public double gProcessT{get;set;}
@@ -177,6 +212,43 @@ namespace aspVue7.Controllers
             public double zWorkRate{get;set;}
             public double plantimeSum{get;set;}
 
+        }
+        //topIssue 类
+        //日期滑条参数 front -> end
+        public class topissuePrm{
+            public string dateunit{get;set;}
+            public DateTime start{get;set;}
+            public DateTime end{get;set;}
+        }
+        //日期滑条参数 end -> front
+        public class TIQuryPrm{
+            public string dateunit{get;set;}
+        }
+        //设备编号参数 front -> end
+        public class equipPrm{
+            public string date{get;set;}
+            public string dateunit{get;set;}
+            public string status{get;set;}
+        }
+        //设备编号参数 end -> front
+        public class equipQueryRes{
+            public string equipNum{get;set;}
+            public double processTime{get;set;}
+            public int andonNum{get;set;}
+            public double rate{get;set;} 
+        }
+        //产线安灯分布参数 front -> end
+        public class prodPrm{
+            public string date{get;set;}
+            public string dateunit{get;set;}
+            public string status{get;set;}
+        }
+        //产线安灯分布参数 end -> front
+        public class prodQueryRes{
+            public string prodLine{get;set;}
+            public double processTime{get;set;}
+            public int andonNum{get;set;}
+            public double rate{get;set;} 
         }
     }
 }

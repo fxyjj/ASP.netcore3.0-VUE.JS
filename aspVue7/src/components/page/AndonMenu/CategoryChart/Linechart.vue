@@ -378,9 +378,6 @@ export default {
             .then(data =>{
                 this.queryData = data;
                 bus.$emit('backData',data);
-                // alert(data);
-                // eslint-disable-next-line no-console
-                // console.log(this.queryData)
             })
             .catch(data =>{
                 alert('error')
@@ -405,16 +402,9 @@ export default {
             this.end = msg.endtime
             this.status = msg.status
             this.loading = msg.loadstatus
-            // console.log("bus过来的参数:"+msg.dateunit);
-            // console.log("bus过来的参数:"+msg.starttime);
-            // console.log("bus过来的参数:"+msg.endtime);
-            // console.log("bus过来的参数:"+msg.status);
             this.queryData = [];
-
             this.getData();
-
         })
     }
-    
 }
 </script>

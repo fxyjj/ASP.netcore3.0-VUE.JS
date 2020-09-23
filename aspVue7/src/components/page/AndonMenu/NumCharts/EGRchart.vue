@@ -16,7 +16,7 @@ export default {
             dateunit:null,
             //querydata from database
             queryData:[],
-            //option data
+            //optionEGR data
             Xdata:[],
             bpvYdata:[],
             vfYdata:[],
@@ -25,7 +25,7 @@ export default {
             amYdata:[],
             etvYdata:[],
             lpYdata:[],
-            option: {
+            optionEGR: {
                 title: {
                     text: 'EGR Value Line 安灯数量',
                     left: '50%',
@@ -148,8 +148,6 @@ export default {
     watch:{
         'queryData.length':{
             handler:function(oldVal,newVal){
-                // eslint-disable-next-line no-console
-                console.log(oldVal+'到'+newVal);
                 this.Xdata = []
                 this.bpvYdata = []
                 this.vfYdata = []
@@ -174,18 +172,18 @@ export default {
                     this.etvYdata.push(item.etvNum);
                     this.lpYdata.push(item.lpNum);
                 }
-                this.option.xAxis.data = this.Xdata;
-                this.option.series[0].data = this.bpvYdata;
-                this.option.series[1].data = this.vfYdata;
-                this.option.series[2].data = this.softYdata;
-                this.option.series[3].data = this.gdiYdata;
-                this.option.series[4].data = this.amYdata;
-                this.option.series[5].data = this.etvYdata;
-                this.option.series[6].data = this.lpYdata;
+                this.optionEGR.xAxis.data = this.Xdata;
+                this.optionEGR.series[0].data = this.bpvYdata;
+                this.optionEGR.series[1].data = this.vfYdata;
+                this.optionEGR.series[2].data = this.softYdata;
+                this.optionEGR.series[3].data = this.gdiYdata;
+                this.optionEGR.series[4].data = this.amYdata;
+                this.optionEGR.series[5].data = this.etvYdata;
+                this.optionEGR.series[6].data = this.lpYdata;
 
                 var c1 = document.getElementById("EGRchart");
                 this.chart = echarts.init(c1);
-                this.chart.setOption(this.option);
+                this.chart.setOption(this.optionEGR);
 
             }
         }
@@ -207,7 +205,6 @@ export default {
             // .then(response => response.text())
             .then(data =>{
                 this.queryData = data
-                //alert(data) 
             }).catch(data =>{
                 alert('error')
             })
@@ -216,20 +213,13 @@ export default {
     mounted(){
         var c1 = document.getElementById("EGRchart");
         this.chart = echarts.init(c1);
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.optionEGR);
 
         bus.$on('AndonNumquery',msg =>{
             this.queryData = [];
             this.dateunit = msg.dateunit;
             this.starttime = msg.start;
             this.endtime = msg.end;
-            // eslint-disable-next-line no-console
-            console.log( this.dateunit);
-             // eslint-disable-next-line no-console
-            console.log(this.starttime);
-             // eslint-disable-next-line no-console
-            console.log(this.endtime);
-
             this.getData()
         })
     }

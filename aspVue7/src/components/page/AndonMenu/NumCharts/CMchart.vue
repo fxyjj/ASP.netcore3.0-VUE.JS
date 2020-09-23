@@ -16,7 +16,7 @@ export default {
             dateunit:null,
             //querydata from database
             queryData:[],
-             //option data
+             //optionCM data
             Xdata:[],
             cm1Ydata:[],
             cm2Ydata:[],
@@ -24,7 +24,7 @@ export default {
             mixYdata:[],
             mod1Ydata:[],
             mod2Ydata:[],
-            option: {
+            optionCM: {
                 title: {
                     text: 'Cooler & Module Value Line 安灯数量',
                     left: '50%',
@@ -158,17 +158,17 @@ export default {
                     this.mod1Ydata.push(item.mod1Num);
                     this.mod2Ydata.push(item.mod2Num);
                 }
-                this.option.xAxis.data = this.Xdata;
-                this.option.series[0].data = this.cm1Ydata;
-                this.option.series[1].data = this.cm2Ydata;
-                this.option.series[2].data = this.cm3Ydata;
-                this.option.series[3].data = this.mixYdata;
-                this.option.series[4].data = this.mod1Ydata;
-                this.option.series[5].data = this.mod2Ydata;
+                this.optionCM.xAxis.data = this.Xdata;
+                this.optionCM.series[0].data = this.cm1Ydata;
+                this.optionCM.series[1].data = this.cm2Ydata;
+                this.optionCM.series[2].data = this.cm3Ydata;
+                this.optionCM.series[3].data = this.mixYdata;
+                this.optionCM.series[4].data = this.mod1Ydata;
+                this.optionCM.series[5].data = this.mod2Ydata;
 
                 var c1 = document.getElementById("CMchart");
                 this.chart = echarts.init(c1);
-                this.chart.setOption(this.option);
+                this.chart.setOption(this.optionCM);
 
             }
         }
@@ -190,7 +190,6 @@ export default {
             // .then(response => response.text())
             .then(data =>{
                 this.queryData = data
-                // alert(data)
             })
             .catch(data =>{
                 alert('error!')
@@ -200,7 +199,7 @@ export default {
     mounted(){
         var c1 = document.getElementById("CMchart");
         this.chart = echarts.init(c1);
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.optionCM);
 
         bus.$on('AndonNumquery', msg =>{
             this.queryData = [];

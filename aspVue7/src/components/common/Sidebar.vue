@@ -128,6 +128,11 @@ export default {
                             icon:'el-icon-s-marketing',
                             index: 'TopIssue',
                             title: 'Top Issues'
+                        },
+                        {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonStatus',
+                            title: '安灯状态'
                         }
                     ]
                 },

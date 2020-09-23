@@ -252,8 +252,6 @@ export default {
         'queryData.length':{
             handler:function(newval,oldval){
                 if(newval !== oldval){
-                    // eslint-disable-next-line no-console
-                    console.log(newval+" 到 "+oldval)
                     this.cxAxis = [];
 
                     this.c1yAxis1 = [];
@@ -262,6 +260,7 @@ export default {
                     this.c2yAxis1 = [];
                     this.c2yAxis2 = [];
                     this.c2yAxis3 = [];
+
                     var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
                     for(var res of this.queryData){
                         if(this.radio == '月'){
@@ -269,8 +268,6 @@ export default {
                         }else{
                             this.cxAxis.push(res.dateunit);
                         }
-                        // this.cxAxis.push(res.dateunit);
-
                         this.c1yAxis1.push(res.planTime.toFixed(2));
                         this.c1yAxis2.push(res.procssTime.toFixed(2));
 
@@ -279,8 +276,6 @@ export default {
                         this.c2yAxis3.push(res.avgRpsTime.toFixed(2));
                         
                         }
-                    // eslint-disable-next-line no-console
-                    console.log(this.cyAxis1);
                     this.option1.xAxis.data = this.cxAxis;
                     this.option1.series[0].data = this.c1yAxis1;
                     this.option1.series[1].data = this.c1yAxis2;
@@ -342,9 +337,6 @@ export default {
             // .then(response => response.text())
             .then(data =>{
                 this.queryData = data;
-                // alert(data);
-                // eslint-disable-next-line no-console
-                console.log(this.queryData)
             })
             .catch(data =>{
                 alert('error')
