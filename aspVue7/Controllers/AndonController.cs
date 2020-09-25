@@ -120,6 +120,17 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<prodQueryRes>($"EXECUTE dbo.QforTopIssueProd @date='{p1}',@dateunit='{p2}',@status='{p3}'").ToList();
             return testData; 
         }
+         //产线安灯工时分布
+        [Route("api/[controller]")]
+        [HttpPost("[action]")]
+        public List<andonSts> andonStatus(){
+            var model = new BorgWarnerMisSQLContext();
+            // var p1 = prm.date;
+            // var p2 = prm.dateunit;
+            // var p3 = prm.status;
+            var testData = model.Database.SqlQuery<andonSts>("select * from dbo.qforAndonXT").ToList();
+            return testData; 
+        }
         //按灯类别，按灯信息汇总 参数 front -> end
         public class queryPrm{
             public string dateunit{get;set;}
@@ -249,6 +260,21 @@ namespace aspVue7.Controllers
             public double processTime{get;set;}
             public int andonNum{get;set;}
             public double rate{get;set;} 
+        }
+
+        //安灯状态表格 end -> front
+        public class andonSts{
+            public string 工作中心{get;set;}
+            public string 是否停线{get;set;}
+            public string 设备编号{get;set;}
+            public string 问题描述{get;set;}
+            public DateTime 按灯时间{get;set;}
+            public string 状态描述{get;set;}
+            public int 当前状态{get;set;}
+            public int 问题类别{get;set;}
+            public int 序号{get;set;}
+            public DateTime 处理时间{get;set;}
+            //TODO...
         }
     }
 }

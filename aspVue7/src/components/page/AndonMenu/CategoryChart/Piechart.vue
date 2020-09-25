@@ -42,7 +42,7 @@ export default {
 				series: [{
 							type: 'pie',
 							radius:'40%',
-							data:[{name:'设备1',value:1026},{name:'质量',value:179},{name:'仓库',value:56},{name:'工艺',value:13}],
+							data:[{name:'设备',value:1026},{name:'质量',value:179},{name:'仓库',value:56},{name:'工艺',value:13}],
 							animation:true,
 							label:{
 								position:'outer',
@@ -59,7 +59,7 @@ export default {
 				series: [{
 							type: 'pie',
 							radius:'40%',
-							data:[{name:'设备2',value:3},{name:'质量',value:7},{name:'仓库',value:12},{name:'工艺',value:6}],
+							data:[{name:'设备',value:3},{name:'质量',value:7},{name:'仓库',value:12},{name:'工艺',value:6}],
 							animation:true,
 							label:{
 								position:'outer',
@@ -77,7 +77,7 @@ export default {
 				series: [{
 							type: 'pie',
 							radius:'40%',
-							data: [{name:'设备3',value:5},{name:'质量',value:20},{name:'仓库',value:36},{name:'工艺',value:10}],
+							data: [{name:'设备',value:5},{name:'质量',value:20},{name:'仓库',value:36},{name:'工艺',value:10}],
 							animation:true,
 							label:{
 								position:'outer',
@@ -95,7 +95,7 @@ export default {
 				series: [{
 							type: 'pie',
 							radius:'40%',
-							data: [{name:'设备4',value:9},{name:'质量',value:12},{name:'仓库',value:33},{name:'工艺',value:6}],
+							data: [{name:'设备',value:9},{name:'质量',value:12},{name:'仓库',value:33},{name:'工艺',value:6}],
 							animation:true,
 							label:{
 								position:'outer',
@@ -155,10 +155,10 @@ export default {
 			this.marks = {};
 			var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
 			for(var item of msg){
-				var v1 = [{name:'工艺',value:item.gProcessT.toFixed(2)},{name:'设备',value:item.sProcessT.toFixed(2)},{name:'物料',value:item.cProcessT.toFixed(2)},{name:'质量',value:item.zProcessT.toFixed(2)}]
-				var v2 = [{name:'工艺',value:item.gAndonN},{name:'设备',value:item.sAndonN},{name:'物料',value:item.cAndonN},{name:'质量',value:item.zAndonN}]
-				var v3 = [{name:'工艺',value:item.gRespT.toFixed(2)},{name:'设备',value:item.sRespT.toFixed(2)},{name:'物料',value:item.cRespT.toFixed(2)},{name:'质量',value:item.zRespT.toFixed(2)}]
-				var v4 = [{name:'工艺',value:item.gRepairT.toFixed(2)},{name:'设备',value:item.sRepairT.toFixed(2)},{name:'物料',value:item.cRepairT.toFixed(2)},{name:'质量',value:item.zRepairT.toFixed(2)}]
+				var v1 = [{name:'工艺',value:item.gProcessT.toFixed(2)},{name:'设备',value:item.sProcessT.toFixed(2)},{name:'仓库',value:item.cProcessT.toFixed(2)},{name:'质量',value:item.zProcessT.toFixed(2)}]
+				var v2 = [{name:'工艺',value:item.gAndonN},{name:'设备',value:item.sAndonN},{name:'仓库',value:item.cAndonN},{name:'质量',value:item.zAndonN}]
+				var v3 = [{name:'工艺',value:item.gRespT.toFixed(2)},{name:'设备',value:item.sRespT.toFixed(2)},{name:'仓库',value:item.cRespT.toFixed(2)},{name:'质量',value:item.zRespT.toFixed(2)}]
+				var v4 = [{name:'工艺',value:item.gRepairT.toFixed(2)},{name:'设备',value:item.sRepairT.toFixed(2)},{name:'仓库',value:item.cRepairT.toFixed(2)},{name:'质量',value:item.zRepairT.toFixed(2)}]
 				if(this.dateunit == '月'){
 					this.$set(this.marks,this.pie1.length,monthName[Number(item.日期单位)-1]);
 				}else{

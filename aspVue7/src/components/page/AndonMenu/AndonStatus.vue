@@ -1,6 +1,6 @@
 <template>
     <div class="container" style="background:#324157"><!--:style='{background:"#324157"}'-->
-     <!-- <div id="lanturn"></div> -->
+     
 
      <!-- <div class="block" style="border:1px solid #000"> -->
     <!-- <img src="../../../assets/logo.png"  style="width: 100px; height: 100px;border:2px" /> -->
@@ -14,20 +14,20 @@
                  </el-card>
             </el-col>
             <el-col :span="8">
-                <el-card shadow="hover" style="width: 100%; height: 130px;box-shadow: 0 1px 2px #fff">EGR Module</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 200px;box-shadow: 0 1px 2px #fff;margin-top:8px;margin-bottom:8px">High Voltage Coolant Heater</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 200px;box-shadow: 0 1px 2px #fff;margin-top:8px;margin-bottom:8px">Ignition Coil</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">EGR Valve</el-card>
+                <el-card shadow="hover" style="width: 100%; height: 130px;box-shadow: 0 1px 2px #fff">EGR Module <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 200px;box-shadow: 0 1px 2px #fff;margin-top:8px;margin-bottom:8px">High Voltage Coolant Heater <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 200px;box-shadow: 0 1px 2px #fff;margin-top:8px;margin-bottom:8px">Ignition Coil <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">EGR Valve <div id="lanturn"></div></el-card>
             </el-col>
             <el-col :span="5">
-                <el-card shadow="hover" style="width: 100%; height: 280px;box-shadow: 0 1px 2px #fff">Cooler testing Furnace</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 250px;box-shadow: 0 1px 2px #fff;margin-top:13px;margin-bottom:13px">Cooler Assembly</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">Hybrid Tube</el-card>
+                <el-card shadow="hover" style="width: 100%; height: 280px;box-shadow: 0 1px 2px #fff">Cooler testing Furnace <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 250px;box-shadow: 0 1px 2px #fff;margin-top:13px;margin-bottom:13px">Cooler Assembly <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">Hybrid Tube <div id="lanturn"></div></el-card>
             </el-col>
             <el-col :span="4">
-                 <el-card shadow="hover" style="width: 100%; height: 300px;box-shadow: 0 1px 2px #fff">Routing Mark</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 230px;box-shadow: 0 1px 2px #fff;margin-top:13px;margin-bottom:13px">Air Heater ECRV</el-card>
-                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">Reservered For Cooler</el-card>
+                 <el-card shadow="hover" style="width: 100%; height: 300px;box-shadow: 0 1px 2px #fff">Routing Mark <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 230px;box-shadow: 0 1px 2px #fff;margin-top:13px;margin-bottom:13px">Air Heater ECRV <div id="lanturn"></div></el-card>
+                <el-card shadow="hover" style="width: 100%; height: 340px;box-shadow: 0 1px 2px #fff">Reservered For Cooler <div id="lanturn"></div></el-card>
             </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -58,16 +58,25 @@ export default {
         return {
             //TODO...
             src:'',
-             tableData: [{
-                // date: '2016-05-02',
-                // name: '王小虎',
-                // address: '上海市普陀区金沙江路 1518 弄',
-                // }, {
-                // date: '2016-05-04',
-                // name: '王小虎',
-                // address: '上海市普陀区金沙江路 1518 弄'
-                }]
+            tableData: [],
         }
+    },
+    mounted(){
+        fetch('api/Andon/andonStatus' ,{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            // .then(response => response.json())
+            .then(data => {
+                // this.cdate = data;
+                alert(data)
+                console.log(data)
+            }).catch(data => {
+                alert(data);
+            })
     }
 }
 </script>
