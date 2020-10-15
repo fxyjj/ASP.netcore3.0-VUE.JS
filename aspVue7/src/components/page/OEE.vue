@@ -224,7 +224,9 @@ export default {
             },
             value1: null,
             value2:new Date(),
-            index:0
+            index:0,
+            //time updater
+            interval:null
         };
     },
     methods: {
@@ -369,11 +371,30 @@ export default {
                 console.log("status"+newV);
                 if(!newV){
                    panel.style.background = "#324157";
+                   this.interval = setInterval(() => {
+                       if(this.value1[1] != new Date()){
+                           this.value1[0]=new Date(this.value1[0]+3600*24*1000)
+                           this.value1[1]=new Date(this.value1[1]+3600*24*1000)
+                       }
+                   }, 86400000);
                 }else{
                    panel.style.background = "";
+                   clearInterval(this.interval)
                 }
             }
         }
+    },
+    mounted(){
+        const oldtime = new Date(Date.now() - 30*24*60*60*1000)
+        const newtime = new Date()
+        this.value1 = [oldtime,newtime]
+        this.dtUnit = "日"
+        this.plName = "GEN_III_A+M"
+        this.group = "EGR线"
+        this.prodline = this.EGRLine;
+        console.log(oldtime);
+        console.log(newtime)
+        bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime})
     },
     beforeDestroy(){
         this.checkedprodLine = [];

@@ -128,7 +128,7 @@ namespace aspVue7.Controllers
             // var p1 = prm.date;
             // var p2 = prm.dateunit;
             // var p3 = prm.status;
-            var testData = model.Database.SqlQuery<andonSts>("select * from dbo.qforAndonXT").ToList();
+            var testData = model.Database.SqlQuery<andonSts>("select * from dbo.qforAndonGeneral where 当前状态 != 4").ToList();
             return testData; 
         }
         //按灯类别，按灯信息汇总 参数 front -> end
@@ -269,11 +269,11 @@ namespace aspVue7.Controllers
             public string 设备编号{get;set;}
             public string 问题描述{get;set;}
             public DateTime 按灯时间{get;set;}
-            public string 状态描述{get;set;}
+            public string 类别描述{get;set;}
             public int 当前状态{get;set;}
-            public int 问题类别{get;set;}
             public int 序号{get;set;}
-            public DateTime 处理时间{get;set;}
+            public int 响应时间{get;set;}
+            public int 持续时间{get;set;}
             //TODO...
         }
     }
