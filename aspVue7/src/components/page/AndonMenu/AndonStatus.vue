@@ -9,27 +9,37 @@
                         </el-col>
                         <el-col :span="6">
                             <div class="block" :style='{height:"50px"}'>
-                                <div class="light"></div>
+                                <div class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" style="margin-top:12px">resPos</div>
                             </div>
                             <div class="block" :style='{height:"50px"}'>
-                                <div class="light"></div>
+                                <div class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" style="margin-left:10%;margin-right:20%;margin-top:12px">TGDI</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                              <div class="block" :style='{height:"50px"}'>
-                                <div class="light"></div>
+                                <div class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" style="margin-top:12px">Test Station</div>
                             </div>
                             <div class="block" :style='{height:"50px"}'>
-                                 <div id="模块线2" class="light"></div>
+                                 <div id="模块线2" class="light">
+                                     <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                 </div>
                                 <div class="modName" style="margin-left:8%;margin-right:8%;margin-top:12px">Module2</div>
                             </div>
                         </el-col>
                         <el-col :span="4">
                             <div class="block" :style='{height:"107px"}'>
-                                <div id="模块线1" class="light" ></div>
+                                <div id="模块线1" class="light" >
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" style="width:80%;margin-left:10px;margin-right:10px;margin-top:10px">Module1</div>
                             </div>
                         </el-col>
@@ -38,13 +48,15 @@
                     </el-card>
                 <el-card :style='{height:"200px","margin-top":"13px",background:"#9DC7A1"}'>
                     <el-row>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <div class="lineName">High Voltage Coolant Heater</div>
                         </el-col>
-                        <el-col :span="12">
-                             <div style="height:150px;border:1px solid #000;margin:10px;border-radius:10px">
-                                 <div id="Liquid Heater Line" class="light"></div>
-                                 <div class="modName" :style='{"margin-left":"20%","margin-right":"20%","margin-top":"20%"}'>Liquid Heater</div>
+                        <el-col :span="16">
+                             <div class="block" style="height:150px">
+                                 <div id="Liquid Heater Line" class="light">
+                                     <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                 </div>
+                                 <div class="modName" :style='{"margin-left":"25%","margin-right":"20%","margin-top":"15%"}'>Liquid Heater</div>
                              </div>
                         </el-col>
                     </el-row>
@@ -53,22 +65,28 @@
                     </el-card>
                 <el-card :style='{height:"180px","margin-top":"13px",background:"#FAFAD2"}'>
                     <el-row>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <div class="lineName">IC2</div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <div class="block" :style='{height:"140px"}'>
-                                <div id="Huebers 2" class="light" ></div>
+                                <div id="Huebers 2" class="light" >
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{"margin-left":"25%","margin-right":"25%","margin-top":"10%"}'>Huebers2</div>
                             </div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <div class="block" :style='{height:"65px"}'>
-                                <div id="IPTE 2" class="light"></div>
+                                <div id="IPTE 2" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"12%"}'>IPTE2</div>
                             </div>
                             <div class="block" :style='{height:"65px"}'>
-                                 <div id="Marsilli 2" class="light" ></div>
+                                 <div id="Marsilli 2" class="light" >
+                                     <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                 </div>
                                 <div class="modName" :style='{margin:"12% 6%"}'>Marsilli2</div>
                             </div>
                         </el-col>
@@ -77,47 +95,69 @@
                     </el-card>
                 <el-card :style='{height:"340px","margin-top":"13px",background:"#85A7D7"}'>
                     <el-row>
-                        <el-col :span="9">
-                             <div class="lineName">EGR Valve</div>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="block" :style='{height:"70px"}'>
-                                <div id="柔性线" class="light"></div>
-                                <div class="modName" :style='{margin:"0% 19%"}'>Flexible</div>
+                        <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8);">EGR Valve</div>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="6">
+                            <div class="block" :style='{height:"62px"}'>
+                                <div id="柔性线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 5%"}'>Flexible</div>
                             </div>
-                            <div class="block" :style='{height:"70px"}'>
-                                <div id="LP阀装配线" class="light"></div>
-                                <div class="modName" :style='{margin:"22% 10%"}'>LP</div>
+                            <div class="block" :style='{height:"62px"}'>
+                                <div id="LP阀装配线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 20%"}'>LP</div>
                             </div>
-                            <div class="block" :style='{height:"70px"}'>
-                                <div id="GEN_II阀装配线" class="light"></div>
-                                <div class="modName" :style='{margin:"0% 15%"}'>GEN II</div>
+                            <div class="block" :style='{height:"62px"}'>
+                                <div id="GEN_II阀装配线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 8%"}'>GEN II</div>
                             </div>
-                            <div class="block" :style='{height:"70px"}'>
-                                <div id="ETV装配线" class="light"></div>
-                                <div class="modName" :style='{margin:"0% 32%"}'>ETV</div>
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="block" :style='{height:"147px"}'>
-                                <div id="GEN_III_A+M" class="light"></div>
-                                <div class="modName" :style='{margin:"20% 10%"}'>GEN III A+M</div>
-                            </div>
-                            <div class="block" :style='{height:"147px"}'>
-                                <div id="GEN_III_V+F" class="light"></div>
-                                <div class="modName" :style='{margin:"20% 10%"}' >GEN III V+F</div>
+                            <div class="block" :style='{height:"62px"}'>
+                                <div id="ETV装配线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 15%"}'>ETV</div>
                             </div>
                         </el-col>
-                        <el-col :span="3">
-                            <div class="block" :style='{height:"302px"}'>
-                                <div id="GEN_III_BPV" class="light"></div>
-                                <div class="modName" :style='{margin:"50% 24%"}'>BPV</div>
+                        <el-col :span="6">
+                            <div class="block" :style='{height:"131px"}'>
+                                <div id="GEN_III_A+M" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"10% 10%"}'>GEN III A+M</div>
+                            </div>
+                            <div class="block" :style='{height:"131px"}'>
+                                <div id="GEN_III_V+F" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"10% 10%"}' >GEN III V+F</div>
                             </div>
                         </el-col>
-                        <el-col :span="3">
-                            <div class="block" :style='{height:"302px"}'>
-                                <div id="GDI阀装配线" class="light"></div>
-                                <div class="modName" :style='{margin:"50% 25%"}'>GDI</div>
+                        <el-col :span="6">
+                            <div class="block" :style='{height:"131px"}'>
+                                <div id="GEN_III_BPV" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"30% 10%"}'>new</div>
+                            </div>
+                            <div class="block" style="height:131px">
+                                <div class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"30% 10%"}'>BPV</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="block" :style='{height:"269px"}'>
+                                <div id="GDI阀装配线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"50% 10%"}'>GDI</div>
                             </div>
                         </el-col>
                     </el-row>
@@ -125,54 +165,66 @@
                 </el-card>
                 </el-col>
             <el-col :span="6">
-                <el-card :style='{height:"350px",background:"#CEE08A"}'>
+                <el-card :style='{height:"365px",background:"#CEE08A"}'>
                     <el-row>
                          <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">Furnace</div>
                     </el-row>
                     <el-row>
                         <div class="block" :style='{height:"60px"}'>
-                            <div id="测试台" class="light"></div>
+                            <div id="测试台" class="light">
+                                <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                            </div>
                             <div class="modName" :style='{margin:"5% 20%"}'>Cooler Testing</div>
                         </div>
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <div class="block" :style='{height:"200px"}'>
-                                <div id="钎焊炉1" class="light"></div>
-                                <div class="modName" :style='{margin:"30% 23%"}'>Furnace1</div>
+                            <div class="block" :style='{height:"210px"}'>
+                                <div id="钎焊炉2" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"30% 23%"}'>Furnace2</div>
                             </div>
                         </el-col>
                         <el-col :span="12">
-                            <div class="block" :style='{height:"200px"}' >
-                                <div id="钎焊炉2" class="light"></div>
-                                <div class="modName" :style='{margin:"30% 23%"}'>Furnace2</div>
+                            <div class="block" :style='{height:"210px"}' >
+                                <div id="钎焊炉1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"30% 23%"}'>Furnace1</div>
                             </div>
                         </el-col>
                     </el-row>
 
                    
                     </el-card>
-                <el-card :style='{height:"193px","margin-top":"13px",background:"#CEE08A"}'>
+                <el-card :style='{height:"180px","margin-top":"13px",background:"#CEE08A"}'>
                     <el-row>
                          <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">Cooler Assembly</div>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <div class="block" :style='{height:"120px"}'>
-                                <div id="Cooler Line 1" class="light"></div>
-                                <div class="modName" :style='{margin:"15% 20%"}'>Cooler1</div>
+                            <div class="block" :style='{height:"100px"}'>
+                                <div id="Cooler Line 3" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 20%"}'>Cooler3</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
-                            <div class="block" :style='{height:"120px"}'>
-                                <div id="Cooler Line 2" class="light"></div>
+                            <div class="block" :style='{height:"100px"}'>
+                                <div id="Cooler Line 2" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"15% 20%"}'>Cooler2</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
-                            <div class="block" :style='{height:"120px"}'>
-                                <div id="Cooler Line 3" class="light"></div>
-                                <div class="modName" :style='{margin:"15% 20%"}'>Cooler3</div>
+                            <div class="block" :style='{height:"100px"}'>
+                                <div id="Cooler Line 1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" :style='{margin:"15% 20%"}'>Cooler1</div>
                             </div>
                         </el-col>
                     </el-row>
@@ -186,19 +238,25 @@
                     <el-row>
                         <el-col :span="8">
                             <div class="block" :style='{height:"120px"}'>
-                                <div id="混合管装配线1" class="light"></div>
+                                <div id="混合管装配线1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"15% 32%"}'>HB1</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="block" :style='{height:"120px"}'>
-                                <div id="混合管装配线2" class="light"></div>
+                                <div id="混合管装配线2" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"15% 32%"}'>HB2</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="block" :style='{height:"120px"}'>
-                                <div id="混合管装配线3" class="light"></div>
+                                <div id="混合管装配线3" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div  class="modName" :style='{margin:"15% 32%"}'>HB3</div>
                             </div>
                         </el-col>
@@ -206,48 +264,62 @@
                     <el-row>
                         <el-col :span="8">
                             <div class="block" :style='{height:"60px"}'>
-                                <div id="Fin压装1" class="light"></div>
+                                <div id="Fin压装1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"17% 0%"}'>Fin_1</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="block" :style='{height:"60px"}'>
-                                <div id="Fin压装2" class="light"></div>
+                                <div id="Fin压装2" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"17% 0%"}'>Fin_2</div>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="block" :style='{height:"60px"}'>
-                                <div id="Fin压装3" class="light"></div>
+                                <div id="Fin压装3" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div class="modName" :style='{margin:"17% 0%"}'>Fin_3</div>
                             </div>
                         </el-col>
                     </el-row>
                     <el-row>
                         <div class="block" :style='{height:"64px"}'>
-                            <div class="light"></div>
-                            <div class="modName">reservedPos</div>
+                            <div class="light">
+                                <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                            </div>
+                            <div class="modName" style="margin-top:20px">Ovl Tube</div>
                         </div>
                     </el-row>
                 </el-card>
             </el-col>
             <el-col :span="6">
-                 <el-card :style='{height:"340px",background:"#DCDCDC"}'>
+                 <el-card :style='{height:"365px",background:"#DCDCDC"}'>
                     <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">IC1</div>
                     <el-row>
                         <el-col :span="12"> 
-                            <div class="block" :style='{height:"270px"}'>
-                                <div id="Huebers 1" class="light"></div>
+                            <div class="block" :style='{height:"280px"}'>
+                                <div id="Huebers 1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div  class="modName" :style='{margin:"55% 25%"}'>Huebers1</div>
                             </div>
                         </el-col>
                         <el-col :span="12">
-                            <div class="block" :style='{height:"131px"}'>
-                                <div id="IPTE 1" class="light"></div>
+                            <div class="block" :style='{height:"136px"}'>
+                                <div id="IPTE 1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div  class="modName" :style='{margin:"8% 30%"}'>IPTE_1</div>
                             </div>
-                            <div class="block" :style='{height:"131px"}'>
-                                <div id="Marsilli 1" class="light"></div>
+                            <div class="block" :style='{height:"136px"}'>
+                                <div id="Marsilli 1" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
                                 <div  class="modName" :style='{margin:"8% 30%"}'>Marsilli1</div>
                             </div>
                         </el-col>
@@ -258,133 +330,155 @@
                <el-row>
                    <el-col :span="12">
                         
-                       <el-card :style='{height:"163px","margin-top":"13px","margin-right":"5px",background:"#7E509B"}'>
+                       <el-card :style='{height:"180px","margin-top":"13px","margin-right":"5px",background:"#DDA0DD"}'><!--#CD69C9-->
                            <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">
                                 Air Heater
                             </div>
                             <el-row>
                                 <el-col :span="12">
-                                    <div class="block" :style='{height:"90px"}'>
-                                        <div id="LV Air PTC Line" class="light"></div>
-                                        <div  class="modName" :style='{margin:"15% 3%","font-size":"14px"}'>LV_PTC</div>
+                                    <div class="block" :style='{height:"100px"}'>
+                                        <div id="LV Air PTC Line" class="light">
+                                            <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                        </div>
+                                        <div  class="modName" :style='{margin:"15% 3%","font-size":"15px"}'>LV_PTC</div>
                                     </div>
                                 </el-col>
                                 <el-col :span="12">
-                                    <div class="block" :style='{height:"90px"}'>
-                                        <div id="HV Air PTC Line" class="light"></div>
-                                        <div  class="modName" :style='{margin:"15% 3%","font-size":"14px"}'>HV_PTC</div>
+                                    <div class="block" :style='{height:"100px"}'>
+                                        <div id="HV Air PTC Line" class="light">
+                                            <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                        </div>
+                                        <div  class="modName" :style='{margin:"15% 3%","font-size":"15px"}'>HV_PTC</div>
                                     </div>
                                 </el-col>
                             </el-row>
                        </el-card>
                    </el-col>
                    <el-col :span="12">
-                       <el-card  :style='{height:"163px","margin-top":"13px","margin-left":"5px",background:"#FFC0CB"}'>
+                       <el-card  :style='{height:"180px","margin-top":"13px","margin-left":"5px",background:"#FFC0CB"}'>
                             <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">
-                               ECRV
+                               eCRV
                             </div>
-                            <div class="block" :style='{height:"90px"}'>
-                                <div id="eCRV Line" class="light"></div>
-                                <div  class="modName" :style='{margin:"20% 16%"}'>eCRV</div>
+                            <div class="block" :style='{height:"100px"}'>
+                                <div id="eCRV Line" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div  class="modName" :style='{margin:"20% 5%"}'>eCRV</div>
                             </div>
                        </el-card>
                     </el-col>
                 </el-row>
-                 <el-card :style='{height:"380px","margin-top":"13px",background:"#D0ECFA"}'>
+                 <el-card :style='{height:"340px","margin-top":"13px",background:"#D0ECFA"}'>
                     <div style="text-align:center;font-weight:2px;font-size:30px;background:rgba(255,255,255,0.8)">
                         Thermostat
                     </div>
                     <el-row>
                         <el-col :span="8">
-                            <div class="block" style="height:150px">
-                                <div id="Ford节温器线" class="light"></div>
-                                <div class="modName">Ford</div>
+                            <div class="block" style="height:110px">
+                                <div id="Ford节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:40% 0%">Ford</div>
                             </div>
                         </el-col>
                         <el-col :span="16">
-                            <div class="block" style="height:150px">
-                                <div id="蜡包装配线" class="light"></div>
-                                <div class="modName">蜡包装配线</div>
+                            <div class="block" style="height:110px">
+                                <div id="蜡包装配线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:18% 10%">蜡包装配线</div>
                             </div>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="6">
                             <div class="block" style="height:150px">
-                                <div id="JLR节温器线" class="light"></div>
-                                <div class="modName">JLR</div>
+                                <div id="JLR节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:35% 25%">JLR</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="block" style="height:71px">
-                                <div id="SGMM节温器线" class="light"></div>
-                                <div class="modName">SGMM</div>
+                                <div id="SGMM节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:5% 5%">SGMM</div>
                             </div>
                             <div class="block" style="height:71px">
-                                <div id="SGME节温器线" class="light"></div>
-                                <div class="modName">SGME</div>
+                                <div id="SGME节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:5% 5%">SGME</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="block" style="height:150px">
-                                <div id="GAC节温器线" class="light"></div>
-                                <div class="modName">GAC</div>
+                                <div id="GAC节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:40% 15%">GAC</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="block" style="height:150px">
-                                <div id="HKMC节温器线" class="light"></div>
-                                <div class="modName">HKMC</div>
+                                <div id="HKMC节温器线" class="light">
+                                    <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                                </div>
+                                <div class="modName" style="margin:40% 10%">HKMC</div>
                             </div>
                         </el-col>
                     </el-row>
                     <div class="block" style="height:308px">
-                        <div class="light"></div>
+                        <div class="light">
+                            <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
+                        </div>
                         <div class="modName">reservedPos</div>
                     </div>
                 </el-card>
                
             </el-col>
             <el-col :span="2">
-                <el-card style="height:912px">
-                    <div class="lineName">Type</div>
-                    <el-row>
-                        <div class="redL"></div>
-                        <div :style='{margin:"5% 5%","font-size":"12px"}'>质量指示灯</div>
-                    </el-row>
-                    <el-row>
-                        <div class="blueL"></div>
-                        <div :style='{margin:"5% 5%","font-size":"12px"}'>设备指示灯</div>
-                    </el-row>
-                    <el-row>
-                        <div class="purpleL"></div>
-                        <div :style='{margin:"5% 5%","font-size":"12px"}'>工艺指示灯</div>
-                    </el-row>
-                    <el-row>
-                        <div class="greenL"></div>
-                        <div :style='{margin:"5% 5%","font-size":"12px"}'>物料指示灯</div>
-                    </el-row>
-                    <el-row>
-                        <div class="yellowL"></div>
-                        <div :style='{margin:"5% 5%","font-size":"12px"}'>管理指示灯</div>
-                    </el-row>
-                </el-card>
+                <div style="height:912px;background:#324157">
+                    <div class="lineName" style="font-size:25px">安灯类型</div>
+                    <div style="height:150px">
+                        <div class="redL" ><strong style="font-size:30px">{{zl}}</strong></div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>质量</div>
+                    </div>
+                    <div style="height:150px">
+                        <div class="blueL"><strong style="font-size:30px">{{sb}}</strong></div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>设备</div>
+                    </div>
+                    <div style="height:150px">
+                        <div class="purpleL"><strong style="font-size:30px">{{gy}}</strong></div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>工艺</div>
+                    </div>
+                    <div style="height:150px">
+                        <div class="greenL"><strong style="font-size:30px">{{wl}}</strong></div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>物料</div>
+                    </div>
+                    <div style="height:150px">
+                        <div class="yellowL"><strong style="font-size:30px">{{gl}}</strong></div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>管理</div>
+                    </div>
+                </div>
             </el-col>
         </el-row>
    
         <el-row :gutter="20">
-             <el-card  style="margin-top:8px;">
-                 <el-table :data="tableData">
-                    <el-table-column prop="number" label="序号" width="180"   :style='{background:"#409EFF"}'></el-table-column>
-                    <el-table-column prop="status" label="是否停线" width="180"></el-table-column>
-                    <el-table-column prop="station" label="工作中心"></el-table-column>
+             <el-card  style="margin-top:8px">
+                 <el-table :data="tableData" :style='{"font-size":"20px","font-weight":"bold"}'>
+                    <el-table-column prop="number" label="序号" width="100"   :style='{background:"#324157"}'></el-table-column>
+                    <el-table-column prop="status" label="是否停线" width="100"></el-table-column>
+                    <el-table-column prop="station" label="工作中心" width="180"></el-table-column>
                     <el-table-column prop="equipNum" label="设备编号" width="180"></el-table-column>
-                    <el-table-column prop="type" label="按灯类型" width="180"></el-table-column>
+                    <el-table-column prop="type" label="按灯类型" width="100"></el-table-column>
                     <el-table-column prop="probDesc" label="问题描述"></el-table-column>
-                    <el-table-column prop="andonTime" label="安灯时间" width="180"></el-table-column>
-                    <el-table-column prop="respTime" label="响应时间(mins)" width="180"></el-table-column>
-                    <el-table-column prop="time" label="持续时间"></el-table-column>
-                    <el-table-column prop="currStatus" label="当前状态" width="180"></el-table-column>
+                    <el-table-column prop="andonTime" label="安灯时间" width="260"></el-table-column>
+                    <el-table-column prop="respTime" label="响应时间(mins)" width="100"></el-table-column>
+                    <el-table-column prop="time" label="持续时间" width="100"></el-table-column>
+                    <el-table-column prop="currStatus" label="当前状态" width="100"></el-table-column>
 
                 </el-table>
              </el-card>
@@ -405,7 +499,12 @@ export default {
             scaleSize:1,
             interval:0,
             lightBuffer:[],
-            test:0
+            test:0,
+            zl:0,
+            sb:0,
+            gy:0,
+            wl:0,
+            gl:0
             
         }
     },
@@ -431,6 +530,23 @@ export default {
                      console.log("if-true")
                     for(var item of data){
                         this.lightBuffer.push({num:item.序号,line:item.工作中心,status:item.当前状态,type:item.类别描述})
+                        switch(item.类别描述){
+                             case "质量"://红灯 质量
+                                this.zl+=1;
+                                break;
+                            case "设备"://蓝灯 设备
+                                this.sb+=1;
+                                break;
+                            case "工艺"://紫灯 工艺
+                                this.gy+=1;
+                                break;
+                            case "物料"://绿灯 物料
+                                this.wl+=1;
+                                break;
+                            case "管理"://黄灯 管理
+                                this.gl+=1;
+                                break;
+                        }
                     }
                 }else{
                     console.log("if-false")
@@ -452,13 +568,36 @@ export default {
                         }
                         if(check==0){
                             this.lightBuffer.push({num:i1.序号,line:i1.工作中心,status:i1.当前状态,type:i1.类别描述})
+                            switch(i1.类别描述){
+                             case "质量"://红灯 质量
+                                this.zl+=1;
+                                break;
+                            case "设备"://蓝灯 设备
+                                this.sb+=1;
+                                break;
+                            case "工艺"://紫灯 工艺
+                                this.gy+=1;
+                                break;
+                            case "物料"://绿灯 物料
+                                this.wl+=1;
+                                break;
+                            case "管理"://黄灯 管理
+                                this.gl+=1;
+                                break;
+                        }
                         }
                     }
                 }
                 console.log(this.lightBuffer)
                 for(var l of this.lightBuffer){
                     console.log("222"+l.line)
-                    var light = document.getElementById(l.line);
+                    var light = null;
+                    if(l.line=="测试台1"||l.line=="测试台2"||l.line=="测试台3"||l.line=="测试台4"){
+                        light = document.getElementById("测试台");
+                    }else{
+                        light = document.getElementById(l.line);
+                    }
+                    
                     if(l.status==1){
                         console.log("状态1")
                         light.style.background = ""
@@ -482,7 +621,7 @@ export default {
                     }
                     else if(l.status==2){
                         console.log("状态2")
-                        light.className = "light"
+                        light.className = "lightActive"
                        switch(l.type){
                             case "质量"://红灯 质量
                                 light.style.background = "#b61414";
@@ -505,7 +644,10 @@ export default {
                                 break;
                         }
                     }
-                    else{
+                    else if(l.status==3){
+                        light.className = "lightActive";
+                        light.style.background = "#fff";
+                    }else{
                         light.style.background = "";
                         light.className="light"
                     }
@@ -518,6 +660,23 @@ export default {
                         light.style.background="";
 
                         this.lightBuffer.splice(this.lightBuffer.indexOf(item),1)
+                        switch(item.type){
+                             case "质量"://红灯 质量
+                                this.zl-=1;
+                                break;
+                            case "设备"://蓝灯 设备
+                                this.sb-=1;
+                                break;
+                            case "工艺"://紫灯 工艺
+                                this.gy-=1;
+                                break;
+                            case "物料"://绿灯 物料
+                                this.wl-=1;
+                                break;
+                            case "管理"://黄灯 管理
+                                this.gl-=1;
+                                break;
+                        }
                     }
                 }
             }).catch(data => {
@@ -554,7 +713,7 @@ export default {
 .modName{
     text-align:center;
    
-    font-weight:2px;
+    font-weight:bold;
     font-size:20px;
     /* background:rgba(255,255,255,0.8); */
     display:inline-block;
@@ -562,69 +721,103 @@ export default {
 
 .block{
     border-radius:10px;
-    border:1px solid rgba(0,0,0,1);
+    border:1px solid rgba(0,0,0,0.3);
     margin:5px;
     
 }
 
 .light{
-    width:20px;
-    height:20px;
+    width:30px;
+    height:30px;
     border-radius:50%;
-    border:1px solid rgba(0,0,0,1);
+    /* border:1px solid rgba(0,0,0,1); */
     margin:5px;
     float:left;
-    
+    visibility:hidden;
+    /* font-size:50px; */
+    opacity:0.8
 }
+
+.lightActive{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    /* border:1px solid rgba(0,0,0,1); */
+    margin:5px;
+    float:left;
+    /* font-size:50px; */
+    opacity:0.8
+}
+
 
 .redL{
     border-radius:50%;
-    background:#b61414;
+    /* background:#b61414; */
+    border:5px solid #b61414;
     height:50px;
     width:50px;
     box-shadow:0px 0px 10px #b61414;
-    margin:5px 10px;
+    margin:20% 30%;
     /* float:left; */
+    text-align:center;
+    line-height:50px;
+    color:#fff
 }
 
 .blueL{
     border-radius:50%;
-    background :#0ba0ea;
+    /* background :#0ba0ea; */
+    border:5px solid #0ba0ea;
     height:50px;
     width:50px;
     box-shadow:0px 0px 10px #0ba0ea;
-    margin:5px 10px;
+    margin:20% 30%;
     /* float:left; */
+    text-align:center;
+    line-height:50px;
+    color:#fff
 }
 
 .purpleL{
     border-radius:50%;
-    background: #9914e6;
+    /* background: #9914e6; */
+    border:5px solid #9914e6;
     height:50px;
     width:50px;
     box-shadow:0px 0px 10px #9914e6;
-    margin:5px 10px;
+    margin:20% 30%;
     /* float:left; */
+    text-align:center;
+    line-height:50px;
+    color:#fff
 }
 
 .greenL{
     border-radius:50%;
-    background:#1aee48;
+    /* background:#1aee48; */
+    border:5px solid #1eea48;
     height:50px;
     width:50px;
     box-shadow:0px 0px 10px #1aee48;
-    margin:5px 10px;
+    margin:20% 30%;
     /* float:left; */
+    text-align:center;
+    line-height:50px;
+    color:#fff
 }
 
 .yellowL{
     border-radius:50%;
-    background:#fbff23;
+    /* background:#fbff23; */
+    border:5px solid #fbff23;
     height:50px;
     width:50px;
     box-shadow:0px 0px 10px #fbff23;
-    margin:5px 10px;
+    margin:20% 30%;
     /* float:left; */
+    text-align:center;
+    line-height:50px;
+    color:#fff
 }
 
 @keyframes breatheBlue {
@@ -703,12 +896,13 @@ export default {
 }
 
 .blinkRed{
-    width:20px;
-    height:20px;
+    width:30px;
+    height:30px;
     border-radius:50%;
     border:1px solid rgba(0,0,0,1);
     margin:5px;
     float:left;
+    font-size:20px;
     animation-timing-function: ease-in-out;
     animation-name: breatheRed;
     animation-duration: 1500ms;
@@ -717,12 +911,14 @@ export default {
 }
 
 .blinkBlue{
-     width:20px;
-    height:20px;
+     width:30px;
+    height:30px;
     border-radius:50%;
     border:1px solid rgba(0,0,0,1);
     margin:5px;
     float:left;
+    font-size:25px;
+    /* color:rgba(255,255,255,0.5); */
     animation-timing-function: ease-in-out;
     animation-name: breatheBlue;
     animation-duration: 1500ms;
@@ -731,12 +927,13 @@ export default {
 }
 
 .blinkPurple{
-     width:20px;
-    height:20px;
+     width:30px;
+    height:30px;
     border-radius:50%;
     border:1px solid rgba(0,0,0,1);
     margin:5px;
     float:left;
+    font-size:20px;
     animation-timing-function: ease-in-out;
     animation-name: breathePurple;
     animation-duration: 1500ms;
@@ -745,12 +942,13 @@ export default {
 }
 
 .blinkGreen{
-     width:20px;
-    height:20px;
+     width:30px;
+    height:30px;
     border-radius:50%;
     border:1px solid rgba(0,0,0,1);
     margin:5px;
     float:left;
+    font-size:20px;
     animation-timing-function: ease-in-out;
     animation-name: breatheGreen;
     animation-duration: 1500ms;
@@ -759,12 +957,13 @@ export default {
 }
 
 .blinkYellow{
-     width:20px;
-    height:20px;
+     width:30px;
+    height:30px;
     border-radius:50%;
     border:1px solid rgba(0,0,0,1);
     margin:5px;
     float:left;
+    font-size:20px;
     animation-timing-function: ease-in-out;
     animation-name: breatheYellow;
     animation-duration: 1500ms;

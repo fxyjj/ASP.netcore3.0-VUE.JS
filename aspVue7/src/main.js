@@ -4,6 +4,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router';
 import "babel-polyfill";
+import "./assets/third_party_icon/iconfont.css"
 // import axios from 'axios';
 // Vue.prototype.$axios = axios
 Vue.config.productionTip = false
