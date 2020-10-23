@@ -8,7 +8,21 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: to=>{
+                console.log("from Index"+to.query.page);
+                switch(to.query.page){
+                    case "dashboard":
+                        return '/dashboard'
+                    case "andon":
+                        return '/Andon'
+                    case "oee":
+                        return '/OEE'
+                    case "account":
+                        return '/404'
+                    default:
+                        return '/404'
+                }
+            }//
         },
         {
             path: '/',
@@ -129,6 +143,37 @@ export default new Router({
             path: '/login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
             meta: { title: '登录' }
+        },
+        {
+            path:'/MainPage',
+            component: () => import('../components/page/MainPage.vue'),
+            meta:{title: '主菜单界面'}
+        },
+        {
+            path:'/AccountManage',
+            redirect:'/UserManage',
+            component: () => import('../components/page/AccountManage.vue'),
+            meta:{title:'账号管理'},
+            children:[
+                {
+                    path:'/UserManage',
+                    name:'UM',
+                    component:() => import('../components/page/AccountManagePage/UserManage.vue'),
+                    meta:{title:'用户管理'}
+                },
+                {
+                    path:'/PwdModify',
+                    name:'PM',
+                    component:() => import('../components/page/AccountManagePage/PwdModify.vue'),
+                    meta:{title:'修改密码'}
+                },
+                {
+                    path:'/CreateKey',
+                    name:'CK',
+                    component:()=>import('../components/page/AccountManagePage/CreateKey.vue'),
+                    meta:{title:'新建许可令牌'}
+                }
+            ]
         },
         {
             path: '*',

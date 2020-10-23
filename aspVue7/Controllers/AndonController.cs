@@ -274,6 +274,8 @@ namespace aspVue7.Controllers
             public int 序号{get;set;}
             public int 响应时间{get;set;}
             public int 持续时间{get;set;}
+
+            public string 处理人{get;set;}
             //TODO...
         }
     }

@@ -130,3 +130,4 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Release\netcore
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Release\netcoreapp3.1\aspVue7.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Release\netcoreapp3.1\aspVue7.pdb
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Release\netcoreapp3.1\aspVue7.genruntimeconfig.cache
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\src\assets\third_party_icon\iconfont.json

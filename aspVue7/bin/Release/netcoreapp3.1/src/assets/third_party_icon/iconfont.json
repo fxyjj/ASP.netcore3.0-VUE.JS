@@ -1,0 +1,23 @@
+{
+  "id": "2134481",
+  "name": "light",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-blinklight",
+  "description": "闪烁的灯泡",
+  "glyphs": [
+    {
+      "icon_id": "883901",
+      "name": "灯泡",
+      "font_class": "dengpao",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "1250067",
+      "name": "灯泡",
+      "font_class": "light",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

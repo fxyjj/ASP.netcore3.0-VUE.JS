@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.AspNetCore.Mvc.Cors;
 using Newtonsoft.Json;
 using aspVue7.Model;
+using Microsoft.AspNetCore.NodeServices;
 
 namespace aspVue7
 {
@@ -35,6 +36,8 @@ namespace aspVue7
             {
                 configuration.RootPath = "ClientApp";
             });
+            //是的cs文件中可以执行js文件
+            services.AddNodeServices();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

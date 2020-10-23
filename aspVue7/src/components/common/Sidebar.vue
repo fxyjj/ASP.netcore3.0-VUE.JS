@@ -10,7 +10,7 @@
             unique-opened
             router
         >
-            <template v-for="item in items">
+            <template v-for="item in items" >
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
@@ -56,11 +56,6 @@ export default {
         return {
             collapse: false,
             items: [
-                {
-                    icon: 'el-icon-s-home',
-                    index: 'dashboard',
-                    title: '系统首页'
-                },
                 // {
                 //     icon: 'el-icon-menu',
                 //     index: 'table',
@@ -104,43 +99,7 @@ export default {
                 //         }
                 //     ]
                 // },
-                {
-                    icon: 'el-icon-s-opportunity',
-                    index: '4',
-                    title: 'Andon',
-                    subs:[
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'Andon',
-                            title: '安灯信息汇总'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonNum',
-                            title: '安灯数量'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonCate',
-                            title: '安灯类别'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'TopIssue',
-                            title: 'Top Issues'
-                        },
-                        {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonStatus',
-                            title: '安灯状态'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-data-analysis',
-                    index: 'OEE',
-                    title: 'OEE'
-                },
+               
                 // {
                 //     icon: 'el-icon-rank',
                 //     index: '6',
@@ -181,7 +140,60 @@ export default {
                 //     index: '/donate',
                 //     title: '支持作者'
                 // }
-            ]
+            ],
+            //首页内容
+            item_dashboard:[
+                 {
+                    icon: 'el-icon-s-home',
+                    index: 'dashboard',
+                    title: '系统首页'
+                },
+            ],
+            //Andon页面内容
+            item_andon:[
+                 {
+                    icon: 'el-icon-s-opportunity',
+                    index: '4',
+                    title: 'Andon',
+                    subs:[
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'Andon',
+                            title: '安灯信息汇总'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonNum',
+                            title: '安灯数量'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonCate',
+                            title: '安灯类别'
+                        },
+                         {
+                            icon:'el-icon-s-marketing',
+                            index: 'TopIssue',
+                            title: 'Top Issues'
+                        },
+                        {
+                            icon:'el-icon-s-marketing',
+                            index: 'AndonStatus',
+                            title: '安灯状态'
+                        }
+                    ]
+                }
+            ],
+            //OEE页面内容
+            item_oee:[
+                 {
+                    icon: 'el-icon-data-analysis',
+                    index: 'OEE',
+                    title: 'OEE'
+                },
+            ],
+            //账号管理页面
+            item_account:[],   
         };
     },
     computed: {
@@ -194,7 +206,29 @@ export default {
         bus.$on('collapse', msg => {
             this.collapse = msg;
             bus.$emit('collapse-content', msg);
-        });
+        }); 
+    },
+    mounted(){
+        console.log("传过来的"+this.$route.query.page)
+        // this.items = this.item_andon
+        switch(this.$route.query.page){
+            case "dashboard":
+                this.items = this.item_dashboard;
+                console.log("this is dashboard")
+                break;
+            case "andon":
+                this.items = this.item_andon;
+                console.log(this.items)
+                console.log("this is andon")
+                break;
+            case "oee":
+                this.items = this.item_oee;
+                console.log("this is oee")
+                break;
+            case "account":
+                this.items = this.item_account;
+                break;
+        }
     }
 };
 </script>

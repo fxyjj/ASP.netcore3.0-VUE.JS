@@ -22,10 +22,10 @@ router.beforeEach((to, from, next) => {
 	if (role) {
 		next();
 	}else{
-		if(to.path === '/login'){
+		if(to.path === '/Login'){
 			next();
 		}else{
-			next('/login');
+			next('/Login');
 		}
 	}
 });

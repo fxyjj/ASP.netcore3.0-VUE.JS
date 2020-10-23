@@ -34,13 +34,12 @@
                     v-model="value1"
                     type="daterange"
                     align="right"
-                    value-format="yyyy-MM-dd"
                     unlink-panels
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     :picker-options="pickerOptions" style="height:33px;padding-top:2px">
-                </el-date-picker>
+                </el-date-picker><!--value-format="yyyy-MM-dd"-->
                 <el-button @click="startPlant" :style="{height:'33px','margin-bottom':'-12px'}">查询</el-button>
 
                
@@ -107,10 +106,14 @@
             </el-col>
         </el-row>
          <el-divider></el-divider>
-            <o-e-echart></o-e-echart>
-            <e-f-fchart></e-f-fchart>
-            <f-t-tchart></f-t-tchart>
-            <t-j-lchart></t-j-lchart>
+         <el-row>
+             <el-col :span="12"><o-e-echart></o-e-echart></el-col>
+             <el-col :span="12"><e-f-fchart></e-f-fchart></el-col>
+         </el-row>
+         <el-row>
+             <el-col :span="12"><f-t-tchart></f-t-tchart></el-col>
+             <el-col :span="12"><t-j-lchart></t-j-lchart></el-col>
+         </el-row>
         </div>
     </div>
 </template>
@@ -372,11 +375,20 @@ export default {
                 if(!newV){
                    panel.style.background = "#324157";
                    this.interval = setInterval(() => {
-                       if(this.value1[1] != new Date()){
-                           this.value1[0]=new Date(this.value1[0]+3600*24*1000)
-                           this.value1[1]=new Date(this.value1[1]+3600*24*1000)
+                       const nowtime = new Date()
+                    //    console.log(nowtime.getDay())
+                    //    if(nowtime.getDay()=='13'){
+                    //        console.log("damnyes");
+                    //    }
+                       if((this.value1[1].getDate() < nowtime.getDate() || (this.value1[1].getMonth() < nowtime.getMonth() && this.value1[1].getDate() > nowtime.getDate())) && nowtime.getHours() == '8'){
+                            // console.log("oldtme"+this.value1[0])
+                            // console.log("oldtme"+this.value1[1])
+                            this.value1[0]=new Date((this.value1[0]).getTime()+3600*24*1000)
+                            this.value1[1]=new Date((this.value1[1]).getTime()+3600*24*1000)
+                            // console.log("newtme"+this.value1[1])
+                            // console.log("更新日期需要")
                        }
-                   }, 86400000);
+                   },86400000);// 
                 }else{
                    panel.style.background = "";
                    clearInterval(this.interval)
@@ -386,12 +398,13 @@ export default {
     },
     mounted(){
         const oldtime = new Date(Date.now() - 30*24*60*60*1000)
+        console.log(oldtime+"dame"+Date.now())
         const newtime = new Date()
         this.value1 = [oldtime,newtime]
         this.dtUnit = "日"
         this.plName = "GEN_III_A+M"
         this.group = "EGR线"
-        this.prodline = this.EGRLine;
+        this.prodLine = this.EGRLine;
         console.log(oldtime);
         console.log(newtime)
         bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime})

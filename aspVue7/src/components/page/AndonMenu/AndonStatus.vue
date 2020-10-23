@@ -469,16 +469,17 @@
         <el-row :gutter="20">
              <el-card  style="margin-top:8px">
                  <el-table :data="tableData" :style='{"font-size":"20px","font-weight":"bold"}'>
-                    <el-table-column prop="number" label="序号" width="100"   :style='{background:"#324157"}'></el-table-column>
-                    <el-table-column prop="status" label="是否停线" width="100"></el-table-column>
-                    <el-table-column prop="station" label="工作中心" width="180"></el-table-column>
-                    <el-table-column prop="equipNum" label="设备编号" width="180"></el-table-column>
-                    <el-table-column prop="type" label="按灯类型" width="100"></el-table-column>
-                    <el-table-column prop="probDesc" label="问题描述"></el-table-column>
-                    <el-table-column prop="andonTime" label="安灯时间" width="260"></el-table-column>
-                    <el-table-column prop="respTime" label="响应时间(mins)" width="100"></el-table-column>
-                    <el-table-column prop="time" label="持续时间" width="100"></el-table-column>
-                    <el-table-column prop="currStatus" label="当前状态" width="100"></el-table-column>
+                    <el-table-column prop="number" label="序号" width="100" align=center></el-table-column>
+                    <el-table-column prop="status" label="是否停线" width="100" align=center></el-table-column>
+                    <el-table-column prop="station" label="工作中心" width="180" align=center></el-table-column>
+                    <el-table-column prop="equipNum" label="设备编号" width="180" align=center></el-table-column>
+                    <el-table-column prop="type" label="按灯类型" width="100" align=center></el-table-column>
+                    <el-table-column prop="probDesc" label="问题描述" header-align="center"></el-table-column>
+                    <el-table-column prop="andonTime" label="安灯时间" width="260" align=center></el-table-column>
+                    <el-table-column prop="respTime" label="响应时间(mins)" width="100" align=center></el-table-column>
+                    <el-table-column prop="time" label="持续时间" width="100" align=center></el-table-column>
+                    <el-table-column prop="currStatus" label="当前状态" width="100" align=center></el-table-column>
+                    <el-table-column prop="respMan" label="响应人" width="100" align=center></el-table-column>
 
                 </el-table>
              </el-card>
@@ -524,7 +525,19 @@ export default {
                 console.log(data)
                 this.tableData = []
                 for(var item of data){
-                    this.tableData.push({number:item.序号,status:item.是否停线,station:item.工作中心,equipNum:item.设备编号,type:item.类别描述,probDesc:item.问题描述,andonTime:item.按灯时间,respTime:item.响应时间,time:item.持续时间,currStatus:item.当前状态});
+                    var sts = null;
+                    switch(item.当前状态){
+                        case 1:
+                            sts = "待处理";
+                            break;
+                        case 2:
+                            sts = "正在处理";
+                            break;
+                        case 3:
+                            sts = "处理完成";
+                            break;
+                    }
+                    this.tableData.push({number:item.序号,status:item.是否停线,station:item.工作中心,equipNum:item.设备编号,type:item.类别描述,probDesc:item.问题描述,andonTime:item.按灯时间,respTime:item.响应时间,time:item.持续时间,currStatus:sts,respMan:item.处理人});
                 }
                 if(this.lightBuffer.length == 0){
                      console.log("if-true")

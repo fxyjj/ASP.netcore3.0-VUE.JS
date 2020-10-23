@@ -1,5 +1,5 @@
 <template>
- <div id="OEEchart" :style="{width:'50%',height:'320px',display:'inline-block'}"></div>
+ <div id="OEEchart" :style="{width:'100%',height:'315px',display:'inline-block'}"></div>
 
 </template>
 <script>
@@ -52,7 +52,7 @@ export default {
                    
                 },
                 xAxis: {
-                    data: ["1","2","3","4","5","6"],
+                    data: [],
                     axisLine:{
                         lineStyle:{
                             color:'#000',
@@ -72,12 +72,7 @@ export default {
                             name: 'OEE',
                             type: 'bar',
                             // data: [5,20,36,10,10,20],
-                            data:[{value:3,color:'#C0504D'},
-                                {value:7,color:'#C0504D'},
-                                {value:12,color:'#C0504D'},
-                                {value:6,color:'#C0504D'},
-                                {value:5,color:'#C0504D'},
-                                {value:1,color:'#C0504D'}],
+                            data:[],
                             itemStyle:{
                                 normal:{
                                     label:{
@@ -110,7 +105,7 @@ export default {
                         {
                             name: '目标',
                             type: 'line',
-                            data: [5,20,36,10,10,20],
+                            data: [],
                             itemStyle:{
                                 color: ["#0070C0"]
                             },
