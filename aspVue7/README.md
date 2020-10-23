@@ -65,8 +65,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 --安灯状态
 
 实现完毕。在工厂产线分布示意图中加入灯泡图片和闪烁特效，在根据数据库中获取的数据与信号，来控制各条产线的按灯情况。（2020/10/19）
+![Image text](https://github.com/fxyjj/ASP.netcore3.0-VUE.JS/blob/master/pic/安灯状态.png)
 
 4：OEE界面数据表格轮播功能。
+![Image text](https://github.com/fxyjj/ASP.netcore3.0-VUE.JS/blob/master/pic/轮播界面.png)
 
 -- 轮播中每隔一个小时自动同步时间，次日清晨8点更新前一天数据到展示面板，不用每天手动更改日期使得最新数据显示到面板。（2020/10/19）
 
@@ -77,6 +79,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 `dotnet add package Microsoft.AspNetCore.NodeServices` 在cs文件中解码前端加密过后的密码，由于前端crypto-js加密相同字符得到不同的密码，在后端接收到密文后需要用相同方法将密文解码再在后端使用pbkdf2算法加密转存入数据库。
 
 6：登陆成功后跳转到新的界面，该界面把不同功能的网页区分开来，并以按钮作为入口点击进入。
+![Image text](https://github.com/fxyjj/ASP.netcore3.0-VUE.JS/blob/master/pic/主界面.png)
 
 7:新增账号管理界面，内含在用户管理，修改密码，新建许可证和搜索等功能，当前开发到用户管理页面（2020/10/23）
 
