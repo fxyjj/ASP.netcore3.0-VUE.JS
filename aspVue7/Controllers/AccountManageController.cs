@@ -31,7 +31,10 @@ namespace aspVue7.Controllers
         }
 
         public class res{
-
+            public string username{get;set;}
+            public string uname{get;set;}
+            public string crtficate{get;set;}
+            public DateTime cdate{get;set;}
         }
     }
 }

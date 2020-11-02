@@ -32,7 +32,7 @@ export default {
             //通过bus传过来的数据
             startTime:new Date(),
             endTime:new Date(),
-            dataUnit: "",
+            dateUnit: "",
             prodLine:"",
             option : {
                 title: {
@@ -140,6 +140,9 @@ export default {
             this.barXdata = [];
             this.barYdata = [];
             this.lineYdata = [];
+            if(this.cdate.length==0){
+                return;
+            }
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 

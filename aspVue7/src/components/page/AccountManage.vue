@@ -34,8 +34,12 @@
                     <el-input
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="searchItem">
+                        v-model="searchItem"
+                        @keyup.enter.native="search()"
+                        style="width:200px;display:inline-block">
+                        
                     </el-input>
+                    <el-button type="primary" @click="search()">搜索</el-button>
                 </div>
                 </div>
             <div class="panel" style="height:810px;margin:10px 30px 0px 10px">
@@ -52,6 +56,7 @@
 </template>
 
 <script>
+import bus from "../common/bus"
 export default {
     name:"AccountMangae",
     data(){
@@ -66,6 +71,9 @@ export default {
     methods:{
         back(){
             this.$router.push('/MainPage');
+        },
+        search(){
+            bus.$emit('srchI',this.searchItem);
         }
     }
 }
@@ -107,6 +115,10 @@ export default {
 }
 .guodu-enter, .guodu-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+.search{
+    width:300px;
 }
 
 </style>

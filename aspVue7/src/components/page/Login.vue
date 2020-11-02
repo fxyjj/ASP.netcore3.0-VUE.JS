@@ -1,6 +1,8 @@
 <template>
     <div class="login-wrap">
+        <img src='../../assets/img/bwlogo.png' style="width:20%;margin:20px"/>
         <div class="ms-login" id="loginPage">
+            
             <div class="ms-title">用户登录</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
@@ -16,6 +18,7 @@
                     >
                     </el-input>
                 </el-form-item>
+                <el-link type="primary" style="width:20%;margin-left:80%;margin-top:-30px" @click="pwdMdfy()" >忘记密码</el-link>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()" style="margin-right:13px">登录</el-button>
                     <el-button type="primary" @click="regist()" style="margin-left:13px">注册</el-button> <!---->
@@ -23,6 +26,7 @@
                 <p class="login-tips">Tips : 这里还没想好给什么tips。</p>
             </el-form>
         </div>
+        <!-- 注册页面 -->
         <div class="ms-login" style="visibility:hidden" id="registPage">
            
             <div class="ms-title"> 
@@ -42,7 +46,7 @@
                 <el-input placeholder="您的用户名" prefix-icon="el-icon-info" v-model="regParam.user"  ></el-input>
             </el-form-item>
             <el-form-item prop="pwd">
-                <el-input placeholder="您的密码" prefix-icon="el-icon-lock" v-model="regParam.pwd" type="password" @change="checkValidate()"  ></el-input>
+                <el-input placeholder="您的密码" prefix-icon="el-icon-lock" v-model="regParam.pwd" type="password" @change="(val)=>checkValidate(val,'reg_pwd')"  ></el-input>
                  <p id="tips" style="font-size: 12px;line-height: 15px;">{{pwdTip}}</p>
             </el-form-item>
             <el-form-item prop="Cpwd">
@@ -75,6 +79,47 @@
             </div>
            
         </div>
+        <!-- 修改密码-->
+        <div id="mdfy" class="ms-login" style="visibility:hidden;width:420px;left:48%">
+            <div class="ms-title"> 
+                <div type="button" @click="mdfyReturn()" style="user-select:none; cursor: pointer;display:inline-block;float:left;margin-left:5%">
+                    <i class="el-icon-arrow-left" ></i>
+                </div>
+                <div style="width:80%;margin:0% 10%">请重设您的密码</div>
+            </div>
+            <el-form ref="mdfyForm" :rules="mdfyRule" :model="mdfyForm" class="ms-content" label-width="70px">
+                <el-form-item label="用户名" prop="username">
+                    <el-input placeholder="请输入忘记密码的用户名" v-model="mdfyForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="许可证" prop="permit">
+                    <el-input placeholder="请输入您的账号许可证。" v-model="mdfyForm.permit"></el-input>
+                </el-form-item>
+                <el-form-item label="新密码" prop="newpwd">
+                    <el-input placeholder="数字，大小写字母，特殊符号组成，8-16位" v-model="mdfyForm.newpwd" type="password" show-password @change="(val)=>checkValidate(val,'mdfy_pwd')"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="cnewpwd">
+                    <el-input placeholder="请再次输入新的密码以确认。" v-model="mdfyForm.cnewpwd" type="password" show-password></el-input>
+                </el-form-item>
+            </el-form>
+            <div class="login-btn" style="margin-bottom:20px">
+                <el-button type="primary" @click="mdfyComfirm()">确认</el-button>
+                <div class="login-tips">{{mdfyTips}}</div>
+            </div>
+        </div>
+        <div id="mdfyRes" class="ms-login" style="visibility:hidden">
+             <div v-if="mdfyWaiting==null">
+                 <i class="el-icon-loading" style="margin:5% 10%;font-size:100px"></i>
+             </div>
+            <div v-else-if="mdfyWaiting">
+                修改成功
+            <el-button type="primary" @click="mdfySuccReturn()">返回登陆</el-button>
+            </div>
+            <div v-else>
+                修改失败{{mdfyFailTips}}
+            <el-button type="primary" @click="reMdfy()">重新修改</el-button>
+            <el-button type="primary" @click="mdfyFailReturn()">返回登陆</el-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -91,6 +136,7 @@ export default {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
+            //注册参数
             regParam:{
                 name:"",
                 key:"",
@@ -109,10 +155,28 @@ export default {
             //提示
             pwdTip:"Tips:密码需要包含数字大写字母，小写字母以及特殊符号等字符，密码长度8-16位。",
             comfirmTip:"",
-            failedTips:""
+            failedTips:"",
+            //修改密码参数
+            mdfyWaiting:false,
+            mdfyForm:{
+                username:null,
+                permit:null,
+                newpwd:null,
+                cnewpwd:null
+            },
+            mdfyRule:{
+                username:[{required:true,message:'请输入您的用户名',trigger:'blur'}],
+                permit:[{required:true,message:'需要您的账户令牌才能重设密码哦！',trigger:'blur'}],
+                newpwd:[{required:true,message:'重设密码不能为空！',trigger:'blur'}],
+            },
+            mdfyTips:"这里是tips",
+            mdfyFailTips:""
         };
     },
     methods: {
+        //=============================================================================================
+        //*************************************登录页面函数*********************************************
+        //=============================================================================================
         submitForm() {
             if(this.param.username == "" || this.param.password == ""){
                 this.$message.error('请输入账号户密码！');
@@ -146,9 +210,14 @@ export default {
                         }).catch(data => {
                             alert(data);
                         })
-            }
-           
+            }  
         },
+        //=============================================================================================
+        //=============================================================================================
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //***********************************注册页面函数***********************************************
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         regist(){
             var lp = document.getElementById("loginPage");
             var rp = document.getElementById("registPage");
@@ -269,17 +338,125 @@ export default {
              this.regRight = null;
         },
         //检查密码字符类型组成
-        checkValidate(){
+        checkValidate(val,event){
             var pwdRegex = new RegExp('(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{8,16}');
-            var tip = document.getElementById("tips")
-            if(!pwdRegex.test(this.regParam.pwd)){
-                tip.style.color = "#FF0000"
-                this.pwdTip = "密码中需要包含大小写字母，数字及特殊字符，长度8-16，请按要求设定！";
-            }else{
-                tip.style.color = "#228B22"
-                this.pwdTip = "设定成功！"
+            if(event=="reg_pwd"){
+                 var tip = document.getElementById("tips")
+                if(!pwdRegex.test(this.regParam.pwd)){
+                    tip.style.color = "#FF0000"
+                    this.pwdTip = "密码中需要包含大小写字母，数字及特殊字符，长度8-16，请按要求设定！";
+                }else{
+                    tip.style.color = "#228B22"
+                    this.pwdTip = "设定成功！"
+                }
+            }else if(event=="mdfy_pwd"){
+                if(!pwdRegex.test(this.mdfyForm.newpwd)){
+                    this.mdfyTips = "密码中需要包含数字，大写字母，小写字母以及特殊字符，请严格按照该规则设定您的密码！"
+                }else{
+                    this.mdfyTips = "设定成功"
+                }
             }
+           
+        },
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        //************************************修改密码页面函数*******************************************
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        pwdMdfy(){
+            var login = document.getElementById("loginPage");
+            var mdfy = document.getElementById("mdfy");
+            login.style.visibility = "hidden";
+            mdfy.style.visibility = "visible";
+        },
+        mdfyReturn(){
+            var login = document.getElementById("loginPage");
+            var mdfy = document.getElementById("mdfy");
+            login.style.visibility = "visible";
+            mdfy.style.visibility = "hidden";
+            this.mdfyTips = ""
+            this.$refs['mdfyForm'].resetFields()
+        },
+        mdfyComfirm(){
+            if(this.mdfyForm.username==null){
+                this.mdfyTips = "请输入有效的用户名，不能为空！"
+                return;
+            }
+            if(this.mdfyForm.permit==null){
+                this.mdfyTips = "请输入您的用户名的许可令牌，不能为空！"
+                return;
+            }
+            if(this.mdfyForm.newpwd==null){
+                this.mdfyTips = "重设的密码不能为空！"
+                return;
+            }
+            if(this.mdfyForm.cnewpwd!==this.mdfyForm.newpwd){
+                 this.mdfyTips = "请确认两次输入的密码一致！"
+                return;
+            }
+
+            console.log(this.mdfyForm.username)
+            console.log(this.mdfyForm.permit)
+            console.log(this.mdfyForm.newpwd)
+
+            var ciphertext = CryptoJS.AES.encrypt(this.mdfyForm.newpwd,"secretkey123").toString();
+
+            fetch('api/Login/modifyPwd',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    username:this.mdfyForm.username,
+                    permit:this.mdfyForm.permit,
+                    newpwd:ciphertext
+                })
+            }).then(response=>response.json())
+                .then(data=>{
+                    alert(data[0].result)
+                    if(data[0].result == 0){
+                        this.mdfyWaiting = false
+                        this.mdfyFailTips = "用户名不存在或令牌有误，请核对后在修改密码！"
+                    }else{
+                        this.mdfyWaiting = true
+                    }
+                }).catch(data=>{
+                    alert(data)
+                })
+            var mdfy = document.getElementById("mdfy");
+            var mdfyRes = document.getElementById("mdfyRes");
+            mdfy.style.visibility = "hidden";
+            mdfyRes.style.visibility = "visible";
+
+            this.mdfyTips = ""
+            this.$refs['mdfyForm'].resetFields()
+        },
+        mdfySuccReturn(){
+            var login = document.getElementById("loginPage");
+            var mdfyRes = document.getElementById("mdfyRes");
+            login.style.visibility = "visible";
+            mdfyRes.style.visibility = "hidden";
+            this.mdfyWaiting=null
+        },
+        reMdfy(){
+            var mdfy = document.getElementById("mdfy");
+            var mdfyRes = document.getElementById("mdfyRes");
+            mdfy.style.visibility = "visible";
+            mdfyRes.style.visibility = "hidden";
+            this.mdfyWaiting=null
+
+        },
+        mdfyFailReturn(){
+            var login = document.getElementById("loginPage");
+            var mdfyRes = document.getElementById("mdfyRes");
+            login.style.visibility = "visible";
+            mdfyRes.style.visibility = "hidden";
+            this.mdfyWaiting=null
         }
+
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     },
 };
 </script>
@@ -312,9 +489,10 @@ export default {
     overflow: hidden;
 }
 .ms-content {
-    padding: 30px 30px;
+    padding: 20px 30px;
 }
 .login-btn {
+    /* margin-top:-12px; */
     text-align: center;
 }
 .login-btn button {

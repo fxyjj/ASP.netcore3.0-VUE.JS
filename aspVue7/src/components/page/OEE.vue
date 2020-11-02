@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 <template>
-    <div >
-
+    <div>
         <div id="bgPanel" class="container" style = "margin-top:-10px;">
             <el-row>
                 <el-col :span="21"> 
@@ -61,7 +60,7 @@
                      <span :style='{"margin-left":"45%","font-size":"50px"}'><strong>{{dtUnit}}</strong></span>
                     <el-divider content-position="center" :style='{"font-size":"50px"}'><i class="el-icon-date"></i> 当前日期范围</el-divider>
                      <span>
-                         <strong v-if="value1!=null" :style='{"margin-left":"15%","font-size":"30px"}'>{{value1[0]}} --- {{value1[1]}}</strong>
+                         <strong v-if="value1!=null" :style='{"margin-left":"15%","font-size":"30px"}'>{{dateToString(value1[0])}} --- {{dateToString(value1[1])}}</strong>
                          <strong v-else>{{value2[0]}} --- {{value2[1]}}</strong>
                      </span>
                    
@@ -100,20 +99,117 @@
                         </el-tooltip>
                     </el-col>
                 </el-row>
-               
-                
-               
             </el-col>
-        </el-row>
-         <el-divider></el-divider>
-         <el-row>
-             <el-col :span="12"><o-e-echart></o-e-echart></el-col>
-             <el-col :span="12"><e-f-fchart></e-f-fchart></el-col>
-         </el-row>
-         <el-row>
-             <el-col :span="12"><f-t-tchart></f-t-tchart></el-col>
-             <el-col :span="12"><t-j-lchart></t-j-lchart></el-col>
-         </el-row>
+            </el-row>
+            <el-divider></el-divider>
+            <el-row>
+                <el-col :span="12"><o-e-echart></o-e-echart></el-col>
+                <el-col :span="12"><e-f-fchart></e-f-fchart></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12"><f-t-tchart></f-t-tchart></el-col>
+                <el-col :span="12"><t-j-lchart></t-j-lchart></el-col>
+            </el-row>
+
+            <el-dialog :visible.sync="showTab" title="日报工单总览">
+               
+                <!-- <h3>{{month}}月{{day}}日的{{type}}报工单总览</h3> -->
+                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top:-40px">
+                    <el-menu-item v-for="item in menus" :key="item.label" :index="item.label">{{item.timeCate}}:{{item.name}}</el-menu-item>
+                </el-menu>
+                 <div v-if="wIcon">
+                    <i class="el-icon-loading"></i>
+                </div>
+                <div class="dialogDisp" v-else>
+                    <div class="basicInfo">
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="8" >
+                                <div class="tip"> <h3>报工编号：{{menus[disNo].bgNo}}</h3></div>
+                            </el-col>
+                        </el-row> 
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="8"><div class="tip"><h3>生产日期：{{menus[disNo].birth}}</h3></div></el-col>
+                        </el-row>
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="6"><div class="tip"><h3>加工人：{{menus[disNo].maniMan}}</h3></div></el-col>
+                            <el-col :span="6"><div class="tip"><h3>所属班组：{{menus[disNo].bclass}}</h3></div></el-col>
+                            <el-col :span="6"><div class="tip"><h3>作业单号：{{menus[disNo].workNo}}</h3></div></el-col>
+                        </el-row>
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="6"><div class="tip"><h3>物料号：{{menus[disNo].wlNo}}</h3></div></el-col>
+                            <el-col :span="9"><div class="tip"><h3>物料名称：{{menus[disNo].name}}</h3></div></el-col>
+                        </el-row>
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="6"><div class="tip"><h3>工序：{{menus[disNo].procedure}} {{menus[disNo].proceName}}</h3></div></el-col>
+                        </el-row>
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="6"><div class="tip"><h3>完工数量：{{menus[disNo].doneNo}}</h3></div></el-col>
+                            <el-col :span="6"><div class="tip"><h3>合格数量：{{menus[disNo].passNo}}</h3></div></el-col>
+                            <el-col :span="6"><div class="tip"><h3>返工合格数量：{{menus[disNo].rePassNo}}</h3></div></el-col>
+                            <el-col :span="6"><div class="tip"><h3>待处理：{{menus[disNo].wHandle}}</h3></div></el-col>
+                        </el-row>
+                        <el-row style="border-bottom: 1px solid #000">
+                            <el-col :span="6"><div class="tip"><h3>不合格数量：{{menus[disNo].failNo}}</h3></div></el-col>
+                            <el-col :span="4"><div class="tip"><h3>料废：{{menus[disNo].lf}}</h3></div></el-col>
+                            <el-col :span="4"><div class="tip"><h3>机废：{{menus[disNo].jf}}</h3></div></el-col>
+                            <el-col :span="4"><div class="tip"><h3>调废：{{menus[disNo].df}}</h3></div></el-col>
+                            <el-col :span="4"><div class="tip"><h3>工废：{{menus[disNo].gf}}</h3></div></el-col>
+
+                        </el-row>
+
+                    </div>
+                    <h3>不合格记录</h3>
+                    <el-table :data="failedRec" border style="width: 100%;margin:2% 0%" height="150">
+                        <el-table-column fixed prop="label" label="序号" width="100"> </el-table-column>
+                        <el-table-column prop="txdate" label="填写日期" width="150"></el-table-column>
+                        <el-table-column prop="pline" label="生产线" width="120"></el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="120"> </el-table-column>
+                        <el-table-column prop="failDesc" label="不合格描述" width="300"> </el-table-column>
+                        <el-table-column prop="failNum" label="不良数量" width="120"> </el-table-column>
+                        <el-table-column prop="shitNo" label="报废数" width="120"></el-table-column>
+                        <el-table-column prop="rePassNo" label="返工合格数量" width="120"></el-table-column>
+                        <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
+                        <el-table-column prop="failNo" label="不合格单号" width="120"> </el-table-column>
+                        <el-table-column prop="workNo" label="作业单号" width="120"> </el-table-column>
+                        <el-table-column prop="wlNo" label="物料编号" width="120"> </el-table-column>
+                        <el-table-column prop="wlDesc" label="物料描述" width="120"> </el-table-column>
+                        <el-table-column prop="downNum" label="降级数" width="120"></el-table-column>
+                        <el-table-column prop="sftNum" label="偏差数" width="120"></el-table-column>
+                        <el-table-column prop="passNum" label="合格数" width="120"> </el-table-column>
+                        <el-table-column prop="status" label="状态" width="120"> </el-table-column>
+                        <el-table-column prop="bgNo" label="报工编号" width="150"> </el-table-column>
+                        <!-- <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                            <el-button type="text" size="small">编辑</el-button>
+                        </template> 
+                        </el-table-column>-->
+                    </el-table>
+                    <h3>停机记录</h3>
+                    <el-table :data="stopRec" border style="width: 100%;margin:2% 0%" height="150">
+                        <el-table-column fixed prop="stopType" label="停机类型" width="100"> </el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="120"></el-table-column>
+                        <el-table-column prop="stopDesc" label="停机描述" width="300"></el-table-column>
+                        <el-table-column prop="stopBegin" label="停机开始" width="180"> </el-table-column>
+                        <el-table-column prop="stopEnd" label="停机结束" width="180"> </el-table-column>
+                        <el-table-column prop="testPause" label="调试暂停" width="120"> </el-table-column>
+                        <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
+                        <el-table-column prop="stopTime" label="停机时间" width="120"> </el-table-column>
+                        <!-- <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                            <el-button type="text" size="small">编辑</el-button>
+                        </template> 
+                        </el-table-column>-->
+                    </el-table>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -136,6 +232,13 @@ export default {
     },
     data() {
         return {
+            //弹出框导航栏参数
+            activeIndex:"0",
+            menus:[],
+            failedRec: [],
+            stopRec: [],
+            disNo:0,
+            wIcon:true,
             //复选框参数
             checkAll: false,
             checkedprodLine: [],
@@ -229,10 +332,31 @@ export default {
             value2:new Date(),
             index:0,
             //time updater
-            interval:null
+            interval:null,
+            //弹窗参数
+            showTab:false,
+            month:'',
+            day:'',
+            type:'',
+            //选定的柱子当前日期
+            currDate:null
         };
     },
     methods: {
+        //工具方程，日期转字符串
+        dateToString(date){  
+            var  year = date.getFullYear();  
+            var  month =(date.getMonth() + 1).toString();  
+            var  day = (date.getDate()).toString();   
+            if(month.length == 1){  
+                month = "0" + month;  
+            }  
+            if(day.length == 1){  
+                day = "0" + day;  
+            } 
+            var dateTime = year + "-" + month + "-" + day; 
+            return dateTime;  
+        },
         //查询方程
         setProdLineVal(indx){
             this.plName = indx;
@@ -364,6 +488,93 @@ export default {
         modifyData(value){
             bus.$emit("Query",{dateunit:this.dtUnit,prodline:this.checkedprodLine[value],starttime:this.value1[0],endtime:this.value1[1]})
             console.log("走马灯"+value);
+        },
+        handleSelect(key, keyPath) {
+            this.disNo = parseInt(key);
+            console.log(key+"和"+keyPath);
+            this.getTab1Data(this.menus[this.disNo].bgNo)
+            this.getTab2Data(this.menus[this.disNo].bgNo)
+        },
+        handleClick(row) {
+            console.log(row);
+        },
+        getTab1Data(prm){
+            this.failedRec = [];
+            fetch('api/Chartdata/tab1',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    qDate:this.currDate,
+                    bgbh:prm
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length==0){
+                    return;
+                }
+                for(var item of data){
+                    var indx = {
+                        label:item.序号,
+                        txdate:item.填写日期,
+                        pline:item.生产线,
+                        sbNo:item.设备编号,
+                        failDesc:item.不合格描述,
+                        failNum:item.不合格数量,
+                        shitNo:item.报废数,
+                        rePassNo:item.返工合格数,
+                        writeMan:item.填写人,
+                        failNo:item.不合格单号,
+                        workNo:item.作业单号,
+                        wlNo:item.物料编号,
+                        wlDesc:item.物料描述,
+                        downNum:item.降级数,
+                        sftNum:item.偏差数,
+                        passNum:item.合格数,
+                        status:item.状态,
+                        bgNo:item.报工编号
+                    }
+                    this.failedRec.push(indx)
+                }
+
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        getTab2Data(prm){
+             this.stopRec = [];
+            fetch('api/Chartdata/tab2',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    qDate:this.currDate,
+                    bgbh:prm
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length==0){
+                    return;
+                }
+                for(var item of data){
+                    var indx = {
+                        stopType:item.停机类型,
+                        sbNo:item.设备编号,
+                        stopDesc:item.停机描述,
+                        stopBegin:item.停机开始,
+                        stopEnd:item.停机结束,
+                        testPause:item.调试暂停,
+                        writeMan:item.填写人,
+                        stopTime:item.停机
+                    }
+                    this.stopRec.push(indx)
+                }
+
+            }).catch(data=>{
+                alert(data)
+            })
         }
     },
     watch:{
@@ -380,7 +591,7 @@ export default {
                     //    if(nowtime.getDay()=='13'){
                     //        console.log("damnyes");
                     //    }
-                       if((this.value1[1].getDate() < nowtime.getDate() || (this.value1[1].getMonth() < nowtime.getMonth() && this.value1[1].getDate() > nowtime.getDate())) && nowtime.getHours() == '8'){
+                       if((this.value1[1].getDate() < nowtime.getDate() || (this.value1[1].getMonth() < nowtime.getMonth() && this.value1[1].getDate() > nowtime.getDate())) && nowtime.getHours() == 8){
                             // console.log("oldtme"+this.value1[0])
                             // console.log("oldtme"+this.value1[1])
                             this.value1[0]=new Date((this.value1[0]).getTime()+3600*24*1000)
@@ -408,6 +619,95 @@ export default {
         console.log(oldtime);
         console.log(newtime)
         bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime})
+        bus.$on("pillInfo",msg=>{
+            if(this.status){
+                return;
+            }
+            this.showTab = true;
+            this.month = msg.month;
+            this.day = msg.day;
+            this.type = msg.type;
+            var qdate = new Date();
+            if(this.value1[0].getFullYear()==this.value1[1].getFullYear()){
+                qdate.setFullYear(this.value1[0].getFullYear(),parseInt(this.month)-1,parseInt(this.day));
+                console.log("一样的 "+qdate);
+            }else{
+                if(parseInt(this.month) >= this.value1[0].getMonth()){
+                    qdate.setFullYear(this.value1[0].getFullYear(),parseInt(this.month)-1,parseInt(this.day));
+                    console.log("去年的 "+qdate)
+                }else{
+                     qdate.setFullYear(this.value1[1].getFullYear(),parseInt(this.month)-1,parseInt(this.day));
+                      console.log("今年的 "+qdate)
+                }
+            }
+           console.log("最后的日期： "+qdate)
+           this.currDate = qdate;
+            fetch('api/Chartdata/dialog1',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    qDate:qdate,
+                    prodLine:this.plName
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length==0){
+                    return;
+                }
+                var c = 0
+                this.menus = []
+                 var doneTime = "";
+                for(var item of data){
+                    if(parseInt((item.作业开始时间).substr(11,2))>16){
+                        doneTime = "中班"
+                    }else if(parseInt((item.作业开始时间).substr(11,2))>8){
+                        doneTime = "早班"
+                    }else{
+                        doneTime = "晚班"
+                    }
+                    var stc = {
+                        label:c.toString(), 
+                        timeCate:doneTime,
+                        name:item.物料描述,
+                        bgNo:item.报工编号,
+                        birth:item.生产日期,
+                        maniMan:item.加工人员,
+                        bclass:item.所属班组,
+                        workNo:item.作业单号,
+                        wlNo:item.物料编号,
+                        procedure:item.工序号,
+                        proceName:item.工序名称,
+                        doneNo:item.完工数量,
+                        passNo:item.合格数量,
+                        rePassNo:item.返工合格数量,
+                        wHandle:item.待处理,
+                        failNo:item.不良数量,
+                        lf:item.料废,
+                        jf:item.机废,
+                        df:item.调废,
+                        gf:item.工废
+                    };
+                    this.menus.push(stc);
+                    c+=1;
+                }
+                console.log(this.menus)
+                console.log("this is BGBH: "+ this.menus[0].bgNo);
+                //加载表格1
+                this.getTab1Data(this.menus[0].bgNo);
+                this.getTab2Data(this.menus[0].bgNo);
+                // alert(data)
+                //加载小图标消失
+                this.wIcon = false;
+            }).catch(data=>{
+                alert(data);
+            })
+
+           
+            // //加载表格2
+            // this.getTab2Data();
+        })
     },
     beforeDestroy(){
         this.checkedprodLine = [];
@@ -481,5 +781,8 @@ export default {
     margin-top:-10px;
     visibility:hidden;
 }
-
+.tip{
+    margin:5px;
+    /* border-bottom:5px double rgba(0,0,0,0.5); */
+}
 </style>

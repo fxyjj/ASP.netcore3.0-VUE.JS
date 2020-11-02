@@ -524,6 +524,9 @@ export default {
             .then(data => {
                 console.log(data)
                 this.tableData = []
+                if(data.length == 0){
+                    return;
+                }
                 for(var item of data){
                     var sts = null;
                     switch(item.当前状态){

@@ -34,9 +34,12 @@ namespace aspVue7.Controllers
             var model = new BorgWarnerMisSQLContext();
             var usr = usrname.username;
             var testData = model.Database.SqlQuery<usrDBO>($"select Password from dbo.tblWebUser where UsrName='{usr}' ").ToList();
+            if(testData.Count==0){
+                return false;
+            }
              //前端密文解密
-            string oriText = await _services.InvokeAsync<string>("./scripts/decrypt",usrname.happyword);
-            bool validate = PasswordHasher.VerifyHashedPassword(oriText,testData[0].Password);
+            string oriText = await _services.InvokeAsync<string>("./src/scripts/decrypt",usrname.happyword);
+            var validate = PasswordHasher.VerifyHashedPassword(oriText,testData[0].Password);
 
             return validate;
         }
@@ -53,6 +56,30 @@ namespace aspVue7.Controllers
             var cipherText = PasswordHasher.HasPassword(oriText);
             
             var testData = model.Database.SqlQuery<regRes>($"EXECUTE dbo.QforAccountValidate @name='{info.name}',@username='{info.username}',@pswd='{cipherText}',@token='{info.token}' ").ToList();
+            return testData;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<List<mdfyRes>> modifyPwd([FromBody] mdfyParam info)
+        {
+            
+            var model = new BorgWarnerMisSQLContext();
+            //前端密文解密
+            string oriText = await _services.InvokeAsync<string>("./scripts/decrypt",info.newpwd);
+            //密码加密
+            var cipherText = PasswordHasher.HasPassword(oriText);
+            
+            var testData = model.Database.SqlQuery<mdfyRes>($"EXECUTE dbo.QforModifyPwd @username='{info.username}',@pswd='{cipherText}',@token='{info.permit}' ").ToList();
+            return testData;
+        }
+
+        [HttpPost("[action]")]
+        public List<delRes> deleteUser([FromBody] delParam info)
+        {
+            
+            var model = new BorgWarnerMisSQLContext();
+            
+            var testData = model.Database.SqlQuery<delRes>($"EXECUTE dbo.QforDeleteUser @username='{info.username}',@token='{info.token}' ").ToList();
             return testData;
         }
 
@@ -81,5 +108,25 @@ namespace aspVue7.Controllers
             public int 用户名使用情况{get;set;}
         }
 
+        //修改密码参数
+        public class mdfyParam{
+            public string username{get;set;}
+            public string permit{get;set;}
+            public string newpwd{get;set;}
+        }
+        //修改密码结果
+        public class mdfyRes{
+            public int result{get;set;}
+        }
+
+        //注销账号参数
+        public class delParam{
+            public string username{get;set;}
+            public string token{get;set;}
+        }
+        //注销账号结果
+        public class delRes{
+            public int result{get;set;}
+        }
     }
 }

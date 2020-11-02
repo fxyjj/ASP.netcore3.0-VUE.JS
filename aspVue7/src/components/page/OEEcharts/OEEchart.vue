@@ -1,6 +1,5 @@
 <template>
- <div id="OEEchart" :style="{width:'100%',height:'315px',display:'inline-block'}"></div>
-
+    <div id="OEEchart" :style="{width:'100%',height:'315px',display:'inline-block'}"></div>
 </template>
 <script>
 import echarts from 'echarts';
@@ -16,6 +15,9 @@ export default {
     name:"OEEchart",
     data() {
         return{
+            //弹窗显隐控制
+            showTab:false,
+            bgd:'',
             input2: 'i2',
             cdate : [],
             stime:{
@@ -32,7 +34,7 @@ export default {
             //通过bus传过来的数据
             startTime:new Date(),
             endTime:new Date(),
-            dataUnit: "",
+            dateUnit: "",
             prodLine:"",
             option : {
                 title: {
@@ -42,7 +44,15 @@ export default {
                     }
                    
                 },
-                tooltip: {},
+                tooltip: {
+                    trigger: "axis",
+                    triggerOn:"click",
+                    axisPointer: {
+                        // link: null,
+                        animation: true,
+                        type: 'cross'
+                    }
+                },
                 legend: {
                     selectMode:true,
                     data:['OEE','目标'],
@@ -142,6 +152,9 @@ export default {
             this.barXdata = [];
             this.barYdata = [];
             this.lineYdata = [];
+            if(this.cdate.length==0){
+                return;
+            }
             for(var i of this.cdate){
                 this.barXdata.push(i.dateunit);
                 
@@ -163,6 +176,7 @@ export default {
         },
          //后端数据请求。
         getInfor(){
+            console.log("Jack的事件"+this.endTime);
             fetch('api/Chartdata/OEEchartQuery' ,{
                 method:'POST',
                 headers: {
@@ -225,6 +239,25 @@ export default {
                 this.option.yAxis.axisLine.lineStyle.color = "#fff";
                 this.charts.setOption(this.option);
             }
+        })
+
+        this.charts.on('click',function(params){
+            if( params.name.length==4){
+                var date = params.name.split("");
+                var month = date[0]+date[1];
+                var day = date[2]+date[3];
+                bus.$emit("pillInfo",{type:"OEE",month:month,day:day})
+                console.log("this is date: "+month+" "+day)
+                var answer = params.seriesName;
+                var number = params.name;
+                var countValue = params.value;
+                console.log(params);
+                console.log('题号：',params.componentIndex+1,params.name);
+                console.log('选择的答案：',params.seriesName);
+                console.log('选择答案的人数：',params.value);
+            }
+           
+　　　　 //getStuAnswer(params.seriesName,examClassId,params.name);//调用接口
         })
     }
 

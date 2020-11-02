@@ -3,43 +3,46 @@
     <div style="margin:0% 10% 5%">
     <el-row>
        
-        <div class="title"> <img src='../../assets/img/bwlogo.png' style="float:left;margin-top:5px;"/>BorgWarner Mis System Panel</div>
+        <div class="title"> <img src='../../assets/img/bwlogo.png' style="float:left;margin-top:5px;"/>MiS Panel</div>
     </el-row>
     <el-row>
          <el-divider style="margin:10%;"><i class="el-icon-mobile-phone"></i></el-divider>
     </el-row>
     <el-row>
-        <el-col :span="3">
+        <el-col :span="2">
+            <div>这是用来填充的</div>
+        </el-col>
+        <el-col :span="4">
             <div id="dashboard" class="mode" type="button" @click="go($event)">
+                <i class="iconfont el-icon-blinklightfangzi" style="line-height:150px"></i>
                 <h3 class="subTitle">系统首页</h3>
-                <i class="iconfont el-icon-blinklightfangzi"></i>
-                </div>
+            </div>
            
         </el-col>
 
-        <el-col :span="3">
+        <el-col :span="4">
             <div id="andon" class="mode" type="button" @click="go($event)">
+                <i class="iconfont el-icon-blinklightlight" style="line-height:150px"></i>
                 <h3 class="subTitle">安灯系统</h3>
-                <i class="iconfont el-icon-blinklightlight"></i>
                 </div>
         </el-col>
 
-        <el-col :span="3">
+        <el-col :span="4">
             <div id="oee" type="button" class="mode"  @click="go($event)">
+                <i class="iconfont el-icon-blinklighttubiao" style="line-height:150px"></i>
                 <h3 class="subTitle">OEE</h3>
-                <i class="iconfont el-icon-blinklighttubiao"></i>
                 </div>
         </el-col>
 
-        <el-col :span="3">
-            <div id="account" type="button" class="mode"  @click="accountM()">
-                <h3 class="subTitle">账号管理</h3>
-                <i class="iconfont el-icon-blinklightkey"></i>
+        <el-col :span="4">
+            <div id="account" type="button" class="mode"  @click="accountM()" v-if="admin">
+                <i class="iconfont el-icon-blinklightkey" style="line-height:150px"></i>
+                 <h3 class="subTitle">账号管理</h3>
                 <!-- <i class="iconfont el-icon-blinklightsuo"></i> -->
                 </div>
         </el-col>
 
-        <el-col :span="3">
+        <!-- <el-col :span="3">
             <div class="mode"><h3 class="subTitle">保留页1</h3></div>
         </el-col>
 
@@ -49,13 +52,16 @@
 
         <el-col :span="3">
             <div class="mode"><h3 class="subTitle">保留页3</h3></div>
-        </el-col>
+        </el-col> -->
 
-        <el-col :span="3">
+        <el-col :span="4">
             <div id="exit" class="mode" @click="exit()">
+                <i class="iconfont el-icon-blinklighttuichu" style="line-height:150px"></i>
                 <h3 class="subTitle">返回登陆</h3>
-                <i class="iconfont el-icon-blinklighttuichu"></i>
-                </div>
+            </div>
+        </el-col>
+        <el-col :span="2">
+            <div >这是用来填充的</div>
         </el-col>
     </el-row>
     </div>
@@ -67,7 +73,7 @@ export default {
     name:"MainPage",
     data(){
         return{
-
+            admin:false
         }
     },
     methods:{
@@ -87,6 +93,11 @@ export default {
         },
         accountM(){
             this.$router.push('/AccountManage');
+        }
+    },
+    mounted(){
+        if(localStorage.getItem("ms_username") == "Sean"){
+            this.admin = true;
         }
     }
 }
@@ -111,7 +122,7 @@ export default {
 }
 
 .mode{
-    height:150px;
+    height:200px;
     border:1px solid rgba(0,0,0,1);
     margin:10%;
     border-radius:10%;
@@ -126,6 +137,6 @@ export default {
 }
 
 .subTitle{
-    margin-top:10%;
+    margin-top:0%;
 }
 </style>
