@@ -1,0 +1,58 @@
+{
+  "id": "2134481",
+  "name": "light",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-blinklight",
+  "description": "闪烁的灯泡",
+  "glyphs": [
+    {
+      "icon_id": "588730",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e6fc",
+      "unicode_decimal": 59132
+    },
+    {
+      "icon_id": "11747399",
+      "name": "房子",
+      "font_class": "fangzi",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "1308403",
+      "name": "221用户_密码_钥匙",
+      "font_class": "key",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "2380664",
+      "name": "锁",
+      "font_class": "suo",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "5140499",
+      "name": "图表",
+      "font_class": "tubiao",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "883901",
+      "name": "灯泡",
+      "font_class": "dengpao",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "1250067",
+      "name": "灯泡",
+      "font_class": "light",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

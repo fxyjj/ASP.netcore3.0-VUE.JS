@@ -49,6 +49,7 @@
 <script>
 import bus from '../../common/bus'
 import CryptoJS from "crypto-js"
+import shaJS from "js-sha1"
 export default {
     name:"AccountManage",
     data(){
@@ -138,7 +139,8 @@ export default {
                 this.$message.error("密码中必须包含数字，大小写字母和特殊字符，请确认后再修改！")
                 return;
             }
-            var ciphertext = CryptoJS.AES.encrypt(this.form.newpwd,"secretkey123").toString();
+            // var ciphertext = CryptoJS.AES.encrypt(this.form.newpwd,"secretkey123").toString();
+            var ciphertext = shaJS(this.form.newpwd);
             fetch('api/Login/modifyPwd',{
                 method:'POST',
                 headers:{
@@ -155,7 +157,12 @@ export default {
                     if(data[0].result == 0){
                         this.$message.error("修改失败")
                     }else{
-                       this.$message.success("修改成功")
+                       if(localStorage.getItem('ms_username')==this.form.username){
+                            this.$message.success("修改成功,当前在登陆账号密码已被修改，请重新登录！")
+                            this.$router.push('/Login')
+                       }else{
+                             this.$message.success("修改成功")
+                       }
                     }
                 }).catch(data=>{
                     alert(data)

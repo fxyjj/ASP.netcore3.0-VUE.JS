@@ -17,8 +17,8 @@ export default new Router({
                         return '/Andon'
                     case "oee":
                         return '/OEE'
-                    case "account":
-                        return '/404'
+                    case "prodPlan":
+                        return '/OrderMaking'
                     default:
                         return '/404'
                 }
@@ -97,6 +97,18 @@ export default new Router({
                     path: '/OEE',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/OEE.vue'),
                     meta: { title: 'OEE' }
+                },
+                {
+                    // vue-schart组件
+                    path: '/OrderMaking',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/ProductPlan/OrderMaking.vue'),
+                    meta: { title: '订单下达' }
+                },
+                {
+                    // vue-schart组件
+                    path: '/OrderTrack',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/ProductPlan/OrderTrack.vue'),
+                    meta: { title: '订单跟踪' }
                 },
                 // {
                 //     // 拖拽列表组件

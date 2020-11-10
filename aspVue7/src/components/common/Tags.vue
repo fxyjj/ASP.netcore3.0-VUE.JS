@@ -8,7 +8,7 @@
                 <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
-        <div class="tags-close-box">
+        <!-- <div class="tags-close-box">
             <el-dropdown @command="handleTags">
                 <el-button size="mini" type="primary">
                     标签选项<i class="el-icon-arrow-down el-icon--right"></i>
@@ -18,7 +18,7 @@
                     <el-dropdown-item command="all">关闭所有</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-        </div>
+        </div> -->
     </div>
 </template>
 

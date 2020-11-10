@@ -111,65 +111,71 @@
                 <el-col :span="12"><t-j-lchart></t-j-lchart></el-col>
             </el-row>
 
-            <el-dialog :visible.sync="showTab" title="日报工单总览">
+            <el-dialog :visible.sync="showTab" title="日报工单总览" :key="timer" width="1550px">
                
                 <!-- <h3>{{month}}月{{day}}日的{{type}}报工单总览</h3> -->
-                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top:-40px">
-                    <el-menu-item v-for="item in menus" :key="item.label" :index="item.label">{{item.timeCate}}:{{item.name}}</el-menu-item>
+                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top:-35px;background:#fff;" >
+                    <el-menu-item v-for="item in menus" :key="item.label" :index="item.label" style="color:#000;font-size:18px" >{{item.timeCate}}:{{item.name}}</el-menu-item><!--#BFBFBF-->
                 </el-menu>
                  <div v-if="wIcon">
                     <i class="el-icon-loading"></i>
                 </div>
                 <div class="dialogDisp" v-else>
-                    <div class="basicInfo">
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="8" >
-                                <div class="tip"> <h3>报工编号：{{menus[disNo].bgNo}}</h3></div>
+                    <div class="basicInfo" style="color:#000"><!--background:#BFBFBF;border:1px solid #012468-->
+                        <el-row>
+                            <el-col :span="18">
+                                <el-row>
+                                    <el-col :span="6" ><div class="tip"> <p>报工编号：{{menus[disNo].bgNo}}</p></div> </el-col>
+                                    <el-col :span="4"><div class="tip"><p>加工人：{{menus[disNo].maniMan}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>物料名称：{{menus[disNo].name}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>一次合格率(FTT)：{{menus[disNo].ftt}}%</p></div></el-col>
+                                </el-row> 
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>生产日期：{{menus[disNo].birth}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>所属班组：{{menus[disNo].bclass}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>作业单号：{{menus[disNo].workNo}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>设备开动率(A)：{{menus[disNo].a}}%</p></div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>物料号：{{menus[disNo].wlNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>工序：{{menus[disNo].procedure}} {{menus[disNo].proceName}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>待处理：{{menus[disNo].wHandle}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>员工效率(P)：{{menus[disNo].p}}%</p></div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>完工数量：{{menus[disNo].doneNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>合格数量：{{menus[disNo].passNo}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>返工合格数量：{{menus[disNo].rePassNo}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>合格率(Q)：{{menus[disNo].q}}%</p></div></el-col>
+                                    
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>不合格数量：{{menus[disNo].failNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>料废：{{menus[disNo].lf}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>机废：{{menus[disNo].jf}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>调废：{{menus[disNo].df}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>工废：{{menus[disNo].gf}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>OEE(A*P*Q)：{{menus[disNo].apq}}%</p></div></el-col>
+                                </el-row>
                             </el-col>
-                        </el-row> 
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="8"><div class="tip"><h3>生产日期：{{menus[disNo].birth}}</h3></div></el-col>
+                            <el-col :span="6">
+                                <div id="pieChart" :style='{width:"100%",height:"150px"}'></div>
+                            </el-col>
                         </el-row>
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="6"><div class="tip"><h3>加工人：{{menus[disNo].maniMan}}</h3></div></el-col>
-                            <el-col :span="6"><div class="tip"><h3>所属班组：{{menus[disNo].bclass}}</h3></div></el-col>
-                            <el-col :span="6"><div class="tip"><h3>作业单号：{{menus[disNo].workNo}}</h3></div></el-col>
-                        </el-row>
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="6"><div class="tip"><h3>物料号：{{menus[disNo].wlNo}}</h3></div></el-col>
-                            <el-col :span="9"><div class="tip"><h3>物料名称：{{menus[disNo].name}}</h3></div></el-col>
-                        </el-row>
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="6"><div class="tip"><h3>工序：{{menus[disNo].procedure}} {{menus[disNo].proceName}}</h3></div></el-col>
-                        </el-row>
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="6"><div class="tip"><h3>完工数量：{{menus[disNo].doneNo}}</h3></div></el-col>
-                            <el-col :span="6"><div class="tip"><h3>合格数量：{{menus[disNo].passNo}}</h3></div></el-col>
-                            <el-col :span="6"><div class="tip"><h3>返工合格数量：{{menus[disNo].rePassNo}}</h3></div></el-col>
-                            <el-col :span="6"><div class="tip"><h3>待处理：{{menus[disNo].wHandle}}</h3></div></el-col>
-                        </el-row>
-                        <el-row style="border-bottom: 1px solid #000">
-                            <el-col :span="6"><div class="tip"><h3>不合格数量：{{menus[disNo].failNo}}</h3></div></el-col>
-                            <el-col :span="4"><div class="tip"><h3>料废：{{menus[disNo].lf}}</h3></div></el-col>
-                            <el-col :span="4"><div class="tip"><h3>机废：{{menus[disNo].jf}}</h3></div></el-col>
-                            <el-col :span="4"><div class="tip"><h3>调废：{{menus[disNo].df}}</h3></div></el-col>
-                            <el-col :span="4"><div class="tip"><h3>工废：{{menus[disNo].gf}}</h3></div></el-col>
-
-                        </el-row>
-
                     </div>
+
                     <h3>不合格记录</h3>
-                    <el-table :data="failedRec" border style="width: 100%;margin:2% 0%" height="150">
-                        <el-table-column fixed prop="label" label="序号" width="100"> </el-table-column>
-                        <el-table-column prop="txdate" label="填写日期" width="150"></el-table-column>
-                        <el-table-column prop="pline" label="生产线" width="120"></el-table-column>
-                        <el-table-column prop="sbNo" label="设备编号" width="120"> </el-table-column>
+                    <el-table :data="failedRec" border style="width: 100%;margin:1% 0% ;font-size:16px" height="240" highlight-current-row>
+                        <el-table-column fixed prop="label" label="序号" width="100" > </el-table-column>
+                        <el-table-column prop="txdate" label="填写日期" width="200"></el-table-column>
+                        <el-table-column prop="pline" label="生产线" width="200"></el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="150"> </el-table-column>
                         <el-table-column prop="failDesc" label="不合格描述" width="300"> </el-table-column>
                         <el-table-column prop="failNum" label="不良数量" width="120"> </el-table-column>
                         <el-table-column prop="shitNo" label="报废数" width="120"></el-table-column>
                         <el-table-column prop="rePassNo" label="返工合格数量" width="120"></el-table-column>
                         <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
-                        <el-table-column prop="failNo" label="不合格单号" width="120"> </el-table-column>
+                        <el-table-column prop="failNo" label="不合格单号" width="200"> </el-table-column>
                         <el-table-column prop="workNo" label="作业单号" width="120"> </el-table-column>
                         <el-table-column prop="wlNo" label="物料编号" width="120"> </el-table-column>
                         <el-table-column prop="wlDesc" label="物料描述" width="120"> </el-table-column>
@@ -177,7 +183,7 @@
                         <el-table-column prop="sftNum" label="偏差数" width="120"></el-table-column>
                         <el-table-column prop="passNum" label="合格数" width="120"> </el-table-column>
                         <el-table-column prop="status" label="状态" width="120"> </el-table-column>
-                        <el-table-column prop="bgNo" label="报工编号" width="150"> </el-table-column>
+                        <el-table-column prop="bgNo" label="报工编号" width="200"> </el-table-column>
                         <!-- <el-table-column
                         fixed="right"
                         label="操作"
@@ -189,12 +195,12 @@
                         </el-table-column>-->
                     </el-table>
                     <h3>停机记录</h3>
-                    <el-table :data="stopRec" border style="width: 100%;margin:2% 0%" height="150">
+                    <el-table :data="stopRec" border style="width: 100%;margin:1% 0%;font-size:16px" height="240" highlight-current-row>
                         <el-table-column fixed prop="stopType" label="停机类型" width="100"> </el-table-column>
-                        <el-table-column prop="sbNo" label="设备编号" width="120"></el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="130"></el-table-column>
                         <el-table-column prop="stopDesc" label="停机描述" width="300"></el-table-column>
-                        <el-table-column prop="stopBegin" label="停机开始" width="180"> </el-table-column>
-                        <el-table-column prop="stopEnd" label="停机结束" width="180"> </el-table-column>
+                        <el-table-column prop="stopBegin" label="停机开始" width="300"> </el-table-column>
+                        <el-table-column prop="stopEnd" label="停机结束" width="300"> </el-table-column>
                         <el-table-column prop="testPause" label="调试暂停" width="120"> </el-table-column>
                         <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
                         <el-table-column prop="stopTime" label="停机时间" width="120"> </el-table-column>
@@ -220,7 +226,7 @@ import OEEchart from './OEEcharts/OEEchart.vue';
 import EFFchart from './OEEcharts/EFFchart.vue';
 import FTTchart from './OEEcharts/FTTchart.vue';
 import TJLchart from './OEEcharts/TJLchart.vue';
-
+import echarts from 'echarts';
 import bus from '../common/bus'
 export default {
     name: 'OEEpage',
@@ -234,7 +240,31 @@ export default {
         return {
             //弹出框导航栏参数
             activeIndex:"0",
-            menus:[],
+            menus:[{
+                    label:null,
+                    txdate:null,
+                    pline:null,
+                    sbNo:null,
+                    failDesc:null,
+                    failNum:null,
+                    shitNo:null,
+                    rePassNo:null,
+                    writeMan:null,
+                    failNo:null,
+                    workNo:null,
+                    wlNo:null,
+                    wlDesc:null,
+                    downNum:null,
+                    sftNum:null,
+                    passNum:null,
+                    status:null,
+                    bgNo:null,
+                    ftt:null,
+                    a:null,
+                    p:null,
+                    q:null,
+                    apq:0
+                    }],
             failedRec: [],
             stopRec: [],
             disNo:0,
@@ -262,7 +292,7 @@ export default {
                       {indexId:6,name:"柔性线"},
                       {indexId:7,name:"ETV装配线"},
                       {indexId:8,name:"GEN_II阀装配线"},
-                      {indexId:9,name:"EGR_Group"}],
+                      ],//{indexId:9,name:"EGR_Group"}
             CMLine:[{indexId:1,name:"混合管装配线1"},
                       {indexId:2,name:"混合管装配线2"},
                       {indexId:3,name:"Cooler Line 1"},
@@ -339,7 +369,29 @@ export default {
             day:'',
             type:'',
             //选定的柱子当前日期
-            currDate:null
+            currDate:null,
+            //实时刷新我们的模态框
+            timer:null,
+            //饼状图参数
+            piec:null,
+            pieOptions:{
+				tooltip: {
+                    formatter: '{a}  {b} : {c}',
+                },
+				series: [{
+                    name:'oee',
+                    type: 'pie',
+                    radius:'80%',
+                    data:[{value:0,itemStyle:{ color:'#00FF00'}},{value:100,itemStyle:{ color:'#696969'}}],
+                    animation:true,
+                    label:{
+                        show:false,
+                        position:'outer',
+                        alignTo:'none',
+                        bleedMargin:5
+                    }
+				}]
+            }
         };
     },
     methods: {
@@ -492,13 +544,27 @@ export default {
         handleSelect(key, keyPath) {
             this.disNo = parseInt(key);
             console.log(key+"和"+keyPath);
+             console.log("fff")
+            this.piec = echarts.init(document.getElementById("pieChart"));
+            this.pieOptions.series[0].data = [];
+            this.pieOptions.series[0].data.push({value:this.menus[this.disNo].apq,itemStyle:{color:'#00FF00'}});
+            this.pieOptions.series[0].data.push({value:100-this.menus[this.disNo].apq,itemStyle:{color:'#696969'}});
+
+            this.piec.setOption(this.pieOptions);
             this.getTab1Data(this.menus[this.disNo].bgNo)
             this.getTab2Data(this.menus[this.disNo].bgNo)
+        },
+        init_pie(){
+            this.piec = echarts.init(document.getElementById("pieChart"));
+            this.pieOptions.series[0].data = [];
+            this.pieOptions.series[0].data.push({value:this.menus[this.disNo].apq,itemStyle:{color:'#00FF00'}});
+            this.pieOptions.series[0].data.push({value:100-this.menus[this.disNo].apq,itemStyle:{color:'#696969'}});
         },
         handleClick(row) {
             console.log(row);
         },
         getTab1Data(prm){
+            
             this.failedRec = [];
             fetch('api/Chartdata/tab1',{
                 method:'POST',
@@ -586,7 +652,16 @@ export default {
                 if(!newV){
                    panel.style.background = "#324157";
                    this.interval = setInterval(() => {
-                       const nowtime = new Date()
+                       const nowtime = new Date();
+                    //    console.log("日期"+nowtime.getDate())
+                    //    console.log("月"+nowtime.getMonth())
+                    //    console.log("日"+nowtime.getDay())
+                    //    console.log("时"+nowtime.getHours())
+                    //    console.log(this.value1[1].getDate() < nowtime.getDate());
+                    //    console.log(this.value1[1].getMonth() < nowtime.getMonth());
+                    //    console.log(this.value1[1].getDate() > nowtime.getDate());
+                    //    console.log(nowtime.getHours() == 8);
+
                     //    console.log(nowtime.getDay())
                     //    if(nowtime.getDay()=='13'){
                     //        console.log("damnyes");
@@ -596,10 +671,11 @@ export default {
                             // console.log("oldtme"+this.value1[1])
                             this.value1[0]=new Date((this.value1[0]).getTime()+3600*24*1000)
                             this.value1[1]=new Date((this.value1[1]).getTime()+3600*24*1000)
+                            // console.log("newtme"+this.value1[0])
                             // console.log("newtme"+this.value1[1])
-                            // console.log("更新日期需要")
+                            console.log("更新日期需要")
                        }
-                   },86400000);// 
+                   },3600000);//86400000 
                 }else{
                    panel.style.background = "";
                    clearInterval(this.interval)
@@ -618,12 +694,18 @@ export default {
         this.prodLine = this.EGRLine;
         console.log(oldtime);
         console.log(newtime)
-        bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime})
+        bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime});
+       
         bus.$on("pillInfo",msg=>{
             if(this.status){
                 return;
             }
+            this.wIcon = true;
+            this.disNo = 0;
+            this.activeIndex = "0"
+            this.timer=new Date().getTime();
             this.showTab = true;
+            // this.piec = echarts.init(document.getElementById("pieChart"));
             this.month = msg.month;
             this.day = msg.day;
             this.type = msg.type;
@@ -687,7 +769,12 @@ export default {
                         lf:item.料废,
                         jf:item.机废,
                         df:item.调废,
-                        gf:item.工废
+                        gf:item.工废,
+                        ftt:(item.一次合格率*100).toFixed(2),
+                        a:(item.设备开动率*100).toFixed(2),
+                        p:(item.员工效率*100).toFixed(2),
+                        q:(item.合格率*100).toFixed(2),
+                        apq:(item.设备开动率*item.员工效率*item.合格率*100).toFixed(2)
                     };
                     this.menus.push(stc);
                     c+=1;
@@ -697,17 +784,16 @@ export default {
                 //加载表格1
                 this.getTab1Data(this.menus[0].bgNo);
                 this.getTab2Data(this.menus[0].bgNo);
+               
                 // alert(data)
                 //加载小图标消失
                 this.wIcon = false;
+               
             }).catch(data=>{
                 alert(data);
             })
-
-           
-            // //加载表格2
-            // this.getTab2Data();
         })
+         
     },
     beforeDestroy(){
         this.checkedprodLine = [];
@@ -783,6 +869,18 @@ export default {
 }
 .tip{
     margin:5px;
+    font-size:18px;
+    color:rgba(0,0,0,0.7)
     /* border-bottom:5px double rgba(0,0,0,0.5); */
+}
+/*修改导航栏菜单激活时的背景色*/ 
+.el-menu-item.is-active {
+    color:#fff !important;
+    background-color:#012468 !important;
+}
+/*修改表格选中某一行后的背景色 */
+.el-table__body tr.current-row>td{
+  background-color:#000 !important;
+  color: #000;
 }
 </style>

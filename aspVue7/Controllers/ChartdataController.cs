@@ -209,6 +209,10 @@ namespace aspVue7.Controllers
         public double 待处理{get;set;}
         public double  返工合格数量{get;set;}
         public DateTime 作业开始时间{get;set;}
+        public double 一次合格率{get;set;}
+        public double 设备开动率{get;set;}
+        public double 员工效率{get;set;}
+        public double 合格率{get;set;}
     }
     //不合格记录参数
     public class tabParam{

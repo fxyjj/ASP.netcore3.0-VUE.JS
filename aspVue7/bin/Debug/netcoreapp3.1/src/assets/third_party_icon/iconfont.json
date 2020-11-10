@@ -6,6 +6,20 @@
   "description": "闪烁的灯泡",
   "glyphs": [
     {
+      "icon_id": "3158535",
+      "name": "控制台",
+      "font_class": "kzjh",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "16707196",
+      "name": "控制",
+      "font_class": "fmea",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "588730",
       "name": "退出",
       "font_class": "tuichu",

@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.NodeServices;
+using System.Security.Cryptography;
 
 
 namespace aspVue7.Controllers
@@ -38,8 +41,9 @@ namespace aspVue7.Controllers
                 return false;
             }
              //前端密文解密
-            string oriText = await _services.InvokeAsync<string>("./src/scripts/decrypt",usrname.happyword);
-            var validate = PasswordHasher.VerifyHashedPassword(oriText,testData[0].Password);
+            // string oriText = await _services.InvokeAsync<string>("./src/scripts/decrypt",usrname.happyword);
+            // string testORI = DecryptByAES(usrname.happyword,"secretkey1234567");
+            var validate = PasswordHasher.VerifyHashedPassword(usrname.happyword,testData[0].Password);
 
             return validate;
         }
@@ -51,9 +55,9 @@ namespace aspVue7.Controllers
             var rng = new Random();
             var model = new BorgWarnerMisSQLContext();
             //前端密文解密
-            string oriText = await _services.InvokeAsync<string>("./scripts/decrypt",info.happyword);
+            // string oriText = await _services.InvokeAsync<string>("./src/scripts/decrypt",info.happyword);
             //密码加密
-            var cipherText = PasswordHasher.HasPassword(oriText);
+            var cipherText = PasswordHasher.HasPassword(info.happyword);
             
             var testData = model.Database.SqlQuery<regRes>($"EXECUTE dbo.QforAccountValidate @name='{info.name}',@username='{info.username}',@pswd='{cipherText}',@token='{info.token}' ").ToList();
             return testData;
@@ -65,13 +69,37 @@ namespace aspVue7.Controllers
             
             var model = new BorgWarnerMisSQLContext();
             //前端密文解密
-            string oriText = await _services.InvokeAsync<string>("./scripts/decrypt",info.newpwd);
+            // string oriText = await _services.InvokeAsync<string>("./src/scripts/decrypt",info.newpwd);
             //密码加密
-            var cipherText = PasswordHasher.HasPassword(oriText);
+            var cipherText = PasswordHasher.HasPassword(info.newpwd);
             
             var testData = model.Database.SqlQuery<mdfyRes>($"EXECUTE dbo.QforModifyPwd @username='{info.username}',@pswd='{cipherText}',@token='{info.permit}' ").ToList();
             return testData;
         }
+        //解密函数
+        // public static string DecryptByAES(string input, string key)
+        // {
+        //     byte[] inputBytes = Convert.FromBase64String(input);
+        //     if(key.Length<16)
+        //         key = key.PadRight(16, '0');
+        //     byte[] keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 16));//16
+        //     using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
+        //     {
+        //         aesAlg.Key = keyBytes;
+        //         aesAlg.IV = keyBytes;
+        //         ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+        //         using (MemoryStream msEncrypt = new MemoryStream(inputBytes))
+        //         {
+        //             using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, decryptor, CryptoStreamMode.Read))
+        //             {
+        //                 using (StreamReader srEncrypt = new StreamReader(csEncrypt))
+        //                 {
+        //                     return srEncrypt.ReadToEnd();
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         [HttpPost("[action]")]
         public List<delRes> deleteUser([FromBody] delParam info)

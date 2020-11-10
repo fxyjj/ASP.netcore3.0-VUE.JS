@@ -192,8 +192,19 @@ export default {
                     title: 'OEE'
                 },
             ],
-            //账号管理页面
-            item_account:[],   
+            //生产计划页面
+            item_prodPlan:[
+                {
+                    icon: 'el-icon-data-analysis',
+                    index: 'OrderMaking',
+                    title: '订单下达'
+                },
+                 {
+                    icon: 'el-icon-aim',
+                    index: 'OrderTrack',
+                    title: '订单跟踪'
+                },
+            ],   
         };
     },
     computed: {
@@ -225,8 +236,8 @@ export default {
                 this.items = this.item_oee;
                 console.log("this is oee")
                 break;
-            case "account":
-                this.items = this.item_account;
+            case "prodPlan":
+                this.items = this.item_prodPlan;
                 break;
         }
     }

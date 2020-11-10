@@ -140,13 +140,13 @@
                         </el-col>
                         <el-col :span="6">
                             <div class="block" :style='{height:"131px"}'>
-                                <div id="GEN_III_BPV" class="light">
+                                <div  class="light">
                                     <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
                                 </div>
                                 <div class="modName" :style='{margin:"30% 10%"}'>new</div>
                             </div>
                             <div class="block" style="height:131px">
-                                <div class="light">
+                                <div id="GEN_III_BPV" class="light">
                                     <i class="iconfont el-icon-blinklightdengpao" style="margin-top:-15px;margin-left:-20px"></i>
                                 </div>
                                 <div class="modName" :style='{margin:"30% 10%"}'>BPV</div>
@@ -441,7 +441,7 @@
             </el-col>
             <el-col :span="2">
                 <div style="height:912px;background:#324157">
-                    <div class="lineName" style="font-size:25px">安灯类型</div>
+                    <div class="lineName" >安灯类型</div>
                     <div style="height:150px">
                         <div class="redL" ><strong style="font-size:30px">{{zl}}</strong></div>
                         <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>质量</div>
@@ -460,7 +460,7 @@
                     </div>
                     <div style="height:150px">
                         <div class="yellowL"><strong style="font-size:30px">{{gl}}</strong></div>
-                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>管理</div>
+                        <div :style='{"text-align":"center",margin:"5% 5%","font-size":"20px",color:"#fff"}'>TBD</div>
                     </div>
                 </div>
             </el-col>
@@ -524,9 +524,9 @@ export default {
             .then(data => {
                 console.log(data)
                 this.tableData = []
-                if(data.length == 0){
-                    return;
-                }
+                // if(data.length == 0){
+                //     return;
+                // }
                 for(var item of data){
                     var sts = null;
                     switch(item.当前状态){
@@ -559,7 +559,7 @@ export default {
                             case "物料"://绿灯 物料
                                 this.wl+=1;
                                 break;
-                            case "管理"://黄灯 管理
+                            case "TBD"://黄灯 TBD
                                 this.gl+=1;
                                 break;
                         }
@@ -597,7 +597,7 @@ export default {
                             case "物料"://绿灯 物料
                                 this.wl+=1;
                                 break;
-                            case "管理"://黄灯 管理
+                            case "TBD"://黄灯 TBD
                                 this.gl+=1;
                                 break;
                         }
@@ -630,7 +630,7 @@ export default {
                             case "物料"://绿灯 物料
                                 light.className = "blinkGreen";
                                 break;
-                            case "管理"://黄灯 管理
+                            case "TBD"://黄灯 TBD
                                 light.className = "blinkYellow";
                                 break;
                         }
@@ -652,7 +652,7 @@ export default {
                             case "物料"://绿灯 物料
                                 light.style.background = "#1aee48";
                                 break;
-                            case "管理"://黄灯 管理
+                            case "TBD"://黄灯 TBD
                                 light.style.background = "#fbff23";
                                 break;
                             default:
@@ -689,7 +689,7 @@ export default {
                             case "物料"://绿灯 物料
                                 this.wl-=1;
                                 break;
-                            case "管理"://黄灯 管理
+                            case "TBD"://黄灯 TBD
                                 this.gl-=1;
                                 break;
                         }
@@ -720,10 +720,10 @@ export default {
 .lineName{
     text-align:center;
     font-weight:2px;
-    font-size:30px;
+    font-size:25px;
     background:rgba(255,255,255,0.8);
-    margin-top:15%;
-    margin-bottom:15%;
+    /* margin-top:15%;
+    margin-bottom:15%; */
 }
 
 .modName{

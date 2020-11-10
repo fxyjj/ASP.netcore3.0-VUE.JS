@@ -136,3 +136,9 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcore
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.Configuration.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.Console.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\src\assets\third_party_icon_ov\iconfont.json
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\NPOI.OOXML.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\NPOI.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\NPOI.OpenXml4Net.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\NPOI.OpenXmlFormats.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Release\netcoreapp3.1\ICSharpCode.SharpZipLib.dll

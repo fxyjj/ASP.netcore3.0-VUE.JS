@@ -18,7 +18,7 @@
                     >
                     </el-input>
                 </el-form-item>
-                <el-link type="primary" style="width:20%;margin-left:80%;margin-top:-30px" @click="pwdMdfy()" >忘记密码</el-link>
+                <el-link type="primary" style="width:20%;margin-left:80%;margin-top:-30px" @click="pwdMdfy()" >忘记密码</el-link><!---->
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()" style="margin-right:13px">登录</el-button>
                     <el-button type="primary" @click="regist()" style="margin-left:13px">注册</el-button> <!---->
@@ -125,6 +125,7 @@
 
 <script>
 import CryptoJS from "crypto-js"
+import shaJS from "js-sha1"
 export default {
     data: function() {
         return {
@@ -182,7 +183,9 @@ export default {
                 this.$message.error('请输入账号户密码！');
             }else{
                 // console.log("new pwd:"+this.param.password)
-                var ciphertext = CryptoJS.AES.encrypt(this.param.password,"secretkey123").toString();
+                // var ciphertext = CryptoJS.AES.encrypt(this.param.password,"secretkey1234567").toString();
+                var ciphertext = shaJS(this.param.password);
+                console.log(ciphertext);
                 fetch('api/Login/validate',{
                             method:'POST',
                             headers: {
@@ -272,7 +275,8 @@ export default {
             resp.style.visibility = "visible";
             // this.regRight = true;
             // this.regRight = false;
-            var ciphertext = CryptoJS.AES.encrypt(this.regParam.pwd,"secretkey123").toString();
+            // var ciphertext = CryptoJS.AES.encrypt(this.regParam.pwd,"secretkey123").toString();
+            var ciphertext = shaJS(this.regParam.pwd);
             console.log(this.regParam.name)
             console.log(this.regParam.key)
             console.log(this.regParam.user)
@@ -400,8 +404,8 @@ export default {
             console.log(this.mdfyForm.permit)
             console.log(this.mdfyForm.newpwd)
 
-            var ciphertext = CryptoJS.AES.encrypt(this.mdfyForm.newpwd,"secretkey123").toString();
-
+            // var ciphertext = CryptoJS.AES.encrypt(this.mdfyForm.newpwd,"secretkey123").toString();
+            var ciphertext = shaJS(this.mdfyForm.newpwd);
             fetch('api/Login/modifyPwd',{
                 method:'POST',
                 headers:{

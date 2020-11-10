@@ -8,12 +8,6 @@
         <div class="logo"><img src="../../assets/img/bw_logo.png" style="margin-bottom:-8px"/><span style="margin-left:30px;font-size:20px">MiS</span></div>
         <div class="header-right">
             <div class="header-user-con">
-                <!-- 全屏显示 -->
-                <div class="btn-fullscreen" @click="handleFullScreen">
-                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                        <i class="el-icon-rank"></i>
-                    </el-tooltip>
-                </div>
                 <!-- 消息中心 -->
                 <!-- <div class="btn-bell">
                     <el-tooltip
@@ -28,9 +22,9 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div> -->
                 <!-- 用户头像 -->
-                <div class="user-avator">
+                <!-- <div class="user-avator">
                     <img src="../../assets/img/img.jpg" />
-                </div>
+                </div> -->
                 <!-- 用户名下拉菜单 -->
                
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -39,12 +33,15 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
-                        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                        <el-dropdown-item divided command="loginout">返回主页</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
+                 <!-- 全屏显示 -->
+                <div class="btn-fullscreen" @click="handleFullScreen">
+                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+                        <i class="el-icon-rank"></i>
+                    </el-tooltip>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +133,7 @@ export default {
 }
 .header-right {
     float: right;
-    padding-right: 50px;
+    padding-right: 20px;
 }
 .header-user-con {
     display: flex;
@@ -171,7 +168,7 @@ export default {
     color: #fff;
 }
 .user-name {
-    margin-left: 10px;
+    margin-right: 10px;
 }
 .user-avator {
     margin-left: 20px;
