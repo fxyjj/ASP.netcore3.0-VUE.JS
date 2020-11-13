@@ -30,7 +30,7 @@ namespace aspVue7.Controllers
 
         // [HttpPost]
         [HttpPost("[action]")]
-        public async Task<bool> validate([FromBody] usrInfo usrname)
+        public bool validate([FromBody] usrInfo usrname)
         {
             
             var rng = new Random();
@@ -49,7 +49,7 @@ namespace aspVue7.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<List<regRes>> registration([FromBody] regParam info)
+        public List<regRes> registration([FromBody] regParam info)
         {
             
             var rng = new Random();
@@ -64,7 +64,7 @@ namespace aspVue7.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<List<mdfyRes>> modifyPwd([FromBody] mdfyParam info)
+        public List<mdfyRes> modifyPwd([FromBody] mdfyParam info)
         {
             
             var model = new BorgWarnerMisSQLContext();
