@@ -14,16 +14,16 @@
                     @keyup.enter.native="search()"
                     style="width:200px;display:inline-block">
                 </el-input>
-                <el-button type="primary" @click="search()">搜索</el-button>
+                <el-button type="primary" @click="search('all')">搜索</el-button>
                 <el-button type="primary" @click="exportExl()">导出到Excel</el-button>
                 <el-button type="primary" @click="addData()">新增订单</el-button>
-                <el-button type="primary" @click="delData()">删除选中</el-button>
+                <el-button type="primary" @click="delData()">关闭选中</el-button>
                 <el-button type="primary" @click="xiadaData()">下达选中</el-button>
                 <el-button type="primary" @click="showImport()">导入</el-button>
-                <div class="cBlock" style="border:1px solid rgba(0,0,0,0.4)">创建</div>
-                <div class="cBlock" style="background: #aadde7;">下达</div>
-                <div class="cBlock" style="background: yellow ">生产中</div>
-                <div class="cBlock" style="background:#22B14C" >完工</div>
+                <div class="cBlock" style="border:1px solid rgba(0,0,0,0.4)" @click="search('创建')">创建</div>
+                <div class="cBlock" style="background: #aadde7;" @click="search('下达')">下达</div>
+                <div class="cBlock" style="background: yellow " @click="search('生产中')">生产中</div>
+                <div class="cBlock" style="background:#22B14C" @click="search('完工')">完工</div>
 
             </div>
         </el-card>
@@ -150,7 +150,7 @@
                 </el-form-item>
             </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="editClose()">取 消</el-button>
+            <el-button @click="editCancel()">取 消</el-button>
             <el-button type="primary" @click="editFinish('editForm')">确 定</el-button>
         </span>
           </el-dialog>
@@ -161,6 +161,16 @@
             <div class="cbtn">
             <el-button type="success" @click="deleteVis=false" style="width:40%">取消</el-button>
             <el-button type="danger" style="width:40%;margin-left:20%" @click="deleteComfirm()">确认</el-button>
+            </div>
+        </el-dialog>
+        <!--批量关闭的弹窗-->
+        <el-dialog title="重要提示" :visible.sync="mulCloseVis" width="20%" style="padding:0 20px 30px">
+            <i class="el-icon-warning-outline" style="color:#ff0000;font-size:100px;margin:4% 34%"></i>
+            <h3 style="text-align:center">确认要关闭以下订单吗？</h3>
+             <div style="text-align:center" v-for="item in multipleSelection" :key="item.orderNo">{{item.orderNo}}</div>
+            <div class="cbtn">
+            <el-button type="success" @click="mulCloseVis=false" style="width:40%">取消</el-button>
+            <el-button type="danger" style="width:40%;margin-left:20%" @click="mulcloseCfm()">确认</el-button>
             </div>
         </el-dialog>
         <el-dialog title="从Excel导入" :visible.sync="importV" width="60%" :before-close="importClose"><!--:headers="PHead"-->
@@ -217,7 +227,7 @@ export default {
                 ordNo:'',
                 wlNo:'',
                 wlDesc:'',
-                ordNum:null,
+                ordNum:0,
                 sTime:'',
                 eTime:'',
                 ordTime:new Date(),
@@ -265,7 +275,9 @@ export default {
                 ordType:[{required:true,message:'我是什么类型的订单呀？',trigger:'blur'}],
             },
             //操作按钮显影
-            btnVis:false
+            btnVis:false,
+            //批量关闭参数
+            mulCloseVis:false,
         }
     },
     methods:{
@@ -285,21 +297,34 @@ export default {
         //表格数据按钮
         //下达
         order(row){
-            if(localStorage.getItem("ms_username") == "Sean"){
+            console.log(row);
+            if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                 fetch('api/OrderRelease/xiadaOrder',{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'
                     },
                     body:JSON.stringify({
-                        ordNo:row.orderNo
+                        ordNo:row.orderNo,
+                        wlNo:row.wlNo,
+                        workNo:row.orderNo,
+                        ordNum:row.orderNum,
+                        sTime:row.planStime,
+                        eTime:row.planEtime,
+                        station:row.srcStn
                     })
                 }).then(response=>response.json())
                 .then(data=>{
-                    this.$message.success("下达成功！")
+                    if(data[0].resSign){
+                        this.$message.success("下达成功！")
+                        this.search('all');
+                    }else{
+                        this.$message.error("物料编号与所属车间不对应或者物料编号有误，我无法找到该订单物料编号对应的工艺路径，请核对后重新编辑该订单的物料编号或所属车间")
+                    }
                 }).catch(data=>{
                     alert(data);
                 })
+
             }else{
                 this.$message.error("你没有权限！"); 
             }
@@ -318,7 +343,7 @@ export default {
                 }
             }
             for(var item of this.multipleSelection){
-               if(localStorage.getItem("ms_username") == "Sean"){
+               if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                     fetch('api/OrderRelease/xiadaOrder',{
                         method:'POST',
                         headers:{
@@ -326,13 +351,25 @@ export default {
                         },
                         body:JSON.stringify({
                             ordNo:item.orderNo,
+                            wlNo:item.wlNo,
+                            workNo:item.orderNo,
+                            ordNum:item.orderNum,
+                            sTime:item.planStime,
+                            eTime:item.planEtime,
+                            station:item.srcStn
+
                         })
                     })
                     .then(response=>response.text())
                     .then(data=>{
                         console.log(data)
-                        this.deleteVis = false;
-                         this.$message.success("下达成功！")
+                         if(data[0].resSign){
+                            this.$message.success("下达成功！")
+                              this.deleteVis = false;
+                            this.search('all');
+                        }else{
+                            this.$message.error("物料编号"+item.wlNo+"与所属车间不对应或者物料编号有误，我无法找到该订单物料编号对应的工艺路径，请核对后重新编辑该订单的物料编号或所属车间")
+                        }
                     })
                     .catch(data=>{
                         alert(data)
@@ -351,7 +388,7 @@ export default {
         },
         //删除提示确认
         deleteComfirm(){
-            if(localStorage.getItem("ms_username") == "Sean"){
+            if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                  fetch('api/OrderRelease/delOrder',{
                     method:'POST',
                     headers:{
@@ -409,14 +446,14 @@ export default {
             })
             .catch(_ => {});
         },
-        editClose(){
+        editCancel(){
             this.$refs['editForm'].resetFields();
             this.editDialog = false;
         },
         editFinish(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/OrderRelease/editOrder',{
                             method:'POST',
                             headers:{
@@ -459,12 +496,19 @@ export default {
         //     this.currPage = event;
         // },
         //搜索按钮，暂未开发
-        search(){
-            console.log('you want to search sth!');
+        search(str){
+            // console.log('you want to search '+str);
             if(this.selProdVal == null){
                 this.$message.error("你还米有选择产线呢！");
                 return;
             }
+            var srhItem = '';
+            if(str == 'all'){
+                srhItem = this.searchItem
+            }else{
+                srhItem = str;
+            }
+            // console.log(srhItem);
             fetch('api/OrderRelease/getOrder',{
                 method:'POST',
                 headers:{
@@ -472,7 +516,7 @@ export default {
                 },
                 body:JSON.stringify({
                     pline:this.selProdVal,
-                    srhCont:this.searchItem
+                    srhCont:srhItem
                 })
             }) .then(response=>response.json())
                 .then(data=>{
@@ -626,14 +670,20 @@ export default {
        addData(){
            this.dialogVisible = true;
        },
-       //批量删除
+       //批量关闭弹出
        delData(){
            if(this.multipleSelection.length == 0){
                 this.$message.warning("当前无任何勾选数据，如需批量关闭，请勾选对应数据，如需单行删除，请点击删除按妞！")
                return;
            }
+            this.mulCloseVis=true;
+           
+           
+       },
+       //批量关闭确认
+        mulcloseCfm(){
             for(var item of this.multipleSelection){
-               if(localStorage.getItem("ms_username") == "Sean"){
+                if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                     fetch('api/OrderRelease/delOrder',{
                         method:'POST',
                         headers:{
@@ -646,24 +696,23 @@ export default {
                     .then(response=>response.text())
                     .then(data=>{
                         console.log(data)
-                        this.deleteVis = false;
-                         this.$message.success("关闭成功！")
+                        this.mulCloseVis = false;
+                        this.$message.success("关闭成功！")
                     })
                     .catch(data=>{
                         alert(data)
                     })
-                   
+                    
                 }else{
                     this.$message.error("你没有权限！")
                 }
             } 
-           
-       },
+        },
        //新增弹窗确认关闭
        addFinish(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/OrderRelease/newOrder',{
                             method:'POST',
                             headers:{
@@ -687,6 +736,7 @@ export default {
                         .then(data=>{
                             console.log(data) 
                             this.$refs['form'].resetFields();
+                            this.$message.success("创建成功！")
                             this.dialogVisible = false;
                         })
                         .catch(data=>{
@@ -712,7 +762,7 @@ export default {
        },
        //批量上传确认按钮
        mulNewData(){
-           if(localStorage.getItem("ms_username") == "Sean"){
+           if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                 fetch('api/Upload/createData',{
                     method:'POST',
                     headers:{
@@ -847,5 +897,7 @@ export default {
     border-radius:10%;
     line-height:30px;
     text-align:center;
+    -moz-user-select: none;
+    cursor: pointer;
 }
 </style>

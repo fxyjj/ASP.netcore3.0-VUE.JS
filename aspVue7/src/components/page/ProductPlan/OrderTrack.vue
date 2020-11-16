@@ -2,9 +2,9 @@
     <div>
         <el-row>
             <el-col :span="4">
-                <el-card style="width:95%">
-                    <el-input placeholder=">订单号/物料号<" prefix-icon="el-icon-search" v-model="searchItem" @keyup.enter.native="search()" style="width:200px;display:inline-block"> </el-input>
-                    <el-button type="primary" @click="search()">搜索</el-button>           
+                <el-card style="width:95%;">
+                    <el-input placeholder=">订单号/物料号<" prefix-icon="el-icon-search" v-model="searchItem" @keyup.enter.native="search()" style="width:200px"> </el-input>
+                    <el-button style="margin:10px 50px 0px;width:100px;" type="primary" @click="search()">搜索</el-button>           
                 </el-card>
                 <el-card style="height:854px;width:95%;margin-top:15px;">
                     <div class="infinite-list-wrapper" style="height:800px;overflow:auto"> 
@@ -58,7 +58,7 @@
                         <el-table-column prop="testHr" label="调试计划用时" width="120" align=center></el-table-column>
                         <el-table-column fixed="right" label="操作" >
                             <template slot-scope="scope">
-                                <el-button @click="order(scope.row)" type="success" size="small">修改</el-button>
+                                <el-button @click="modify(scope.row)" type="success" size="small">修改</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -115,7 +115,45 @@
                 </el-card>
             </el-col>
         </el-row>
-    
+    <el-dialog title="修改" :visible.sync="modifyVis" :before-close="modifyClose">
+         <el-form ref="modForm" :model="modForm" :rules="modRule" class="fromStyle" label-width="110px">
+                <el-form-item label="顺序号" prop="orderNo">
+                    <el-input v-model="modForm.orderNo" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="作业单号" prop="workNo">
+                    <el-input v-model="modForm.workNo" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="物料编号" prop="wlNo">
+                    <el-input  v-model="modForm.wlNo" disabled></el-input>
+                </el-form-item>
+                 <el-form-item label="物料描述" prop="wlDesc">
+                    <el-input v-model="modForm.wlDesc" ></el-input>
+                </el-form-item>
+                <el-form-item label="工序号" prop="proceNo">
+                     <el-input v-model="modForm.proceNo" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="工序名称" prop="proceName" >
+                  <el-input v-model="modForm.proceName" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="开始日期" prop="startDate">
+                     <el-date-picker v-model="modForm.startDate" type="date" placeholder="选择日期"></el-date-picker>
+                </el-form-item>
+                 <el-form-item label="结束日期" prop="endDate">
+                     <el-date-picker v-model="modForm.endDate" type="date" placeholder="选择日期"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="剩余时间" prop="leftHr">
+                    <el-input v-model="modForm.leftHr" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="未完工数量" prop="unfnsNum">
+                    <el-input  v-model="modForm.unfnsNum" disabled></el-input>
+                </el-form-item>
+                 <el-form-item label="调试用时" prop="testHr">
+                    <el-input v-model="modForm.testHr" disabled></el-input>
+                </el-form-item>
+            </el-form>
+            <el-button type="success" @click="modifyCancel()" style="width:40%">取消</el-button>
+            <el-button type="danger" style="width:40%;margin-left:20%" @click="modifyconfirm('modForm')">确认</el-button>
+    </el-dialog>
     </div>
 </template>
 
@@ -162,6 +200,26 @@ export default {
             trackData3:[],
             currLine:null,
             searchItem:'',
+            //修改弹出框参数
+            modifyVis:false,
+            modForm:{
+                orderNo:'',
+                workNo:'',
+                wlNo:'',
+                wlDesc:'',
+                proceNo:0,
+                proceName:'',
+                startDate:null,
+                endDate:null,
+                leftHr:0,
+                unfnsNum:0,
+                testHr:0
+            },
+            modRule:{
+                startDate:[{required:true,message:'开始日期是？',trigger:'blur'}],
+                endDate:[{required:true,message:'结束日期呢？',trigger:'blur'}],
+            },
+
         }
     },
     methods:{
@@ -196,7 +254,7 @@ export default {
                                 proceNo:item.工序号,
                                 proceName:item.工序名称,
                                 startDate:item.开始日期,
-                                endDate:item.结束日期,
+                                endDate:item.完工日期,
                                 leftHr:(item.剩余工时).toFixed(2),
                                 testHr:item.调试计划用时,
                                 unfnsNum:item.未完工
@@ -277,7 +335,7 @@ export default {
                                 proceNo:item.工序号,
                                 proceName:item.工序名称,
                                 startDate:item.开始日期,
-                                endDate:item.结束日期,
+                                endDate:item.完工日期,
                                 leftHr:(item.剩余工时).toFixed(2),
                                 testHr:item.调试计划用时,
                                 unfnsNum:item.未完工
@@ -321,6 +379,70 @@ export default {
             }).catch(data=>{
                 alert(data)
             })
+        },
+        modify(row){
+            this.modForm.orderNo = row.orderNo;
+            this.modForm.workNo = row.workNo;
+            this.modForm.wlNo = row.wlNo;
+            this.modForm.wlDesc = row.wlDesc;
+            this.modForm.proceNo = row.proceNo;
+            this.modForm.proceName = row.proceName;
+            this.modForm.startDate = row.startDate;
+            this.modForm.endDate = row.endDate;
+            this.modForm.leftHr = row.leftHr;
+            this.modForm.unfnsNum = row.unfnsNum;
+            this.modForm.testHr = row.testHr;
+            this.modifyVis = true;
+
+        },
+        modifyconfirm(formName){
+            console.log(this.modForm.startDate);
+            console.log(this.modForm.endDate);
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/OrderRelease/mdfyDate',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                workNo:this.modForm.workNo,
+                                sDate:this.modForm.startDate,
+                                eDate:this.modForm.endDate
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            console.log(data[0].resSign);
+                            if(data[0].resSign){
+                                this.$message.success("修改成功！");
+                                this.modifyVis = false;
+                            }else{
+                                this.$message.error("修改失败，完工日期须晚于开始日期！");
+                            }
+                        }).catch(data=>{
+                            alert(data)
+                        })
+                    }else{
+                        this.$message.error('你没有权限!');
+                    }
+                }else{
+                    console.log('error submit!!');
+                    return false;
+                }
+            })
+        },
+        modifyClose(done) {
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                this.$refs['modForm'].resetFields();
+                done();
+            })
+            .catch(_ => {});
+        },
+        modifyCancel(){
+            this.modifyVis = false;
+            this.$refs['modForm'].resetFields();
         }
     }
 }

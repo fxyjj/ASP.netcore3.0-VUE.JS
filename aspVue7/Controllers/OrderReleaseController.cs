@@ -39,9 +39,9 @@ namespace aspVue7.Controllers
         }
 
          [HttpPost("[action]")]
-         public List<newRes> xiadaOrder([FromBody] delPrm prm){
+         public List<newRes> xiadaOrder([FromBody] xiadaPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<newRes>($"EXECUTE dbo.QforXiadaOrder @ordNo='{prm.ordNo}' ").ToList();
+            var testData = model.Database.SqlQuery<newRes>($"EXECUTE dbo.QforXiadaOrder @ordNo='{prm.ordNo}',@wlNo='{prm.wlNo}',@workNo='{prm.ordNo}',@ordNum='{prm.ordNum}',@sTime='{prm.sTime}',@eTime='{prm.eTime}',@station='{prm.station}' ").ToList();
             return testData;
         }
 
@@ -70,6 +70,12 @@ namespace aspVue7.Controllers
          public List<ordTrack1Res> otSearch([FromBody] otSrhPrm prm){
             var model = new BorgWarnerMisSQLContext();
             var testData = model.Database.SqlQuery<ordTrack1Res>($"select * from dbo.qforWebOrderTrackTab1 where 生产单元='{prm.workUnit}' and (顺序号 like '%'+'{prm.srhCont}'+'%' or 作业单号 like '%'+'{prm.srhCont}'+'%' or 物料编号 like '%'+'{prm.srhCont}'+'%' or 物料描述 like '%'+'{prm.srhCont}'+'%' or 工序名称 like '%'+'{prm.srhCont}'+'%' )").ToList();
+            return testData;
+        }
+        [HttpPost("[action]")]
+         public List<newRes> mdfyDate([FromBody] mdfyPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<newRes>($"EXECUTE dbo.QforOrderDateModify @workNo='{prm.workNo}',@start='{prm.sDate}',@end='{prm.eDate}'").ToList();
             return testData;
         }
     }
@@ -118,6 +124,16 @@ namespace aspVue7.Controllers
     public class delPrm{
         public string ordNo{get;set;}
     }
+    //下达参数
+    public class xiadaPrm{
+        public string ordNo{get;set;}
+        public string wlNo{get;set;}
+        public string workNo{get;set;}
+        public int ordNum{get;set;}
+        public DateTime sTime{get;set;}
+        public DateTime eTime {get;set;}
+        public string station{get;set;}
+    }
     //跟踪表1/2/3参数
     public class otPrm{
         public string workUnit{get;set;}
@@ -131,7 +147,7 @@ namespace aspVue7.Controllers
         public int 工序号{get;set;}
         public string 工序名称{get;set;}
         public DateTime 开始日期{get;set;}
-        public DateTime 结束日期{get;set;}
+        public DateTime 完工日期{get;set;}
         public int 调试计划用时{get;set;}
         public int 未完工{get;set;}
         public decimal 剩余工时{get;set;}
@@ -187,5 +203,11 @@ namespace aspVue7.Controllers
         public string 状态{get;set;}
     }
 
+    //订单跟踪页面修改日期参数
+    public class mdfyPrm{
+        public string workNo{get;set;}
+        public DateTime sDate{get;set;}
+        public DateTime eDate{get;set;}
+    }
 
 }

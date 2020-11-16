@@ -18,7 +18,7 @@
                     >
                     </el-input>
                 </el-form-item>
-                <el-link type="primary" style="width:20%;margin-left:80%;margin-top:-30px"  @click="pwdMdfy()">忘记密码</el-link><!---->
+                <el-link type="primary" style="width:20%;margin-left:80%;margin-top:-30px"  >忘记密码</el-link><!--@click="pwdMdfy()"-->
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()" style="margin-right:13px">登录</el-button>
                     <el-button type="primary" @click="regist()" style="margin-left:13px">注册</el-button> <!---->
