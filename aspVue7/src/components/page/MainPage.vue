@@ -79,7 +79,7 @@
             </div>
         </el-col>
          <el-col :span="4">
-            <div class="mode" style="background:#0066FF">
+            <div id="workRep" class="mode" style="background:#0066FF"  @click="go($event)"><!-- -->
                 <i class="el-icon-document-copy" style="line-height:150px;font-size:70px;color:white"></i>
                 <h3 class="subTitle">工单管理</h3>
             </div>

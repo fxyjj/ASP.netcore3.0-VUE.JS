@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using NPOI.SS.UserModel;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections;
+using System.Net.Http.Headers;
 
 
 namespace aspVue7.Controllers
@@ -24,11 +25,20 @@ namespace aspVue7.Controllers
     [Route("api/[controller]")]
     public class UploadController : Controller
     {
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public UploadController(IWebHostEnvironment env)
+        {
+            this.hostingEnvironment = env;
+        }
 
         [HttpPost("[action]")]
         public List<sheetName> postExcel([FromForm(Name = "file")] IFormFile input){
             var file = input.FileName;
             string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploadFolder");
+            if(!Directory.Exists(uploadsFolder)){
+                Directory.CreateDirectory(uploadsFolder);
+            }
             string uniqueFileName = Guid.NewGuid().ToString() + "_" + input.FileName;
             string filePath = Path.Combine(uploadsFolder,uniqueFileName);
             FileStream fs = new FileStream(filePath, FileMode.Create);
@@ -199,6 +209,8 @@ namespace aspVue7.Controllers
                 container.ordType = (c10 == null)?"":c10.ToString().Trim();
                 ICell c11 = (dynamic) row.GetCell(10);
                 container.tip = (c11 == null)?"":(c11).ToString().Trim();
+                //TODO..
+                //重复订单号检验！！！
                 td = model.Database.SqlQuery($"EXECUTE dbo.QforWebNewOrder @ordNo='{container.ordNo}',@wlNo='{container.wlNo}',@wlDesc='{container.wlDesc}',@ordNum='{container.ordNum}',@sTime='{container.sTime}',@eTime='{container.eTime}',@ordTime='{container.ordTime}',@station='{container.station}',@status='{container.status}',@ordType='{container.ordType}',@tip='{container.tip}' ");
               
             }

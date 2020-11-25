@@ -43,7 +43,7 @@
             </el-col>
             <el-col :span="20">
                 <el-card >
-                    <el-table :data="trackData1" height="320" @row-click="showtab3" style="font-size:16px"><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
+                    <el-table :data="trackData1" height="320" @row-click="showtab3" style="font-size:16px" border fit><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
                         <!-- <el-table-column type="selection" width="55" ></el-table-column> -->
                         <el-table-column prop="orderNo" label="顺序号" width="120" align=center></el-table-column>
                         <el-table-column prop="workNo" label="作业单号" width="120" align=center></el-table-column>
@@ -65,7 +65,7 @@
                 </el-card>
 
                 <el-card style="margin-top:15px;">
-                    <el-table :data="trackData2" style="width: 100%;height:260px;font-size:16px"  ><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
+                    <el-table :data="trackData2" style="width: 100%;height:260px;font-size:16px" border ><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
                         <!-- <el-table-column type="selection" width="55" ></el-table-column> -->
                         <el-table-column  prop="bgNo" label="报工编号" width="200" align=center></el-table-column>
                         <el-table-column  prop="workNo" label="作业单号"  width="150" align=center></el-table-column>
@@ -98,7 +98,7 @@
                 </el-card>
 
                 <el-card style="margin-top:15px;">
-                    <el-table :data="trackData3" style="width: 100%;height:240px;font-size:16px"  ><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
+                    <el-table :data="trackData3" style="width: 100%;height:240px;font-size:16px" border ><!-- @selection-change="handleSelectionChange" tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
                         <!-- <el-table-column type="selection" width="55" ></el-table-column> -->
                         <el-table-column prop="workNo" label="作业单号" align=center></el-table-column>
                         <el-table-column prop="wlNo" label="物料编号" width="150" align=center></el-table-column>

@@ -204,7 +204,15 @@ export default {
                     index: 'OrderTrack',
                     title: '订单跟踪'
                 },
-            ],   
+            ], 
+            //工单管理页面内容
+            item_workRep:[
+                 {
+                    icon: 'el-icon-data-analysis',
+                    index: 'WorkReport',
+                    title: '工单管理'
+                },
+            ],  
         };
     },
     computed: {
@@ -239,6 +247,9 @@ export default {
             case "prodPlan":
                 this.items = this.item_prodPlan;
                 break;
+            case "workRep":
+            this.items = this.item_workRep;
+            break;
         }
     }
 };

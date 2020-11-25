@@ -19,6 +19,8 @@ export default new Router({
                         return '/OEE'
                     case "prodPlan":
                         return '/OrderMaking'
+                    case "workRep":
+                        return '/WorkReport'
                     default:
                         return '/404'
                 }
@@ -109,6 +111,12 @@ export default new Router({
                     path: '/OrderTrack',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/ProductPlan/OrderTrack.vue'),
                     meta: { title: '订单跟踪' }
+                },
+                {
+                    // vue-schart组件
+                    path: '/WorkReport',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/WorkReportManage/ProductReportManage.vue'),
+                    meta: { title: '工单管理' }
                 },
                 // {
                 //     // 拖拽列表组件

@@ -735,16 +735,17 @@ export default {
                 })
             }).then(response=>response.json())
             .then(data=>{
-                if(data.length==0){
+                if(data.length==0){console.log();
                     return;
                 }
                 var c = 0
                 this.menus = []
                  var doneTime = "";
                 for(var item of data){
-                    if(parseInt((item.作业开始时间).substr(11,2))>16){
+                    console.log(parseInt((item.调试开始时间).substr(11,2)));
+                    if(parseInt((item.调试开始时间).substr(11,2))>=16){
                         doneTime = "中班"
-                    }else if(parseInt((item.作业开始时间).substr(11,2))>8){
+                    }else if(parseInt((item.调试开始时间).substr(11,2))>=8){
                         doneTime = "早班"
                     }else{
                         doneTime = "晚班"

@@ -69,7 +69,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
          public List<ordTrack1Res> otSearch([FromBody] otSrhPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<ordTrack1Res>($"select * from dbo.qforWebOrderTrackTab1 where 生产单元='{prm.workUnit}' and (顺序号 like '%'+'{prm.srhCont}'+'%' or 作业单号 like '%'+'{prm.srhCont}'+'%' or 物料编号 like '%'+'{prm.srhCont}'+'%' or 物料描述 like '%'+'{prm.srhCont}'+'%' or 工序名称 like '%'+'{prm.srhCont}'+'%' )").ToList();
+            var testData = model.Database.SqlQuery<ordTrack1Res>($"select * from dbo.qforWebOrderTrackTab1 where 生产单元 like '%'+'{prm.workUnit}'+'%' and (顺序号 like '%'+'{prm.srhCont}'+'%' or 作业单号 like '%'+'{prm.srhCont}'+'%' or 物料编号 like '%'+'{prm.srhCont}'+'%' or 物料描述 like '%'+'{prm.srhCont}'+'%' or 工序名称 like '%'+'{prm.srhCont}'+'%' )").ToList();
             return testData;
         }
         [HttpPost("[action]")]

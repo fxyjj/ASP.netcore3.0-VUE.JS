@@ -20,15 +20,14 @@
                 <el-button type="primary" @click="delData()">关闭选中</el-button>
                 <el-button type="primary" @click="xiadaData()">下达选中</el-button>
                 <el-button type="primary" @click="showImport()">导入</el-button>
-                <div class="cBlock" style="border:1px solid rgba(0,0,0,0.4)" @click="search('创建')">创建</div>
+                <div class="cBlock" style="margin-left:14%;border:1px solid rgba(0,0,0,0.4)" @click="search('创建')">创建</div>
                 <div class="cBlock" style="background: #aadde7;" @click="search('下达')">下达</div>
                 <div class="cBlock" style="background: yellow " @click="search('生产中')">生产中</div>
                 <div class="cBlock" style="background:#22B14C" @click="search('完工')">完工</div>
-
             </div>
         </el-card>
         <el-card >
-            <el-table :data="tableData" style="width: 100%"   @selection-change="handleSelectionChange" :row-class-name="rowStyle" height="660"  ><!--:row-click="btnVis=true" :cell-mouse-leave="btnVis=false"tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
+            <el-table :data="tableData" style="width: 100%"   @selection-change="handleSelectionChange" :row-class-name="rowStyle" height="660" border fit ><!--:row-click="btnVis=true" :cell-mouse-leave="btnVis=false"tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
                  <el-table-column fixed="left" type="selection" width="55" ></el-table-column>
                 <el-table-column prop="orderNo" label="订单号"  width="100"></el-table-column>
                 <el-table-column prop="wlNo" label="物料号" width="120"></el-table-column>
@@ -40,7 +39,7 @@
                 <el-table-column prop="prodStime" label="生产开始日期" width="100px"></el-table-column>
                 <el-table-column prop="prodEtime" label="生产完工日期" width="100px"></el-table-column>
                 <el-table-column prop="passNum" label="合格数量"></el-table-column>
-                <el-table-column prop="failNum" label="不合格数量"></el-table-column>
+                <el-table-column prop="failNum" label="不合格数量" width="100px"></el-table-column>
                 <el-table-column prop="srcStn" label="来源车间" width="120" ></el-table-column>
                 <el-table-column prop="status" label="状态" ></el-table-column>
                 <el-table-column prop="ordType" label="订单类型"></el-table-column>
@@ -137,13 +136,29 @@
                      <el-date-picker v-model="editForm.ordTime" type="date" disabled></el-date-picker>
                 </el-form-item>
                  <el-form-item label="来源车间" prop="station">
-                    <el-input v-model="editForm.station" ></el-input>
+                    <!-- <el-input v-model="editForm.station" ></el-input> -->
+                    <el-select v-model="editForm.station" placeholder="请选择">
+                        <el-option
+                        v-for="item in pLineSet"
+                        :key="item.label"
+                        :label="item.value"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="状态" prop="status">
                     <el-input v-model="editForm.status" :placeholder="editForm.status" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="订单类型" prop="ordType">
-                    <el-input  v-model="editForm.ordType"></el-input>
+                    <!-- <el-input  v-model="editForm.ordType"></el-input> -->
+                    <el-select v-model="editForm.ordType" placeholder="请选择">
+                        <el-option
+                        v-for="item in ordTypeSet"
+                        :key="item.label"
+                        :label="item.value"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                  <el-form-item label="备注" prop="tip">
                     <el-input v-model="editForm.tip" ></el-input>
@@ -184,7 +199,7 @@
             <el-button type="warning" @click="reUpload">重新上传</el-button>
             </div>
              <el-divider content-position="left">数据预览</el-divider>
-              <el-table :data="importedData" style="width: 100%"  height="350" ><!--tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
+              <el-table :data="importedData" style="width: 100%"  height="350" border><!--tableData.slice((currPage-1)*pageSize,currPage*pageSize)-->
                 <el-table-column prop="orderNo" label="订单号"></el-table-column>
                 <el-table-column prop="wlNo" label="物料号"></el-table-column>
                 <el-table-column prop="wlDesc" label="物料描述"></el-table-column>
@@ -274,6 +289,11 @@ export default {
                 station:[{required:true,message:'车间在哪？',trigger:'blur'}],
                 ordType:[{required:true,message:'我是什么类型的订单呀？',trigger:'blur'}],
             },
+            pLineSet:[{label:'0',value:'EGR阀线'},
+                      {label:'1',value:'电子线'},
+                      {label:'2',value:'Cooler/Module线'}],
+            ordTypeSet:[{label:'0',value:'受控订单'},
+                        {label:'1',value:'试制订单'}],
             //操作按钮显影
             btnVis:false,
             //批量关闭参数
@@ -360,7 +380,7 @@ export default {
 
                         })
                     })
-                    .then(response=>response.text())
+                    .then(response=>response.json())
                     .then(data=>{
                         console.log(data)
                          if(data[0].resSign){
@@ -473,7 +493,7 @@ export default {
                                 tip:this.editForm.tip
                             })
                         })
-                        .then(response=>response.text())
+                        .then(response=>response.json())
                         .then(data=>{
                             console.log(data) 
                             this.$refs['editForm'].resetFields();
@@ -732,12 +752,16 @@ export default {
                                 tip:this.form.tip
                             })
                         })
-                        .then(response=>response.text())
+                        .then(response=>response.json())
                         .then(data=>{
-                            console.log(data) 
-                            this.$refs['form'].resetFields();
-                            this.$message.success("创建成功！")
-                            this.dialogVisible = false;
+                            if(data[0].resSign){
+                                this.$refs['form'].resetFields();
+                                this.$message.success("创建成功！")
+                                this.dialogVisible = false;
+                            }else{
+                                this.$message.error("新建订单中存在重复订单"+this.form.ordNo)
+                            }
+                           
                         })
                         .catch(data=>{
                             alert(data)

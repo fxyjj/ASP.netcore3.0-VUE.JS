@@ -141,7 +141,7 @@ namespace aspVue7.Controllers
         public List<stopRec> tab2([FromBody] tabParam prm){
             var model = new BorgWarnerMisSQLContext();
             // var testdata =  model.Database.SqlQuery<failRec>($"select * from dbo.qforFailRec where 填写日期='{prm.qDate.Date}' and 报工编号='{prm.bgbh}'").ToList();
-            var testdata = model.Database.SqlQuery<stopRec>($"select * from dbo.qforOrderEDownRecordBrowse where convert(date,停机开始)='{prm.qDate.Date}' and 报工编号='{prm.bgbh}'").ToList();
+            var testdata = model.Database.SqlQuery<stopRec>($"select * from dbo.qforOrderEDownRecordBrowse where 报工编号='{prm.bgbh}'").ToList();//convert(date,停机开始)='{prm.qDate.Date}' and 
             return testdata; 
         }
 
@@ -208,7 +208,7 @@ namespace aspVue7.Controllers
         public double 工废{get;set;}
         public double 待处理{get;set;}
         public double  返工合格数量{get;set;}
-        public DateTime 作业开始时间{get;set;}
+        public DateTime 调试开始时间{get;set;}
         public double 一次合格率{get;set;}
         public double 设备开动率{get;set;}
         public double 员工效率{get;set;}
