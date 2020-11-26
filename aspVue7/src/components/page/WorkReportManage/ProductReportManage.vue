@@ -8,9 +8,9 @@
                         <el-button class="Btns" @click="blpVis=true">不良品记录</el-button>
                         <el-button class="Btns">异常报检</el-button>
                         <el-button class="Btns">生产记录</el-button>
-                        <el-button class="Btns">计划停机</el-button>
-                        <el-button class="Btns">异常停机</el-button>
-                        <el-button class="Btns">停机信息</el-button>
+                        <el-button class="Btns" @click="planVis=true">计划停机</el-button>
+                        <el-button class="Btns" @click="unplanVis=true">异常停机</el-button>
+                        <el-button class="Btns" @click="sInfoVis=true">停机信息</el-button>
                         <el-button class="Btns">打印标签</el-button>
                     </div>
                 </el-card>
@@ -108,6 +108,9 @@
                                          <el-form-item label="作业单号" prop="BgworkNo">
                                             <el-input  v-model="BgForm.BgworkNo" disabled></el-input>
                                         </el-form-item>
+                                        <el-form-item label="工序号" prop="BgproceNo">
+                                            <el-input  v-model="BgForm.BgproceNo" disabled></el-input>
+                                        </el-form-item>
                                         <el-form-item label="报工日期" prop="BgTime">
                                             <el-date-picker v-model="BgForm.BgTime" type="date" style="width:203px"></el-date-picker>
                                         </el-form-item>
@@ -120,9 +123,9 @@
                                         <el-form-item  label="返工合格数量" prop="BgRepassNum">
                                             <el-input v-model.number="BgForm.BgRepassNum"></el-input>
                                         </el-form-item>
-                                        <el-form-item label="不良数量" prop="BgFlawNum">
+                                        <!-- <el-form-item label="不良数量" prop="BgFlawNum">
                                             <el-input v-model.number="BgForm.BgFlawNum"></el-input>
-                                        </el-form-item>
+                                        </el-form-item> -->
                                             <el-form-item label="料废" prop="BgLf">
                                             <el-input v-model.number="BgForm.BgLf" ></el-input>
                                         </el-form-item>
@@ -147,7 +150,17 @@
                                 </el-dialog>   
                             </div>
                             
-                            <el-card v-else-if="bgStage>=5" style="height:250px" shadow="hover">报工结束</el-card>
+                            <el-card v-else-if="bgStage>=5" style="height:250px" shadow="hover">
+                                <div class="bgd">完工时间:{{pBgdownTime}}</div>
+                                <div class="bgd">合格数量:{{pBgpassNum}}</div>
+                                <div class="bgd">料废:{{pBgLf}}</div>
+                                <div class="bgd">机废:{{pBgJf}}</div>
+                                <div class="bgd">调废:{{pBgDf}}</div>
+                                <div class="bgd">工废:{{pBgGf}}</div>
+                                <div class="bgd">待处理:{{pBgDcl}}</div>
+                                <div class="bgd">不合格数量:{{pBgfailNum}}</div>
+                                <div class="bgd">返工合格数量:{{pBgRepassNum}}</div>
+                            </el-card>
                         </el-col>
                         <el-col :span="1"><el-divider direction="vertical" style="height:250px;margin:0% 50%"></el-divider></el-col>
                         <el-col :span="4">
@@ -287,7 +300,43 @@
             <el-button type="primary" @click="testComfirm('testForm')">确认</el-button>
             <el-button type="primary" @click="testCancel()">取消</el-button>
         </el-dialog>
+        <!-- 不良品弹窗 -->
         <el-dialog title="不良品记录单" :visible.sync="blpVis">
+
+        </el-dialog>
+
+        <!-- 计划停机弹窗 -->
+        <el-dialog title="计划停机表单" :visible.sync="planVis" width="300px">
+              <el-form ref="planForm" :model="planForm" :rules="planRule" label-width="120px">
+                <el-form-item label="作业单号" prop="workNo">
+                    <el-input v-model="planForm.workNo" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="停机类型" prop="planStype">
+                    <el-input v-model="planForm.planStype"></el-input>
+                    <!-- <el-date-picker v-model="planForm.planStype" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker> -->
+                </el-form-item>
+                 <el-form-item label="停机开始" prop="planSstime">
+                   <el-date-picker v-model="planForm.planSstime" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker>
+                </el-form-item>
+                <el-form-item label="停机结束" prop="planSetime">
+                    <el-date-picker v-model="planForm.planSetime" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker>
+                </el-form-item>
+                <el-form-item label="填写人" prop="planMan">
+                     <el-input v-model="planForm.planMan"></el-input>
+                </el-form-item>
+             </el-form>
+            <el-button type="primary" @click="planComfirm('planForm')">确认</el-button>
+            <el-button type="primary" @click="planCancel()">取消</el-button>
+
+        </el-dialog>
+
+        <!-- 非计划停机弹窗 -->
+        <el-dialog title="非计划停机表单" :visible.sync="unplanVis">
+
+        </el-dialog>
+
+        <!-- 停机信息弹窗 -->
+        <el-dialog title="停机情况" :visible.sync="sInfoVis">
 
         </el-dialog>
     </div>
@@ -406,7 +455,7 @@ export default {
                 tips:''
             },
             testRule:{
-                testMan:[{required:true,message:'是谁调试的？',trigger:'blur'}],
+                testMan:[{required:true,max:9,message:'是谁调试的？',trigger:'blur'}],
             },
             //测试结束显示测试参数
             tStime:null,
@@ -429,6 +478,7 @@ export default {
             BgVis:false,//弹窗显影指示
             BgForm:{
                 BgworkNo:'',
+                BgproceNo:'',
                 BgTime:new Date(),
                 BgprodNum:null,
                 BgpassNum:null, 
@@ -454,8 +504,20 @@ export default {
                 BgDcl:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
                 BgFailNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}]
             },
+            pBgdownTime:'',
+            pBgpassNum:null,
+            pBgLf:null,
+            pBgJf:null,
+            pBgDf:null,
+            pBgGf:null,
+            pBgDcl:null,
+            pBgfailNum:null,
+            pBgRepassNum:null,
             //侧边按钮弹窗参数
             blpVis:false,//不良品记录弹窗显影指示
+            planVis:false,//计划停机弹窗显影指示
+            unplanVis:false,//非计划停机弹窗显影指示
+            sInfoVis:false,//停机信息弹窗显影指示
         }
     },
     methods:{
@@ -578,12 +640,14 @@ export default {
                 },
                 body:JSON.stringify({
                     workunit:this.pLine,
+                    // workNo:this.ordNo
                 })
             })
             .then(response=>response.json())
             .then(data=>{
                 console.log("长度"+data.length)
                 console.log(this.creatable)
+                console.log(data)
                 if(data.length != 0){
                     this.creatable = true;
                     this.bgNo = data[0].bgNo
@@ -594,9 +658,18 @@ export default {
                     this.bgfixNum = data[0].fixNum
                     this.bgWunit = data[0].workUnit
                     this.bgfixMan = data[0].fixMan
-                    if(data[0].workMan != ''){
-                        console.log('生产已经开始');
-                        //调试数据
+                    if(data[0].wgTime != null){
+                        console.log("报工完成");
+                        this.pBgdownTime =(data[0].wgTime).substr(0,10);
+                        this.pBgpassNum = data[0].passNum;
+                        this.pBgLf = data[0].lf;
+                        this.pBgJf = data[0].jf;
+                        this.pBgDf = data[0].df;
+                        this.pBgGf = data[0].gf;
+                        this.pBgDcl = data[0].dcl;
+                        this.pBgfailNum = data[0].failNum;
+                        this.pBgRepassNum = data[0].rePassNum;
+                         //调试数据
                         this.tStime = data[0].tsTime
                         this.tEtime = data[0].teTime
                         this.tSman = data[0].tsMan
@@ -605,54 +678,46 @@ export default {
                         //生产数据
                         this.scworkMan = data[0].workMan
                         this.scBZ = data[0].workBZ
-                        this.scDate = data[0].prodDate
+                        this.scDate = data[0].prodDate.substr(0,10)
                         this.scStart = data[0].workStime
                         //阶段指示
-                        this.bgStage = 4;
-                    }else if(data[0].duration != 0){
-                        console.log("调试了")
-                        this.tStime = data[0].tsTime
-                        this.tEtime = data[0].teTime
-                        this.tSman = data[0].tsMan
-                        this.tEman = data[0].teMan
-                        this.duration = data[0].duration
-                        this.bgStage = 3;
+                        this.bgStage = 5;
                     }else{
-                        console.log("没有调试")
-                        this.bgStage = 1
+                        if(data[0].workMan != null){
+                            console.log('生产已经开始');
+                            //调试数据
+                            this.tStime = data[0].tsTime
+                            this.tEtime = data[0].teTime
+                            this.tSman = data[0].tsMan
+                            this.tEman = data[0].teMan
+                            this.duration = data[0].duration
+                            //生产数据
+                            this.scworkMan = data[0].workMan
+                            this.scBZ = data[0].workBZ
+                            this.scDate = data[0].prodDate
+                            this.scStart = data[0].workStime
+                            //阶段指示
+                            this.bgStage = 4;
+                        }else if(data[0].duration != 0){
+                            console.log("调试了")
+                            this.tStime = data[0].tsTime
+                            this.tEtime = data[0].teTime
+                            this.tSman = data[0].tsMan
+                            this.tEman = data[0].teMan
+                            this.duration = data[0].duration
+                            this.bgStage = 3;
+                        }else{
+                            console.log("没有调试")
+                            this.bgStage = 1
+                        }
                     }
+                   
                 }
                  console.log(this.creatable)
             }).catch(data=>{
                 alert(data)
             })
         },
-        // getBGDtest(){
-        //      fetch('api/WorkReport/BGDtestChk',{
-        //         method:'POST',
-        //         headers:{
-        //             'Content-Type':'application/json'
-        //         },
-        //         body:JSON.stringify({
-        //             workNo:this.ordNo,
-        //         })
-        //     })
-        //     .then(response=>response.json())
-        //     .then(data=>{
-        //         console.log(data)
-        //         if(data.length != 0){
-        //             this.tStime = data[0].tsTime
-        //             this.tEtime = data[0].teTime
-        //             this.tSman = data[0].tsMan
-        //             this.tEman = data[0].teMan
-        //             this.duration = data[0].duration
-        //             this.bgSatge = 3;
-        //         }
-        //     })
-        //     .catch(data=>{
-        //         alert(data)
-        //     })
-        // },
         getOrder(){
             //当前订单数据加载
             fetch('api/WorkReport/currOrd',{
@@ -666,14 +731,14 @@ export default {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.length != 0){
-                    this.ordNo = data[1].作业单号,
-                    this.ordNum = data[1].订单数量,
-                    this.wlNo = data[1].物料编号,
-                    this.wlDesc = data[1].物料描述,
-                    this.downNum = data[1].完工数量,
-                    this.failNum = data[1].不合格数量,
-                    this.currBGD = data[1].报工编号
-                    this.pct = (data[1].合格数量/data[1].订单数量)*100
+                    this.ordNo = data[0].作业单号,
+                    this.ordNum = data[0].订单数量,
+                    this.wlNo = data[0].物料编号,
+                    this.wlDesc = data[0].物料描述,
+                    this.downNum = data[0].完工数量,
+                    this.failNum = data[0].不合格数量,
+                    this.currBGD = data[0].报工编号
+                    this.pct = (data[0].合格数量/data[0].订单数量)*100
                     // this.getBGDtest();
                 }
             
@@ -692,6 +757,7 @@ export default {
         Bg(){
             this.BgVis = true;
             this.BgForm.BgworkNo = this.ordNo
+            this.BgForm.BgproceNo = this.bgproceNo
         },
         //生产开始确认
         prodComfirm(){
@@ -729,8 +795,8 @@ export default {
                     this.$message.success("生产已开始！")
                     this.scworkMan = this.workMan;
                     this.scBZ = this.prodCgp;
-                    this.scStart = this.workStime;
-                    this.scDate = this.prodStime;
+                    this.scStart = dateToString(this.workStime);
+                    this.scDate = dateToString(this.prodStime);
                     this.workMan = '';
                     this.prodCgp = '';
                     this.workStime = '';
@@ -858,9 +924,47 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
-                        this.$refs['BgForm'].resetFields();
-                        this.BgVis = false;
-                        this.bgStage = 5;
+                        fetch('api/WorkReport/ProdBG',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                workNo:this.BgForm.BgworkNo,
+                                bgTime:this.BgForm.BgTime,
+                                passNum:this.BgForm.BgpassNum,
+                                Lf:this.BgForm.BgLf,
+                                Jf:this.BgForm.BgJf,
+                                Df:this.BgForm.BgDf,
+                                Gf:this.BgForm.BgGf,
+                                Dcl:this.BgForm.BgDcl,
+                                failNum:this.BgForm.BgFailNum,
+                                rePassNum:this.BgForm.BgRepassNum,
+                                pManNum:this.BgForm.BgprodNum,
+                                proceNo:this.BgForm.BgproceNo
+
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                this.$message.success("报工完成！");
+                                this.pBgdownTime = this.dateToString(this.BgForm.BgTime);
+                                this.pBgpassNum = this.BgForm.BgpassNum;
+                                this.pBgLf = this.BgForm.BgLf;
+                                this.pBgJf = this.BgForm.BgJf;
+                                this.pBgDf = this.BgForm.BgDf;
+                                this.pBgGf = this.BgForm.BgGf;
+                                this.pBgDcl = this.BgForm.BgDcl;
+                                this.pBgfailNum = this.BgForm.BgFailNum;
+                                this.pBgRepassNum = this.BgForm.BgRepassNum;
+                                this.$refs['BgForm'].resetFields();
+                                this.BgVis = false;
+                                this.bgStage = 5;
+                            }else{
+                                this.$message.error("报工单不存在或者该报工单不属于订单报工！请核实");
+                            }
+                        })
+                       
                     }else{
                         this.$message.error("你没有权限！")
                     }

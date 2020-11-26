@@ -40,7 +40,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<startRes> BGDstart([FromBody] startPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<startRes>($"EXECUTE dbo.QforBGDStart @workUnit='{prm.workunit}'").ToList();
+            var testData = model.Database.SqlQuery<startRes>($"EXECUTE dbo.QforBGDStart @workUnit='{prm.workunit}'").ToList();//,@workNo='{prm.workNo}'
             return testData;
         }
 
@@ -64,20 +64,34 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<prodRes>($"EXECUTE dbo.QforProdStart @workNo='{prm.workNo}',@workMan='{prm.workman}',@cGroup='{prm.cgroup}',@startTime='{prm.workStime}',@prodTime='{prm.prodStime}'").ToList();
             return testData;
         }
+
+        [HttpPost("[action]")]
+        public List<pBGRes> ProdBG([FromBody] pBGPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<pBGRes>($"EXECUTE dbo.QforProdBG @workNo='{prm.workNo}',@proceNo='{prm.proceNo}',@bgTime='{prm.bgTime}',@passNum='{prm.passNum}',@Lf='{prm.Lf}',@Jf='{prm.Jf}',@Df='{prm.Df}',@Gf='{prm.Gf}',@Dcl='{prm.Dcl}',@FailNum='{prm.failNum}',@rePassNum='{prm.rePassNum}',@pManNum='{prm.pManNum}'").ToList();
+            return testData;
+        }
     }
 
-    // //测试数据检测，如果存在已调试数据，则直接进入生产阶段
-    // public class tChkPrm{
-    //     public string workNo{get;set;}
-    // }
+    //生产报工参数类
+    public class pBGPrm{
+        public string workNo{get;set;}
+        public DateTime bgTime{get;set;}
+        public int passNum{get;set;}
+        public int Lf{get;set;}
+        public int Jf{get;set;}
+        public int Df{get;set;}
+        public int Gf{get;set;}
+        public int Dcl{get;set;}
+        public int failNum{get;set;}
+        public int rePassNum{get;set;}
+        public int pManNum{get;set;}
+        public int proceNo{get;set;}
+    }
 
-    // public class tChkRes{
-    //     public DateTime tsTime{get;set;}
-    //     public DateTime teTime{get;set;}
-    //     public string tsMan{get;set;}
-    //     public string teMan{get;set;}
-    //     public double duration{get;set;}
-    // }
+    public class pBGRes{
+       public bool resSign{get;set;}
+    }
 
     //生产参数
     public class prodPrm{
@@ -173,6 +187,7 @@ namespace aspVue7.Controllers
     //报工单开始时调取信息参数
     public class startPrm{
         public string workunit{get;set;}
+        // public string workNo{get;set;}
     }
     //报工单开始结果类
     public class startRes{
@@ -185,14 +200,26 @@ namespace aspVue7.Controllers
         public int fixNum{get;set;}
         public string workMan{get;set;}
         public string workUnit{get;set;}
+        //调试参数
         public DateTime tsTime{get;set;}
         public DateTime teTime{get;set;}
         public string tsMan{get;set;}
         public string teMan{get;set;}
         public double duration{get;set;}
+        //生产参数
         public DateTime prodDate{get;set;}
         public DateTime workStime{get;set;}
         public string workBZ{get;set;}
         public int fixMan{get;set;}
+        //报工参数,变量名第一个字母不大写
+        public DateTime wgTime{get;set;}
+        public int passNum{get;set;}
+        public int lf{get;set;}
+        public int jf{get;set;}
+        public int df{get;set;}
+        public int gf{get;set;}
+        public int dcl{get;set;}
+        public int failNum{get;set;}
+        public int rePassNum{get;set;}
     }
 }
