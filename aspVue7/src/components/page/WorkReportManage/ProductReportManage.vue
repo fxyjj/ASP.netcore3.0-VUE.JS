@@ -8,9 +8,9 @@
                         <el-button class="Btns" @click="blpVis=true">不良品记录</el-button>
                         <el-button class="Btns">异常报检</el-button>
                         <el-button class="Btns">生产记录</el-button>
-                        <el-button class="Btns" @click="planVis=true">计划停机</el-button>
-                        <el-button class="Btns" @click="unplanVis=true">异常停机</el-button>
-                        <el-button class="Btns" @click="sInfoVis=true">停机信息</el-button>
+                        <el-button class="Btns" @click="planS()" :disabled="wtherStop" type="primary">计划停机</el-button>
+                        <el-button class="Btns" @click="unplanS()" :disabled="wtherStop" type="primary">异常停机</el-button>
+                        <el-button class="Btns" @click="stopLog()" type="primary">停机信息</el-button>
                         <el-button class="Btns">打印标签</el-button>
                     </div>
                 </el-card>
@@ -25,7 +25,9 @@
                         <el-step title="报工完毕" icon="el-icon-picture"></el-step>
                     </el-steps>
                 </el-card>
-                <el-card style="height:290px;margin:8px 0px">
+                <el-card v-if="bgStage==0" style="height:290px;margin:8px 0px"> 当前还没有报工单，您可以创建新的报工单！</el-card>
+                
+                <el-card v-else-if="!wtherStop" style="height:290px;margin:8px 0px">
                     <el-row>
                         <el-col :span="4">
                             <el-card shadow="hover" style="height:250px;">
@@ -170,6 +172,13 @@
                         </el-col>
                     </el-row>   
                 </el-card>
+                <el-card v-else style="height:290px;margin:8px 0px">
+                    停机了
+                    <div>停机类型：{{pauseType}}</div>
+                    <div>停机描述：{{pauseDesc}}</div>
+                    <div>停机人：{{pauseMan}}</div>
+                    <el-button type="primary" @click="prodContinue()">立即开始</el-button>
+                </el-card>
             </el-col>
         </el-row>
         <el-row>
@@ -285,7 +294,7 @@
                     <el-input v-model="testForm.workNo" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束时间" prop="testEtime">
-                    <el-date-picker v-model="testForm.testEtime" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker>
+                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" disabled></el-date-picker>
                 </el-form-item>
                  <el-form-item label="调试累计用时" prop="testTime">
                     <el-input v-model="testForm.testTime" disabled></el-input>
@@ -306,20 +315,21 @@
         </el-dialog>
 
         <!-- 计划停机弹窗 -->
-        <el-dialog title="计划停机表单" :visible.sync="planVis" width="300px">
+        <el-dialog title="计划停机表单" :visible.sync="planVis" :before-close="planClose">
               <el-form ref="planForm" :model="planForm" :rules="planRule" label-width="120px">
                 <el-form-item label="作业单号" prop="workNo">
                     <el-input v-model="planForm.workNo" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="停机类型" prop="planStype">
-                    <el-input v-model="planForm.planStype"></el-input>
-                    <!-- <el-date-picker v-model="planForm.planStype" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker> -->
+                    <el-select v-model="planForm.planStype" placeholder="请选择" @change="typeC">
+                        <el-option v-for="item in Stype" :key="item.label" :value="item.value">{{item.value}}</el-option>
+                    </el-select>
                 </el-form-item>
                  <el-form-item label="停机开始" prop="planSstime">
-                   <el-date-picker v-model="planForm.planSstime" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker>
+                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" @change="defEndT"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="停机结束" prop="planSetime">
-                    <el-date-picker v-model="planForm.planSetime" type="datetime" format="yyyy-mm-dd HH:mm:ss" placeholder="选择日期" disabled></el-date-picker>
+                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" :disabled="wtherFix"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="填写人" prop="planMan">
                      <el-input v-model="planForm.planMan"></el-input>
@@ -331,13 +341,58 @@
         </el-dialog>
 
         <!-- 非计划停机弹窗 -->
-        <el-dialog title="非计划停机表单" :visible.sync="unplanVis">
+        <el-dialog title="非计划停机表单" :visible.sync="unplanVis" :before-close="unplanClose">
+             <el-form ref="unplanForm" :model="unplanForm" :rules="unplanRule" label-width="120px">
+                <el-form-item label="作业单号" prop="workNo">
+                    <el-input v-model="unplanForm.workNo" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="停机类型" prop="unplanStype">
+                    <el-input v-model="unplanForm.unplanStype" disabled></el-input>
+                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                </el-form-item>
+                <el-form-item label="停机描述" prop="unplanSDesc">
+                    <el-input v-model="unplanForm.unplanSDesc"></el-input>
+                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                </el-form-item>
+                 <el-form-item label="停机小类" prop="unplanStypem">
+                   <el-select v-model="unplanForm.unplanStypem" placeholder="请选择">
+                        <el-option v-for="item in unStypem" :key="item.label" :value="item.value">{{item.value}}</el-option>
+                    </el-select>
+                </el-form-item>
+                 <el-form-item label="设备编号" prop="unplanSqNo">
+                    <el-input v-model="unplanForm.unplanSqNo"></el-input>
+                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                </el-form-item>
+                 <el-form-item label="停机开始" prop="unplanSstime">
+                   <el-date-picker v-model="unplanForm.unplanSstime" type="datetime"  placeholder="选择日期"></el-date-picker>
+                </el-form-item>
+                
+                <el-form-item label="填写人" prop="unplanMan">
+                     <el-input v-model="unplanForm.unplanMan"></el-input>
+                </el-form-item>
+             </el-form>
+            <el-button type="primary" @click="unplanComfirm('unplanForm')">确认</el-button>
+            <el-button type="primary" @click="unplanCancel()">取消</el-button>
 
         </el-dialog>
 
         <!-- 停机信息弹窗 -->
         <el-dialog title="停机情况" :visible.sync="sInfoVis">
-
+            <el-table :data="Stab" style="width: 100%">
+                <el-table-column prop="sType" label="停机类型" width="180"></el-table-column>
+                <el-table-column prop="sDesc" label="停机描述" width="180"></el-table-column>
+                <el-table-column prop="sStart" label="停机开始" width="180"></el-table-column>
+                <el-table-column prop="sEnd" label="停机结束" width="180"></el-table-column>
+                <el-table-column prop="testPause" label="调试暂停" width="180"></el-table-column>
+                <el-table-column prop="sMan" label="填写人" width="180"></el-table-column>
+                <el-table-column prop="sTime" label="停机时间" width="180"></el-table-column>
+                <el-table-column prop="sqNo" label="设备编号" width="180"></el-table-column>
+                <el-table-column prop="status" label="状态" width="180"></el-table-column>
+            </el-table>
+        
+       
+      
+      
         </el-dialog>
     </div>
 </template>
@@ -516,8 +571,63 @@ export default {
             //侧边按钮弹窗参数
             blpVis:false,//不良品记录弹窗显影指示
             planVis:false,//计划停机弹窗显影指示
+            //停机挡板
+            wtherStop:false,
+            //计划停机表单参数
+            wtherFix:false,
+            planForm:{
+                workNo:'',
+                planStype:'',
+                planSstime:'',
+                planSetime:'',
+                planMan:''
+            },
+            planRule:{
+                planSstime:[{required:true,message:'开始时间为必须项！',trigger:'blur'}],
+                planSetime:[{required:true,message:'结束时间为必须项！',trigger:'blur'}],
+                planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}]
+            },
+            Stype:[{label:'1',value:'晨餐'},
+                   {label:'2',value:'午餐'},
+                   {label:'3',value:'午休'},
+                   {label:'4',value:'晚餐'},
+                   {label:'5',value:'晚间休息'},
+                   {label:'6',value:'夜宵'},
+                   {label:'7',value:'周TMP'},
+                   {label:'8',value:'培训'},
+                   {label:'9',value:'前道工序库存不足'},
+                   {label:'10',value:'会议'},
+                   {label:'11',value:'IC线换料'}],
             unplanVis:false,//非计划停机弹窗显影指示
+            unplanForm:{
+                workNo:'',
+                unplanStype:'非计划停机',
+                unplanStypem:'',
+                unplanSDesc:'',
+                unplanSqNo:'',
+                unplanSstime:'',
+                unplanMan:''
+            },
+            unplanRule:{
+                unplanSstime:[{required:true,message:'开始时间为必须项！',trigger:'blur'}],
+                unplanSqNo:[{required:true,message:'停机设备编号是多少？',trigger:'blur'}],
+                planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}]
+            },
+            unStypem:[{label:'1',value:'管理停机'},
+                      {label:'2',value:'物料停机'},
+                      {label:'3',value:'工艺停机'},
+                      {label:'4',value:'质量停机'},
+                      {label:'5',value:'设备停机'},
+                      {label:'6',value:'缺料停机'},
+                      {label:'7',value:'其他停机'}],
             sInfoVis:false,//停机信息弹窗显影指示
+            Stab:[], 
+            //停机开始时停机挡板显示的参数
+
+            pauseType:'',
+            pauseDesc:'',
+            pauseTime:'',
+            pauseMan:''
         }
     },
     methods:{
@@ -571,6 +681,7 @@ export default {
                 this.crtForm.station = data[0].工作组;
                 this.crtForm.bgCate = data[0].报工类别
                 this.crtVis = true
+                this.getOrder();
             })
             .catch(data=>{
                 alert(data)
@@ -989,7 +1100,238 @@ export default {
         },
         //关闭报工单操作
         BgComplete(){
+            fetch('api/WorkReport/BGClose',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.bgNo
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.$message.success("报工结束！")
+                    this.creatable = false;
+                    this.bgStage = 0;
+                    this.getOrder()
+                }else{
+                    this.$message.error("出现了意外的情况！")
+                }
+            })
+        },
+        //计划停机弹窗参数
+        planS(){
+            if(this.bgStage!=0){
+                this.planVis=true
+                this.planForm.workNo = this.ordNo
+            }
+           
+        },
+        planComfirm(formName){
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/WorkReport/planStop',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                workNo:this.planForm.workNo,
+                                stopType:this.planForm.planStype,
+                                stopBegin:this.planForm.planSstime,
+                                stopEnd:this.planForm.planSetime,
+                                sMan:this.planForm.planMan
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                this.pauseType = "计划停机";
+                                this.pauseDesc = this.planForm.planStype;
+                                this.pauseMan = this.planForm.planMan;
+                                this.$refs['planForm'].resetFields();
+                                this.planVis = false;
+                                this.wtherStop = true;
+                                this.$message.success("计划停机记录成功！")
+                            }else{
+                                this.$message.error("报工单不存在，请核实")
+                            }
+                        }).catch(data=>{
+                            alert(data);
+                        })
+                    }else{
+                        this.$message.error("你没有权限")
+                    }
+                }else{
+                    return false;
+                }
+            })
+            
+        },
+        planCancel(){
+            this.$refs['planForm'].resetFields();
+            this.planVis = false;
+        },
+        planClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                this.$refs['planForm'].resetFields();
+                done();
+            })
+            .catch(_ => {});
+        },
+        //非计划停机弹窗参数
+        unplanS(){
+            if(this.bgStage!=0){
+                this.unplanVis=true
+                this.unplanForm.workNo = this.ordNo
+            }
+           
+        },
+        unplanComfirm(formName){
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/WorkReport/unPlanStop',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                workNo:this.unplanForm.workNo,
+                                stopType:this.unplanForm.unplanStype,
+                                stopsType:this.unplanForm.unplanStypem,
+                                sbNo:this.unplanForm.unplanSqNo,
+                                stopDesc:this.unplanForm.unplanSDesc,
+                                sMan:this.unplanForm.unplanMan,
+                                stopBegin:this.unplanForm.unplanSstime
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                this.$message.success("已停机！")
+                                this.pauseType = this.unplanForm.unplanStype;
+                                this.pauseDesc = this.unplanForm.unplanSDesc;
+                                this.pauseMan = this.unplanForm.unplanMan;
+                                this.$refs['unplanForm'].resetFields();
+                                this.unplanVis = false;
+                                this.wtherStop = true;
+                            }else{
+                                this.$message.error("需要关闭的报工单不存在，请核实！")
+                            }
+                        })
+                      
+                    }else{
+                        this.$message.error("你没有权限")
+                    }
+                }else{
+                    return false;
+                }
+            })
+            
+        },
+        unplanCancel(){
+            this.$refs['unplanForm'].resetFields();
+            this.unplanVis = false;
+        },
+        unplanClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                this.$refs['unplanForm'].resetFields();
+                done();
+            })
+            .catch(_ => {});
+        },
+        //停机信息表格查看
+        stopLog(){
+            if(this.bgStage==0){
+                return;
+            }
+            this.sInfoVis = true
+            fetch('api/WorkReport/stopLog',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                this.Stab = []
+                if(data.length != 0){
+                    for(var item of data){
+                        var tmp = {
+                            sType:item.停机类型,
+                            sDesc:item.停机描述,
+                            sStart:item.停机开始,
+                            sEnd:item.停机结束,
+                            testPause:item.调试暂停,
+                            sMan:item.填写人,
+                            sTime:item.停机时间,
+                            sqNo:item.设备编号,
+                            status:item.状态
+                        }
+                        this.Stab.push(tmp)
+                    }
+                }else{
+                    this.$message.warning("没有停机记录！")
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        //停机类型改变
+        typeC(){
+            this.planForm.planSstime = '';
+            this.planForm.planSetime = '';
+            this.wtherFix = false;
 
+        },
+        //计划停机时选择完开始时间后定义结束时间
+        defEndT(){
+            if(!(this.planForm.planStype =="培训" || this.planForm.planStype =="会议" || this.planForm.planStype =="前道工序库存不足" || this.planForm.planStype =="IC线换料")){
+                this.wtherFix = true
+                var n = 0
+                if(this.planForm.planStype =="午休"|| this.planForm.planStype =="晚间休息"){
+                    n = 15
+                }else if(this.planForm.planStype =="午餐" || this.planForm.planStype =="晚餐" || this.planForm.planStype =="夜宵" || this.planForm.planStype =="周TMP"){
+                    n = 30
+                }else if(this.planForm.planStype =="晨餐"){
+                    n = 45
+                }
+                console.log(n);
+                const tmpT = new Date(this.planForm.planSstime)
+                // console.log(new Date(tmpT.setMinutes(tmpT.getMinutes()+n)))
+                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
+            }else{
+                this.wtherFix = false;
+            }
+        },
+        prodContinue(){
+            fetch('api/WorkReport/pContinue',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.pauseType = '';
+                    this.pauseDesc = '';
+                    this.pauseMan = '';
+                    this.wtherStop = false;
+                    this.$message.success("生产继续")
+                }else{
+                    this.$message.error("停机失败")
+                }
+            }).catch(data=>{
+                alert(data)
+            }) 
         }
     },
     mounted(){

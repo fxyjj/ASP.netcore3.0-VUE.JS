@@ -71,6 +71,45 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<pBGRes>($"EXECUTE dbo.QforProdBG @workNo='{prm.workNo}',@proceNo='{prm.proceNo}',@bgTime='{prm.bgTime}',@passNum='{prm.passNum}',@Lf='{prm.Lf}',@Jf='{prm.Jf}',@Df='{prm.Df}',@Gf='{prm.Gf}',@Dcl='{prm.Dcl}',@FailNum='{prm.failNum}',@rePassNum='{prm.rePassNum}',@pManNum='{prm.pManNum}'").ToList();
             return testData;
         }
+
+        //计划停机记录录入
+        [HttpPost("[action]")]
+        public List<stopRes> planStop([FromBody] stopPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPlanStop @workNo='{prm.workNo}',@stopType='{prm.stopType}',@sStart='{prm.stopBegin}',@eTime='{prm.stopEnd}',@sMan='{prm.sMan}'").ToList();
+            return testData;
+        }
+
+        //非计划停机记录录入
+        [HttpPost("[action]")]
+        public List<stopRes> unPlanStop([FromBody] stopPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforUnPlanStop @workNo='{prm.workNo}',@stopType='{prm.stopType}',@stopsType='{prm.stopsType}',@sbNo='{prm.sbNo}',@stopDesc='{prm.stopDesc}',@sMan='{prm.sMan}',@sStart='{prm.stopBegin}'").ToList();
+            return testData;
+        }
+
+        //停机记录查询
+        [HttpPost("[action]")]
+        public List<logRes> stopLog([FromBody] stopPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<logRes>($"select * from qforStopLog where 作业单号='{prm.workNo}'").ToList();
+            return testData;
+        }
+        //停机继续
+        [HttpPost("[action]")]
+        public List<stopRes> pContinue([FromBody] stopPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPContinue @workNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+         //报工结束
+        [HttpPost("[action]")]
+        public List<stopRes> BGClose([FromBody] stopPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforBGDClose @bgNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+        
     }
 
     //生产报工参数类
@@ -222,4 +261,34 @@ namespace aspVue7.Controllers
         public int failNum{get;set;}
         public int rePassNum{get;set;}
     }
+
+    //非/计划停机&记录 参数
+    public class stopPrm{
+        public string workNo{get;set;}
+        public string stopType{get;set;}
+        public string stopsType{get;set;}
+        public DateTime stopBegin{get;set;}
+        public DateTime stopEnd{get;set;}
+        public string sMan{get;set;}
+        public string sbNo{get;set;}
+        public string stopDesc{get;set;}
+    }
+    //非/计划停机结果
+    public class stopRes{
+        public bool resSign{get;set;}
+    }
+    //停机记录结果
+    public class logRes{
+        public string 停机类型{get;set;}
+        public string 停机描述{get;set;}
+        public DateTime 停机开始{get;set;}
+        public DateTime 停机结束{get;set;}
+        public int 调试暂停{get;set;}
+        public string 填写人{get;set;}
+        public string 停机小类{get;set;}
+        public string 设备编号{get;set;}
+        public int 停机时间{get;set;}
+        public string 状态{get;set;}
+    }
+    
 }
