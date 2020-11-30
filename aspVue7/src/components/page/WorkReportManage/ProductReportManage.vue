@@ -5,9 +5,9 @@
                 <el-card style="height:398px;margin-right:8px">
                     <div class="title" style="font-size:18px;"> 产线名：{{pLine}} </div>
                     <div>
-                        <el-button class="Btns" @click="blpVis=true">不良品记录</el-button>
-                        <el-button class="Btns">异常报检</el-button>
-                        <el-button class="Btns">生产记录</el-button>
+                        <el-button class="Btns" @click="blpClick()" type="primary">不良品记录</el-button>
+                        <!-- <el-button class="Btns">异常报检</el-button> -->
+                        <!-- <el-button class="Btns">生产记录</el-button> -->
                         <el-button class="Btns" @click="planS()" :disabled="wtherStop" type="primary">计划停机</el-button>
                         <el-button class="Btns" @click="unplanS()" :disabled="wtherStop" type="primary">异常停机</el-button>
                         <el-button class="Btns" @click="stopLog()" type="primary">停机信息</el-button>
@@ -310,8 +310,134 @@
             <el-button type="primary" @click="testCancel()">取消</el-button>
         </el-dialog>
         <!-- 不良品弹窗 -->
-        <el-dialog title="不良品记录单" :visible.sync="blpVis">
-
+        <el-dialog title="不良品记录单" :visible.sync="blpVis" :before-close="blpClose">
+            <el-form ref="blpForm" :model="blpForm" :rules="blpRule" label-width="100px">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="作业单号" prop="blpworkNo" >
+                            <el-input v-model="blpForm.blpworkNo" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="生产线" prop="blpPline">
+                            <el-input v-model="blpForm.blpPline" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="发现部门" prop="blpDpart">
+                            <el-input v-model="blpForm.blpDpart" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="主物料号" prop="blpMwlNo">
+                            <el-input v-model="blpForm.blpMwlNo" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="填写人" prop="blpMan">
+                            <el-input v-model="blpForm.blpMan" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="发现班组" prop="blpCgroup">
+                            <el-input v-model="blpForm.blpCgroup" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="主物料描述" prop="blpMwldesc">
+                            <el-input v-model="blpForm.blpMwldesc" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="填写日期" prop="blpDate">
+                            <el-input v-model="blpForm.blpDate" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="报工编号" prop="blpbgNo">
+                            <el-input v-model="blpForm.blpbgNo" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="工序号" prop="blpProceNo">
+                            <el-input v-model="blpForm.blpProceNo" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="工序描述" prop="blpProceDesc">
+                            <el-input v-model="blpForm.blpProceDesc" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!-- 不合格记录信息 -->
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="序号" prop="blpIDNo">
+                            <el-input v-model="blpForm.blpIDNo" :disabled="inputDis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="子物料号" prop="blpZwlNo">
+                            <el-input v-model="blpForm.blpZwlNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="子物料描述" prop="blpZwlDesc">
+                            <el-input v-model="blpForm.blpZwlDesc"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="数量" prop="blpNum">
+                            <el-input v-model="blpForm.blpNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="工位" prop="blpPos">
+                            <el-input v-model="blpForm.blpPos"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="不良描述" prop="blpFDesc">
+                            <el-input v-model="blpForm.blpFDesc"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="返工合格数量" prop="blpRPsNum" label-width="120px">
+                            <el-input v-model="blpForm.blpRPsNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="合格原因" prop="blpPreason">
+                            <el-input v-model="blpForm.blpPreason"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="备注" prop="blpTip">
+                    <el-input v-model="blpForm.blpTip"></el-input>
+                </el-form-item>
+            </el-form>
+             <el-table :data="blpTab" style="width: 100%">
+                <el-table-column prop="tabID" label="序号" width="100"></el-table-column>
+                <el-table-column prop="tabwlNo" label="物料编号" width="100"></el-table-column>
+                <el-table-column prop="tabwlDesc" label="物料描述" width="100"></el-table-column>
+                <el-table-column prop="tabNum" label="数量" width="100"></el-table-column>
+                <el-table-column prop="tabPos" label="工位" width="100"></el-table-column>
+                <el-table-column prop="tabfDesc" label="不良描述" width="100"></el-table-column>
+                <el-table-column prop="tabRpsNum" label="返工合格数量" width="100"></el-table-column>
+                <el-table-column prop="tabRsn" label="合格原因" width="100"></el-table-column>
+                <el-table-column prop="tabTip" label="备注" width="100"></el-table-column>
+             </el-table>
+            <el-button type="primary" @click="blpAdd()" :disabled="!storeVis">添加</el-button>
+            <el-button v-if="storeVis" type="primary" @click="blpStore()">保存</el-button>
+            <el-button v-else type="primary" @click="blpComfirm()">确认</el-button>
         </el-dialog>
 
         <!-- 计划停机弹窗 -->
@@ -569,7 +695,7 @@ export default {
             pBgfailNum:null,
             pBgRepassNum:null,
             //侧边按钮弹窗参数
-            blpVis:false,//不良品记录弹窗显影指示
+           
             planVis:false,//计划停机弹窗显影指示
             //停机挡板
             wtherStop:false,
@@ -623,11 +749,65 @@ export default {
             sInfoVis:false,//停机信息弹窗显影指示
             Stab:[], 
             //停机开始时停机挡板显示的参数
-
             pauseType:'',
             pauseDesc:'',
             pauseTime:'',
-            pauseMan:''
+            pauseMan:'',
+            //不良品表单参数
+            blpVis:false,//不良品记录弹窗显影指示
+            blpForm:{
+                //part1
+                blpworkNo:'',
+                blpPline:'',
+                blpDpart:'',
+                blpMwlNo:'',
+                blpMan:'',//填写人
+                blpCgroup:'',
+                blpMwldesc:'',
+                blpDate:'',
+                blpbgNo:'',
+                blpProceNo:'',
+                blpProceDesc:'',
+                //part2
+                blpIDNo:null,
+                blpZwlNo:'',
+                blpZwlDesc:'',
+                blpNum:'',
+                blpPos:'',//工位
+                blpFDesc:'',//不良描述
+                blpRPsNum:null,
+                blpPreason:'',
+                blpTip:''
+            },
+            blpRule:{
+                //part1
+                blpworkNo:[{required:true,message:'作业单号不能为空！',trigger:'blur'}],
+                blpPline:[{required:true,message:'生产线不能为空！',trigger:'blur'}],
+                blpDpart:[{required:true,message:'哪个部门发现的？',trigger:'blur'}],
+                blpMwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
+                blpMan:[{required:true,message:'谁填写的？',trigger:'blur'}],//填写人
+                blpCgroup:[{required:true,message:'那个班组发现的？',trigger:'blur'}],
+                blpMwldesc:[{required:true,message:'物料描述是什么？',trigger:'blur'}],
+                blpDate:[{required:true,message:'填写日期是什么时候？',trigger:'blur'}],
+                blpbgNo:[{required:true,message:'报工编号不能为空！',trigger:'blur'}],
+                blpProceNo:[{required:true,message:'工序号不能为空！',trigger:'blur'}],
+                blpProceDesc:[{required:true,message:'工序描述是什么？',trigger:'blur'}],
+                //part2
+                blpIDNo:[{required:true,message:'序号不能为空！',trigger:'blur'}],
+                blpZwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
+                blpZwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
+                blpNum:[{required:true,message:'数量是是多少？',trigger:'blur'}],
+                blpPos:[{required:true,message:'哪个工位？',trigger:'blur'}],//工位
+                blpFDesc:[{required:true,message:'简短描述下呗！',trigger:'blur'}],//不良描述
+                blpRPsNum:[{required:true,message:'此处不能为空！',trigger:'blur'}],
+                blpPreason:[{required:true,message:'(!*_*!)为啥就过了？',trigger:'blur'}]
+            },
+            blpTab:[],
+            //保存键显影指示
+            storeVis:true,
+            //已赋值的输入框不再可用控制器
+            inputDis:false,
+
         }
     },
     methods:{
@@ -760,6 +940,12 @@ export default {
                 console.log(this.creatable)
                 console.log(data)
                 if(data.length != 0){
+                    if(data[0].sMan != null){
+                        this.wtherStop = true;
+                        this.pauseType = data[0].sType;
+                        this.pauseDesc = data[0].sDesc;
+                        this.pauseMan = data[0].sMan;
+                    }
                     this.creatable = true;
                     this.bgNo = data[0].bgNo
                     this.bgcrtMan = data[0].initMan
@@ -842,15 +1028,24 @@ export default {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.length != 0){
-                    this.ordNo = data[0].作业单号,
-                    this.ordNum = data[0].订单数量,
-                    this.wlNo = data[0].物料编号,
-                    this.wlDesc = data[0].物料描述,
-                    this.downNum = data[0].完工数量,
-                    this.failNum = data[0].不合格数量,
+                    this.ordNo = data[0].作业单号
+                    this.ordNum = data[0].订单数量
+                    this.wlNo = data[0].物料编号
+                    this.wlDesc = data[0].物料描述
+                    this.downNum = data[0].完工数量
+                    this.failNum = data[0].不合格数量
                     this.currBGD = data[0].报工编号
                     this.pct = (data[0].合格数量/data[0].订单数量)*100
                     // this.getBGDtest();
+                }else{
+                    this.ordNo = ''
+                    this.ordNum = 0
+                    this.wlNo = ''
+                    this.wlDesc = ''
+                    this.downNum = 0
+                    this.failNum = 0
+                    this.currBGD = ''
+                    this.pct = 0
                 }
             
             }).catch(data=>{
@@ -1236,7 +1431,7 @@ export default {
             this.unplanVis = false;
         },
         unplanClose(done){
-             this.$confirm('确认关闭？')
+            this.$confirm('确认关闭？')
             .then(_ => {
                 this.$refs['unplanForm'].resetFields();
                 done();
@@ -1332,7 +1527,148 @@ export default {
             }).catch(data=>{
                 alert(data)
             }) 
+        },
+        //不良品记录按钮点击
+        blpClick(){
+            if(this.bgStage!=0){
+                this.blpVis=true;
+                fetch('api/WorkReport/BLPopen',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        workNo:this.ordNo
+                    })
+                }).then(response=>response.json())
+                .then(data=>{
+                    if(data.length!=0){
+                        this.blpForm.blpworkNo = data[0].作业单号
+                        this.blpForm.blpMwlNo = data[0].物料编号
+                        this.blpForm.blpMwldesc = data[0].物料描述
+                        this.blpForm.blpPline = data[0].生产线
+                        this.blpForm.blpMan = data[0].填写人
+                        this.blpForm.blpDate = data[0].填写日期
+                        this.blpForm.blpDpart = data[0].发现部门
+                        this.blpForm.blpCgroup = data[0].发现班组
+                        this.blpForm.blpbgNo = data[0].报工编号
+                        this.blpForm.blpProceNo = data[0].proceNo
+                        this.blpForm.blpProceDesc = data[0].proceName
+                        this.blpForm.blpIDNo = data[0].blpId
+                        //保存按钮
+                        this.storeVis = false;
+                        //已赋值的输入框不再可用
+                        this.inputDis = true;
+                    }else{
+                        //所有输入框都可用
+                        this.inputDis = false;
+                        this.blpForm.blpworkNo = this.ordNo
+                        this.blpForm.blpbgNo = this.bgNo
+                        this.blpForm.blpProceNo = this.bgproceNo
+                        this.blpForm.blpProceDesc = this.bgproceName
+                        //确认按钮
+                        this.storeVis = true;
+                    }
+                }).catch(data=>{
+                    alert(data)
+                })
+                
+            }
+        },
+        //不良品弹窗函数，保存按钮函数
+        blpStore(){
+            this.$refs['blpForm'].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/WorkReport/BLPstore',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                               
+                                workNo:this.blpForm.blpworkNo,
+                                wlNo:this.blpForm.blpMwlNo,
+                                wlDesc:this.blpForm.blpMwldesc,
+                                pLine:this.blpForm.blpPline,
+                                man:this.blpForm.blpMan,
+                                date:this.blpForm.blpDate ,
+                                Dpart:this.blpForm.blpDpart,
+                                Cgroup:this.blpForm.blpCgroup,
+                                bgNo:this.blpForm.blpbgNo,
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                // this.$refs['blpForm'].resetFields();
+                                // this.blpVis = false;
+                                this.storeVis = false;
+                            }else{
+                                this.$message.error("找不到作业单对应的报工单！")
+                            }
+                        })
+                        
+                    }else{
+                        this.$message.error("你没有权限")
+                    }
+                }else{
+                    return false;
+                }
+            })
+            
+        },
+        //不良品确认按钮
+        blpComfirm(){
+            this.$refs['blpForm'].resetFields();
+            this.blpVis = false;
+        },
+        //不良品添加记录
+        blpAdd(){
+            this.$refs['blpForm'].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/WorkReport/BLPAdd',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                tabID:this.blpForm.blpIDNo,
+                                tabwlNo:this.blpForm.blpZwlNo,
+                                tabwlDesc:this.blpForm.blpZwlDesc,
+                                tabNum:this.blpForm.blpNum,
+                                tabPos:this.blpForm.blpPos,
+                                tabFDesc:this.blpForm.blpFDesc,
+                                tabRPsNum:this.blpForm.blpRPsNum,
+                                tabPreason:this.blpForm.blpPreason,
+                                tabTip:this.blpForm.blpTip
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                renewTab()
+                            }else{
+                                this.$message.error("添加失败")
+                            }
+                        })
+                    }else{
+                        this.$message.error("你没有权限")
+                    }
+                }else{
+                    return false;
+                }
+            })
+
+        },
+        blpClose(done){
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                this.$refs['blpForm'].resetFields();
+                done();
+            })
+            .catch(_ => {});
         }
+
     },
     mounted(){
         // this.bgStage = 3;

@@ -109,7 +109,59 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforBGDClose @bgNo='{prm.workNo}'").ToList();
             return testData;
         }
+
+        //不良品记录表单开启
+        [HttpPost("[action]")]
+        public List<blpOpenRes> BLPopen([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpOpenRes>($"EXECUTE dbo.QforBLPOpen @workNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+        //不良品记录保存
+        [HttpPost("[action]")]
+        public List<blpStoreRes> BLPstore([FromBody] blpStorePrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforBLPStore @workNo='{prm.workNo}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pLine='{prm.pLine}',@man='{prm.man}',@date='{prm.date}',@Dpart='{prm.Dpart}',@Cgroup='{prm.Cgroup}',@bgNo='{prm.bgNo}'").ToList();
+            return testData;
+        }
         
+        
+    }
+    //不良品储存记录参数
+    public class blpStorePrm{
+        public string workNo{get;set;}
+        public string wlNo{get;set;}
+        public string wlDesc{get;set;}
+        public string pLine{get;set;}
+        public string man{get;set;}
+        public DateTime date{get;set;}
+        public string Dpart{get;set;}
+        public string Cgroup{get;set;}
+        public string bgNo{get;set;}
+    }
+    //不良品储存记录结果
+    public class blpStoreRes{
+        public bool resSign{get;set;}
+    }
+    //不良品记录打开时查询参数
+    public class blpOpenPrm{
+        public string workNo{get;set;}
+    }
+    //不良品记录打开时查询结果
+    public class blpOpenRes{
+        public string 作业单号{get;set;}
+        public string 物料编号{get;set;}
+        public string 物料描述{get;set;}
+        public string 生产线{get;set;}
+        public string 填写人{get;set;}
+        public DateTime 填写日期{get;set;}
+        public string 发现部门{get;set;}
+        public string 发现班组{get;set;}
+        public string bgNo{get;set;}
+        public int proceNo{get;set;}
+        public string poceName{get;set;}
+
+        public int blpId{get;set;} 
     }
 
     //生产报工参数类
@@ -260,6 +312,10 @@ namespace aspVue7.Controllers
         public int dcl{get;set;}
         public int failNum{get;set;}
         public int rePassNum{get;set;}
+        //停机记录查询
+        public string sType{get;set;}
+        public string sDesc{get;set;}
+        public string sMan{get;set;}
     }
 
     //非/计划停机&记录 参数
