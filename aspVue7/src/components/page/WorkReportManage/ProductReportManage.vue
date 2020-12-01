@@ -182,19 +182,19 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col :span="4">
-                <el-card style="margin-right:8px">
-                    <div class="title">当班员工信息</div>
-                   <el-table :data="manInfo" style="" height="500">
-                        <el-table-column prop="posReg" label="岗位登记" ></el-table-column>
-                        <el-table-column prop="man" label="员工" ></el-table-column>
-                        <el-table-column prop="skill" label="技能" ></el-table-column>
-                    </el-table>
-                </el-card>
-            </el-col>
-            <el-col :span="20">
+             <el-col :span="18">
                 <el-row>
-                    <el-col :span="18">
+                     <el-col :span="5">
+                          <el-card style="margin-right:8px">
+                                <div class="title">当班员工信息</div>
+                                <el-table :data="manInfo" style="" height="220">
+                                    <el-table-column prop="posReg" label="岗位登记" ></el-table-column>
+                                    <el-table-column prop="man" label="员工" ></el-table-column>
+                                    <el-table-column prop="skill" label="技能" ></el-table-column>
+                                </el-table>
+                            </el-card>
+                    </el-col>
+                    <el-col :span="19">
                         <el-card style="margin-right:8px;height:300px;">
                             <div class="title" >当前订单</div>
                             <div class="tgs">订单编号：{{ordNo}}</div>
@@ -211,15 +211,9 @@
                             
                         </el-card>
                     </el-col>
-                    <el-col :span="6">
-                        <el-card style="height:300px;">
-                            <div class="title">Andon设置</div>
-                            <div id="pieBtn" style="width:280px;height:240px;margin:0% 5%"></div>
-                        </el-card>
-                    </el-col>
                 </el-row>
                 <el-row>
-                    <el-card style="margin-top:8px">
+                    <el-card style="margin-top:8px;margin-right:8px">
                         <div class="title">所有订单</div>
                         <el-table :data="allOrder" style="" height="190" border>
                             <el-table-column prop="workNo" label="作业单号" width="120"></el-table-column>
@@ -244,6 +238,13 @@
                     </el-card>
                 </el-row>
             </el-col>
+            <el-col :span="6">
+                <el-card style="height:580px;">
+                    <div class="title">Andon设置</div>
+                    <div id="pieBtn" style="width:100%;height:370px;margin:15% 0%;text-align:center"></div><!--width:370px;-->
+                </el-card>
+            </el-col>
+           
         </el-row>
         <el-dialog title="创建报工单" :visible.sync="crtVis" :before-close="crtClose" >
              <el-form ref="crtForm" :model="crtForm" :rules="crtRule" label-width="80px">
@@ -354,7 +355,8 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="填写日期" prop="blpDate">
-                            <el-input v-model="blpForm.blpDate" :disabled="inputDis"></el-input>
+                            <!-- <el-input v-model="blpForm.blpDate" :disabled="inputDis"></el-input> -->
+                            <el-date-picker v-model="blpForm.blpDate" type="date" placeholder="选择日期" :disabled="inputDis"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -366,7 +368,7 @@
                  <el-row>
                     <el-col :span="8">
                         <el-form-item label="工序号" prop="blpProceNo">
-                            <el-input v-model="blpForm.blpProceNo" :disabled="inputDis"></el-input>
+                            <el-input v-model.number="blpForm.blpProceNo" :disabled="inputDis"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -379,7 +381,7 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="序号" prop="blpIDNo">
-                            <el-input v-model="blpForm.blpIDNo" :disabled="inputDis"></el-input>
+                            <el-input v-model.number="blpForm.blpIDNo"  :disabled="inputDis"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -394,7 +396,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="数量" prop="blpNum">
-                            <el-input v-model="blpForm.blpNum"></el-input>
+                            <el-input v-model.number="blpForm.blpNum" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -411,7 +413,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="返工合格数量" prop="blpRPsNum" label-width="120px">
-                            <el-input v-model="blpForm.blpRPsNum"></el-input>
+                            <el-input v-model.number="blpForm.blpRPsNum" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -435,7 +437,7 @@
                 <el-table-column prop="tabRsn" label="合格原因" width="100"></el-table-column>
                 <el-table-column prop="tabTip" label="备注" width="100"></el-table-column>
              </el-table>
-            <el-button type="primary" @click="blpAdd()" :disabled="!storeVis">添加</el-button>
+            <el-button type="primary" @click="blpAdd()" v-if="!storeVis">添加</el-button>
             <el-button v-if="storeVis" type="primary" @click="blpStore()">保存</el-button>
             <el-button v-else type="primary" @click="blpComfirm()">确认</el-button>
         </el-dialog>
@@ -520,10 +522,21 @@
       
       
         </el-dialog>
+
+        <!-- 添加安灯记录 -->
+        <el-dialog title="新安灯记录" :visible.sync="newAndonVis">
+            <div>新安灯记录</div>
+        </el-dialog>
+        <!-- 安灯记录 -->
+        <el-dialog title="安灯记录" :visible.sync="andonLogVis">
+             <div>安灯记录</div>
+        </el-dialog>
+
     </div>
 </template>
 <script>
 import echart from 'echarts'
+import bus from '../../common/bus';
 export default {
     data(){
         return {
@@ -537,7 +550,7 @@ export default {
                 animation:false,
                 series: [{
                         type: 'pie',
-                        radius: ['25%', '55%'],
+                        radius: ['25%', '60%'],
                         label: {
                             position:'inner'
                         },
@@ -545,18 +558,37 @@ export default {
                             show: false
                         },
                         data: [
-                            {value: 1, name: '4'},
-                            {value: 1, name: '3'},
-                            {value: 1, name: '2'},
-                            {value: 1, name: '1'},
-                            {value: 1, name: '0'}
-
-                        ]
+                            {mark:'inner',value: 1, name: '0',colorB:'#b61414',colorT:'#000'},
+                            {mark:'inner',value: 1, name: '1',colorB:'#0ba0ea',colorT:'#000'},
+                            {mark:'inner',value: 1, name: '0',colorB:'#9914e6',colorT:'#000'},
+                            {mark:'inner',value: 1, name: '0',colorB:'#1aee48',colorT:'#000'},
+                            {mark:'inner',value: 1, name: '0',colorB:'#fbff23',colorT:'#000'}
+                        ],
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    position:'inner',
+                                    textStyle: { //图例文字的样式
+                                        color: '#000',
+                                        fontSize: 10
+                                    },
+                                },
+                                color:function(params) {
+                                    if(params.data['name']!='0'){
+                                        return params.data['colorB'];
+                                    }else{
+                                        return '#C0C0C0'
+                                    }
+                                }, 
+                            }
+                        }
+                        
                     },
                     {
                         name: '',
                         type: 'pie',
-                        radius: ['55%', '90%'],
+                        radius: ['60%', '100%'],
                         label: {
                             position:'inner'
                         },
@@ -564,12 +596,27 @@ export default {
                             show: false
                         },
                         data: [
-                            {value: 1, name: '直达'},
-                            {value: 1, name: '邮件'},
-                            {value: 1, name: '联盟'},
-                            {value: 1, name: '视频'},
-                            {value: 1, name: '百度'},
-                        ]
+                            {mark:'outter',value: 1, name: '质量',color:'#b61414'},
+                            {mark:'outter',value: 1, name: '工艺',color:'#0ba0ea'},
+                            {mark:'outter',value: 1, name: '设备',color:'#9914e6'},
+                            {mark:'outter',value: 1, name: '物料',color:'#1aee48'},
+                            {mark:'outter',value: 1, name: 'TBD',color:'#fbff23'},
+                        ],
+                        itemStyle:{
+                            normal:{
+                                label:{
+                                    show:true,
+                                    position:'inner',
+                                    textStyle: { //图例文字的样式
+                                        color: '#000',
+                                        fontSize: 16
+                                    },
+                                },
+                                color:function(params) {
+                                    return params.data['color'];
+                                }, 
+                            }
+                        }
                     }
                 ]
             },
@@ -766,13 +813,13 @@ export default {
                 blpMwldesc:'',
                 blpDate:'',
                 blpbgNo:'',
-                blpProceNo:'',
+                blpProceNo:null,
                 blpProceDesc:'',
                 //part2
                 blpIDNo:null,
                 blpZwlNo:'',
                 blpZwlDesc:'',
-                blpNum:'',
+                blpNum:null,
                 blpPos:'',//工位
                 blpFDesc:'',//不良描述
                 blpRPsNum:null,
@@ -807,6 +854,12 @@ export default {
             storeVis:true,
             //已赋值的输入框不再可用控制器
             inputDis:false,
+            //饼状图点击区域识别标签
+            whr:'',
+            //新安灯记录弹窗参数
+            newAndonVis:false,
+            //安灯记录弹窗参数
+            andonLogVis:false,
 
         }
     },
@@ -1551,7 +1604,7 @@ export default {
                         this.blpForm.blpDate = data[0].填写日期
                         this.blpForm.blpDpart = data[0].发现部门
                         this.blpForm.blpCgroup = data[0].发现班组
-                        this.blpForm.blpbgNo = data[0].报工编号
+                        this.blpForm.blpbgNo = data[0].bgNo
                         this.blpForm.blpProceNo = data[0].proceNo
                         this.blpForm.blpProceDesc = data[0].proceName
                         this.blpForm.blpIDNo = data[0].blpId
@@ -1559,6 +1612,7 @@ export default {
                         this.storeVis = false;
                         //已赋值的输入框不再可用
                         this.inputDis = true;
+                        this.renewlTab()
                     }else{
                         //所有输入框都可用
                         this.inputDis = false;
@@ -1566,6 +1620,9 @@ export default {
                         this.blpForm.blpbgNo = this.bgNo
                         this.blpForm.blpProceNo = this.bgproceNo
                         this.blpForm.blpProceDesc = this.bgproceName
+                        this.blpForm.blpMwlNo = this.wlNo
+                        this.blpForm.blpMwldesc = this.wlDesc
+                        this.blpForm.blpPline = this.pLine
                         //确认按钮
                         this.storeVis = true;
                     }
@@ -1586,7 +1643,6 @@ export default {
                                 'Content-Type':'application/json'
                             },
                             body:JSON.stringify({
-                               
                                 workNo:this.blpForm.blpworkNo,
                                 wlNo:this.blpForm.blpMwlNo,
                                 wlDesc:this.blpForm.blpMwldesc,
@@ -1596,6 +1652,15 @@ export default {
                                 Dpart:this.blpForm.blpDpart,
                                 Cgroup:this.blpForm.blpCgroup,
                                 bgNo:this.blpForm.blpbgNo,
+                                tabID:this.blpForm.blpIDNo,
+                                tabwlNo:this.blpForm.blpZwlNo,
+                                tabwlDesc:this.blpForm.blpZwlDesc,
+                                tabNum:this.blpForm.blpNum,
+                                tabPos:this.blpForm.blpPos,
+                                tabFDesc:this.blpForm.blpFDesc,
+                                tabRPsNum:this.blpForm.blpRPsNum,
+                                tabPreason:this.blpForm.blpPreason,
+                                tabTip:this.blpForm.blpTip
                             })
                         }).then(response=>response.json())
                         .then(data=>{
@@ -1603,6 +1668,7 @@ export default {
                                 // this.$refs['blpForm'].resetFields();
                                 // this.blpVis = false;
                                 this.storeVis = false;
+                                this.renewlTab();
                             }else{
                                 this.$message.error("找不到作业单对应的报工单！")
                             }
@@ -1620,6 +1686,7 @@ export default {
         //不良品确认按钮
         blpComfirm(){
             this.$refs['blpForm'].resetFields();
+            this.blpTab=[]
             this.blpVis = false;
         },
         //不良品添加记录
@@ -1633,6 +1700,7 @@ export default {
                                 'Content-Type':'application/json'
                             },
                             body:JSON.stringify({
+                                workNo:this.blpForm.blpworkNo,
                                 tabID:this.blpForm.blpIDNo,
                                 tabwlNo:this.blpForm.blpZwlNo,
                                 tabwlDesc:this.blpForm.blpZwlDesc,
@@ -1646,7 +1714,17 @@ export default {
                         }).then(response=>response.json())
                         .then(data=>{
                             if(data[0].resSign){
-                                renewTab()
+                                this.$message.success("添加成功！")
+                                this.renewlTab();
+                                this.blpForm.blpIDNo+=1;
+                                this.blpForm.blpZwlNo = ''
+                                this.blpForm.blpZwlDesc = ''
+                                this.blpForm.blpNum = null
+                                this.blpForm.blpPos = ''
+                                this.blpForm.blpFDesc=''
+                                this.blpForm.blpRPsNum=null
+                                this.blpForm.blpPreason=''
+                                this.blpForm.blpTip=''
                             }else{
                                 this.$message.error("添加失败")
                             }
@@ -1664,9 +1742,40 @@ export default {
             this.$confirm('确认关闭？')
             .then(_ => {
                 this.$refs['blpForm'].resetFields();
+                this.blpTab=[]
                 done();
             })
             .catch(_ => {});
+        },
+        renewlTab(){
+            fetch('api/WorkReport/getTab',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.blpForm.blpworkNo
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                this.blpTab = []
+                for(var item of data){
+                    var tmp = {
+                        tabID:item.id,
+                        tabwlNo:item.wlNo,
+                        tabwlDesc:item.wlDesc,
+                        tabNum:item.failNum,
+                        tabPos:item.position,
+                        tabfDesc:item.failDesc,
+                        tabRpsNum:item.repassNum,
+                        tabRsn:item.reason,
+                        tabTip:item.tips
+                    }
+                    this.blpTab.push(tmp)
+                }
+            }).catch(data=>{
+                alert(data)
+            })
         }
 
     },
@@ -1680,6 +1789,18 @@ export default {
         var andonBtn = document.getElementById("pieBtn");
         this.piebtn = echart.init(andonBtn);
         this.piebtn.setOption(this.pieOpt);
+        this.piebtn.on('click',function(params){
+           bus.$emit('area',params.data.mark);
+        });
+        bus.$on('area',msg=>{
+            console.log(msg)
+            if(msg == "inner"){
+                this.andonLogVis = true;
+            }else{
+                this.newAndonVis = true;
+            }
+        })
+        
         
         //所有订单数据表格加载
         fetch('api/WorkReport/allOrdDisp',{

@@ -121,11 +121,38 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<blpStoreRes> BLPstore([FromBody] blpStorePrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforBLPStore @workNo='{prm.workNo}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pLine='{prm.pLine}',@man='{prm.man}',@date='{prm.date}',@Dpart='{prm.Dpart}',@Cgroup='{prm.Cgroup}',@bgNo='{prm.bgNo}'").ToList();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforBLPStore @workNo='{prm.workNo}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pLine='{prm.pLine}',@man='{prm.man}',@date='{prm.date}',@Dpart='{prm.Dpart}',@Cgroup='{prm.Cgroup}',@bgNo='{prm.bgNo}',@tabID='{prm.tabID}',@tabwlNo='{prm.tabwlNo}',@tabwlDesc='{prm.tabwlDesc}',@tabNum='{prm.tabNum}',@tabPos='{prm.tabPos}',@tabFDesc='{prm.tabFDesc}',@tabRPsNum='{prm.tabRPsNum}',@tabPreason='{prm.tabPreason}',@tabTip='{prm.tabTip}'").ToList();
+            return testData;
+        }
+
+         //不良品记录添加
+        [HttpPost("[action]")]
+        public List<blpStoreRes> BLPAdd([FromBody] blpStorePrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforBLPAdd @workNo='{prm.workNo}',@tabID='{prm.tabID}',@tabwlNo='{prm.tabwlNo}',@tabwlDesc='{prm.tabwlDesc}',@tabNum='{prm.tabNum}',@tabPos='{prm.tabPos}',@tabFDesc='{prm.tabFDesc}',@tabRPsNum='{prm.tabRPsNum}',@tabPreason='{prm.tabPreason}',@tabTip='{prm.tabTip}'").ToList();
+            return testData;
+        }
+        //不良品表格更新
+        [HttpPost("[action]")]
+        public List<tabRes> getTab([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<tabRes>($"EXECUTE dbo.QforBLPTabreNew @workNo='{prm.workNo}'").ToList();
             return testData;
         }
         
         
+    }
+    //不良品表格更新结果类
+    public class tabRes{
+        public int id{get;set;}
+        public string wlNo{get;set;}
+        public string wlDesc{get;set;}
+        public int failNum{get;set;}
+        public string position{get;set;}
+        public string failDesc{get;set;}
+        public int repassNum{get;set;}
+        public string reason{get;set;}
+        public string tips{get;set;}
     }
     //不良品储存记录参数
     public class blpStorePrm{
@@ -138,6 +165,15 @@ namespace aspVue7.Controllers
         public string Dpart{get;set;}
         public string Cgroup{get;set;}
         public string bgNo{get;set;}
+        public int tabID{get;set;}
+        public string tabwlNo{get;set;}
+        public string tabwlDesc{get;set;}
+        public int tabNum{get;set;}
+        public string tabPos{get;set;}
+        public string tabFDesc{get;set;}
+        public int tabRPsNum{get;set;}
+        public string tabPreason{get;set;}
+         public string tabTip{get;set;}
     }
     //不良品储存记录结果
     public class blpStoreRes{
@@ -159,7 +195,7 @@ namespace aspVue7.Controllers
         public string 发现班组{get;set;}
         public string bgNo{get;set;}
         public int proceNo{get;set;}
-        public string poceName{get;set;}
+        public string proceName{get;set;}
 
         public int blpId{get;set;} 
     }
