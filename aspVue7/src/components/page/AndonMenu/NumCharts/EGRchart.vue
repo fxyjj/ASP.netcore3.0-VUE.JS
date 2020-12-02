@@ -156,7 +156,7 @@ export default {
                 this.amYdata = []
                 this.etvYdata = []
                 this.lpYdata = []
-                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov'] 
+                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'] 
                 for(var item of this.queryData){
                     if(this.dateunit == '月'){
                         this.Xdata.push(monthName[Number(item.日期单位-1)]);

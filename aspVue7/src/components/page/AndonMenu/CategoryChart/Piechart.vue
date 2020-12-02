@@ -153,7 +153,7 @@ export default {
 			this.pie3 = [];
 			this.pie4 = [];
 			this.marks = {};
-			var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
+			var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec']
 			for(var item of msg){
 				var v1 = [{name:'工艺',value:item.gProcessT.toFixed(2)},{name:'设备',value:item.sProcessT.toFixed(2)},{name:'仓库',value:item.cProcessT.toFixed(2)},{name:'质量',value:item.zProcessT.toFixed(2)}]
 				var v2 = [{name:'工艺',value:item.gAndonN},{name:'设备',value:item.sAndonN},{name:'仓库',value:item.cAndonN},{name:'质量',value:item.zAndonN}]

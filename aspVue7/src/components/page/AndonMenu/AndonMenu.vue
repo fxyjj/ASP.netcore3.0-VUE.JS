@@ -261,7 +261,7 @@ export default {
                     this.c2yAxis2 = [];
                     this.c2yAxis3 = [];
 
-                    var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
+                    var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec']
                     for(var res of this.queryData){
                         if(this.radio == '月'){
                             this.cxAxis.push(monthName[Number(res.dateunit)-1]);

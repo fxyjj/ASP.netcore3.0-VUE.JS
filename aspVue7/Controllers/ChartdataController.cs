@@ -229,7 +229,7 @@ namespace aspVue7.Controllers
         public string 物料编号{get;set;}
         public string 物料描述{get;set;}
         public string 不合格描述{get;set;}
-        public int 不合格数量{get;set;}
+        public int 不良数量{get;set;}
         public int 报废数{get;set;}
         public int 返工合格数{get;set;}
         public int 降级数{get;set;}

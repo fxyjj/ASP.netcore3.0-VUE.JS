@@ -177,7 +177,7 @@
                     <div>停机类型：{{pauseType}}</div>
                     <div>停机描述：{{pauseDesc}}</div>
                     <div>停机人：{{pauseMan}}</div>
-                    <el-button type="primary" @click="prodContinue()">立即开始</el-button>
+                    <el-button type="primary" @click="prodContinue()" :disabled="wtherZLP">立即开始</el-button>
                 </el-card>
             </el-col>
         </el-row>
@@ -524,7 +524,104 @@
         </el-dialog>
 
         <!-- 添加安灯记录 -->
-        <el-dialog title="新安灯记录" :visible.sync="newAndonVis">
+        <el-dialog title="新安灯记录" :visible.sync="newAndonVis" :before-close="zlAndonClose">
+            <el-form v-if="zlVis" ref="zlForm" :model="zlForm" :rules="zlRule" label-width="120px">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="序号" prop="no">
+                            <el-input v-model.number="zlForm.no" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="作业单号" prop="zlworkNo">
+                            <el-input v-model="zlForm.zlworkNo" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="填写人" prop="zlMan">
+                            <el-input v-model="zlForm.zlMan" :disabled="zlInpVis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="发现部门" prop="zlDpt">
+                            <el-input v-model="zlForm.zlDpt" :disabled="zlInpVis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="发现班组" prop="zlCls">
+                            <el-input v-model="zlForm.zlCls" :disabled="zlInpVis"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="数量" prop="zlNum">
+                            <el-input v-model.number="zlForm.zlNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="物料号" prop="zlwlNo">
+                            <el-input v-model="zlForm.zlwlNo" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="物料描述" prop="zlwlDesc">
+                            <el-input v-model="zlForm.zlwlDesc"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="工位" prop="zlPos">
+                            <el-input v-model="zlForm.zlPos"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="问题描述" prop="zlQdesc">
+                            <el-input v-model="zlForm.zlQdesc" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="返工合格数量" prop="zlRPsNum">
+                            <el-input v-model.number="zlForm.zlRPsNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="设备编号" prop="zlsbNo">
+                            <el-input v-model="zlForm.zlsbNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="合格原因" prop="zlRea">
+                            <el-input v-model="zlForm.zlRea" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="备注" prop="zlTip">
+                            <el-input v-model="zlForm.zlTip"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="安灯人" prop="zlAndonMan">
+                            <el-input v-model="zlForm.zlAndonMan"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="是否停线" prop="zlwhrStop">
+                            <el-input v-model="zlForm.zlwthrStop" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form> 
+            <el-form v-else ref="otherForm" :model="otherForm" :rules="otherRule" label-width="120px"></el-form>
+            <el-button type="primary" @click="zlAndonCfm()">确认</el-button>
+            <el-button type="primary" @click="zlAndonCancel()">取消</el-button>
             <div>新安灯记录</div>
         </el-dialog>
         <!-- 安灯记录 -->
@@ -860,6 +957,47 @@ export default {
             newAndonVis:false,
             //安灯记录弹窗参数
             andonLogVis:false,
+            //质量安灯的表单显示
+            zlVis:false,
+            //质量安灯表格参数
+            zlForm:{
+                no:1,
+                zlworkNo:'',
+                zlMan:'',
+                zlDpt:'',
+                zlCls:'',
+                zlNum:null,
+                zlwlNo:'',
+                zlwlDesc:'',
+                zlPos:'',
+                zlQdesc:'',
+                zlRPsNum:null,
+                zlsbNo:'',
+                zlRea:'',
+                zlTip:'',
+                zlAndonMan:'',
+                zlwthrStop:'',
+            },
+            zlRule:{
+                zlMan:[{required:true,message:'不良品记录人不能为空！',trigger:'blur'}],
+                zlDpt:[{required:true,message:'发现部门不能为空！',trigger:'blur'}],
+                zlCls:[{required:true,message:'发现班组不能为空！',trigger:'blur'}],
+                zlNum:[{required:true,message:'此处不能为空！',trigger:'blur'}],
+                zlwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
+                zlwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
+                zlPos:[{required:true,message:'工位不能为空！',trigger:'blur'}],
+                zlRPsNum:[{required:true,message:'返工合格数量？',trigger:'blur'}],
+                zlsbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
+                zlAndonMan:[{required:true,message:'安灯人是谁？',trigger:'blur'}],
+            },
+            //如已存在不合格记录，则不用填写部分信息
+            zlInpVis:false,
+            //除质量以外的其他按灯记录表
+            otherForm:{},
+            otherRule:{},
+            //如为质量停机，则不可主动开始
+            wtherZLP:false,
+
 
         }
     },
@@ -1668,6 +1806,7 @@ export default {
                                 // this.$refs['blpForm'].resetFields();
                                 // this.blpVis = false;
                                 this.storeVis = false;
+                                this.inputDis = true;
                                 this.renewlTab();
                             }else{
                                 this.$message.error("找不到作业单对应的报工单！")
@@ -1776,6 +1915,114 @@ export default {
             }).catch(data=>{
                 alert(data)
             })
+        },
+        //质量安灯开启
+        zlOpen(){
+             fetch('api/WorkReport/zlAndonOpen',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length!=0){
+                    this.zlForm.no = data[0].序号
+                    this.zlForm.zlDpt = data[0].发现部门
+                    this.zlForm.zlCls = data[0].发现班组
+                    this.zlForm.zlMan = data[0].填写人
+                    this.zlInpVis = true;
+                }else{
+                    this.zlInpVis = false;
+
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+             
+        },
+        //质量安灯确认
+        zlAndonCfm(){
+            var tmpName = null
+            if(this.zlVis){
+                tmpName = "zlForm"
+            }else{
+                tmpName = "otherForm"
+            }
+            this.$refs[tmpName].validate((valid) => {
+                if (valid) {
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        fetch('api/WorkReport/zlAndonCfm',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                workNo:this.zlForm.zlworkNo,
+                                order:this.zlForm.no,
+                                fillMan:this.zlForm.zlMan,
+                                dpt:this.zlForm.zlDpt,
+                                cls:this.zlForm.zlCls,
+                                num:this.zlForm.zlNum,
+                                wlNo:this.zlForm.zlwlNo,
+                                wlDesc:this.zlForm.zlwlDesc,
+                                pos:this.zlForm.zlPos,
+                                qDesc:this.zlForm.zlQdesc,
+                                rePsnum:this.zlForm.zlRPsNum,
+                                sbNo:this.zlForm.zlsbNo,
+                                reason:this.zlForm.zlRea,
+                                tips:this.zlForm.zlTip,
+                                andonMan:this.zlForm.zlAndonMan,
+                                stopSts:this.zlForm.zlwthrStop
+                            })
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            if(data[0].resSign){
+                                this.$message.error("按灯成功，现在已停机待检");
+                                this.newAndonVis = false;
+                                //停机状态打开
+                                this.wtherStop = true;
+                                this.pauseType = "质量停机"
+                                this.pauseDesc = this.zlForm.zlQdesc;
+                                this.pauseMan = this.zlForm.zlAndonMan;
+                                this.wtherZLP = true;
+                                this.$refs[tmpName].resetFields();
+                            }
+                        })
+                       
+                    }else{
+                        this.$message.error("你没有权限！")
+                    }
+                }else{
+                    return false;
+                }
+             })
+        },
+        //质量安灯取消
+        zlAndonCancel(){
+            var tmpName = null
+            if(this.zlVis){
+                tmpName = "zlForm"
+            }else{
+                tmpName = "otherForm"
+            }
+            this.newAndonVis = false;
+            this.$refs[tmpName].resetFields();
+        },
+        //质量安灯表单关闭
+        zlAndonClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                if(this.zlVis){
+                   this.$refs['zlForm'].resetFields();
+                }else{
+                   this.$refs['otherForm'].resetFields();
+                }
+                done();
+            })
+            .catch(_ => {});
         }
 
     },
@@ -1790,14 +2037,30 @@ export default {
         this.piebtn = echart.init(andonBtn);
         this.piebtn.setOption(this.pieOpt);
         this.piebtn.on('click',function(params){
-           bus.$emit('area',params.data.mark);
+           bus.$emit('area',{mk:params.data.mark,name:params.data.name});
         });
         bus.$on('area',msg=>{
-            console.log(msg)
-            if(msg == "inner"){
+            // console.log(msg)
+            if(msg.mk == "inner"){
                 this.andonLogVis = true;
             }else{
-                this.newAndonVis = true;
+                if(msg.name=="质量"){
+                    if(this.wtherStop){
+                        this.$message.error("现在是停机状态，质量安灯需要在生产过程中进行，安灯完毕后会自动停机！")
+                    }else{
+                        this.zlVis = true;
+                        this.newAndonVis = true;
+                        this.zlForm.zlworkNo = this.ordNo
+                        this.zlForm.zlwthrStop = this.wtherStop?"已停机":"未停机"
+                        this.zlOpen();
+                    }
+                }else{
+                    this.zlVis = false;
+                    this.newAndonVis = true;
+                }
+               
+                
+
             }
         })
         

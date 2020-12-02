@@ -587,7 +587,7 @@ export default {
                         pline:item.生产线,
                         sbNo:item.设备编号,
                         failDesc:item.不合格描述,
-                        failNum:item.不合格数量,
+                        failNum:item.不良数量,
                         shitNo:item.报废数,
                         rePassNo:item.返工合格数,
                         writeMan:item.填写人,

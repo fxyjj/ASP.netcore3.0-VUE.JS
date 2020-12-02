@@ -306,7 +306,7 @@ export default {
                 this.c3ys=[]
                 this.c3yc=[]
                 this.c3yz=[]
-                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Dec','Nov']
+                var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec']
                 for(var i of this.queryData){
                     if(this.dateunit == '月'){
                         this.xdata.push(monthName[Number(i.日期单位)-1]);

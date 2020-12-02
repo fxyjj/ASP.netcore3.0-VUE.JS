@@ -139,8 +139,49 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<tabRes>($"EXECUTE dbo.QforBLPTabreNew @workNo='{prm.workNo}'").ToList();
             return testData;
         }
+         //质量安灯打开查询
+        [HttpPost("[action]")]
+        public List<zlOpenRes> zlAndonOpen([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<zlOpenRes>($"EXECUTE dbo.QforZLAndonOpen @workNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+        //质量安灯打开查询
+        [HttpPost("[action]")]
+        public List<blpStoreRes> zlAndonCfm([FromBody] zlCfmPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforZLAndon @workNo='{prm.workNo}',@order='{prm.order}',@fillMan='{prm.fillMan}',@Dpt='{prm.dpt}',@Cls='{prm.cls}',@Num='{prm.num}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pos='{prm.pos}',@qDesc='{prm.qDesc}',@repassNum='{prm.rePsnum}',@sbNo='{prm.sbNo}',@reason='{prm.reason}',@tips='{prm.tips}',@andonMan='{prm.andonMan}',@stopSts='{prm.stopSts}'").ToList();
+            return testData;
+        }
         
-        
+    }
+    //质量按灯确认查询参数
+    public class zlCfmPrm{
+        public string workNo{get;set;}
+        public string order{get;set;}
+        public string fillMan{get;set;}
+        public string dpt{get;set;}
+        public string cls{get;set;}
+        public int num{get;set;}
+        public string wlNo{get;set;}
+        public string wlDesc{get;set;}
+        public string pos{get;set;}
+        public string qDesc{get;set;}
+        public int rePsnum{get;set;}
+        public string sbNo{get;set;}
+        public string reason{get;set;}
+        public string tips{get;set;}
+        public string andonMan{get;set;}
+        public string stopSts{get;set;}
+
+    }
+
+    //质量安灯打开时查询结果
+    public class zlOpenRes{
+        public string 发现部门{get;set;}
+        public string 发现班组{get;set;}
+        public int 序号{get;set;}
+        public string 填写人{get;set;}
     }
     //不良品表格更新结果类
     public class tabRes{
