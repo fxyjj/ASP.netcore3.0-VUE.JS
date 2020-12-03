@@ -426,7 +426,7 @@
                     <el-input v-model="blpForm.blpTip"></el-input>
                 </el-form-item>
             </el-form>
-             <el-table :data="blpTab" style="width: 100%">
+             <el-table :data="blpTab" style="width: 100%" height="300px">
                 <el-table-column prop="tabID" label="序号" width="100"></el-table-column>
                 <el-table-column prop="tabwlNo" label="物料编号" width="100"></el-table-column>
                 <el-table-column prop="tabwlDesc" label="物料描述" width="100"></el-table-column>
@@ -516,16 +516,12 @@
                 <el-table-column prop="sTime" label="停机时间" width="180"></el-table-column>
                 <el-table-column prop="sqNo" label="设备编号" width="180"></el-table-column>
                 <el-table-column prop="status" label="状态" width="180"></el-table-column>
-            </el-table>
-        
-       
-      
-      
+            </el-table> 
         </el-dialog>
 
         <!-- 添加安灯记录 -->
         <el-dialog title="新安灯记录" :visible.sync="newAndonVis" :before-close="zlAndonClose">
-            <el-form v-if="zlVis" ref="zlForm" :model="zlForm" :rules="zlRule" label-width="120px">
+            <el-form v-if="zlVis==0" ref="zlForm" :model="zlForm" :rules="zlRule" label-width="120px">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="序号" prop="no">
@@ -611,22 +607,160 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="8">
                         <el-form-item label="是否停线" prop="zlwhrStop">
                             <el-input v-model="zlForm.zlwthrStop" disabled></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
             </el-form> 
-            <el-form v-else ref="otherForm" :model="otherForm" :rules="otherRule" label-width="120px"></el-form>
+            <el-form v-else-if="zlVis==1" ref="sbForm" :model="sbForm" :rules="sbRule" label-width="120px">
+                <el-form-item label="作业单号" prop="sbworkNo">
+                    <el-input v-model="sbForm.sbworkNo" disabled></el-input>
+                </el-form-item>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="是否停线" prop="sbStop">
+                            <el-select v-model="sbForm.sbStop" :disabled="sbInputVis">
+                                <el-option  v-for="item in sbP" :key="item.value" :value="item.value">{{item.value}}</el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="优先级" prop="sbYxj">
+                            <el-select v-model="sbForm.sbYxj">
+                                <el-option  v-for="item in priority" :key="item.value" :value="item.value">{{item.value}}</el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="工作中心" prop="sbStation">
+                            <el-input v-model="sbForm.sbStation" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="报修部门" prop="sbDpt">
+                            <el-input v-model="sbForm.sbDpt"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="报修人员" prop="sbMan">
+                            <el-input v-model="sbForm.sbMan"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="设备编号" prop="sbNo">
+                            <el-input v-model="sbForm.sbNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="设备名称" prop="sbName">
+                            <el-input v-model="sbForm.sbName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="故障部位" prop="sbQpart">
+                            <el-input v-model="sbForm.sbQpart"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="故障类型" prop="sbQtype">
+                            <el-input v-model="sbForm.sbQtype"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="故障描述" prop="sbQdesc">
+                    <el-input v-model="sbForm.sbQdesc"></el-input>
+                </el-form-item>
+                
+                <el-form-item label="故障描述" prop="sbQdesc">
+                    <el-select v-model="sbForm.sbSafe">
+                        <el-option  value="涉及安全">涉及安全</el-option>
+                        <el-option  value="不涉及安全">不涉及安全</el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <el-form v-else ref="otherform" :model="otherForm" :rules="otherRule" label-width="120px">
+                 <el-form-item label="作业单号" prop="othworkNo">
+                    <el-input v-model="otherForm.othworkNo" disabled></el-input>
+                </el-form-item>
+                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="按灯类别" prop="othAndonT">
+                            <el-input v-model="otherForm.othAndonT" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="工作中心" prop="othStation">
+                            <el-input v-model="otherForm.othStation" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                        <el-form-item label="是否停线" prop="othStop">
+                            <el-select v-model="otherForm.othStop" :disabled="othInputVis">
+                                <el-option  v-for="item in sbP" :key="item.value" :value="item.value">{{item.value}}</el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="设备编号" prop="othsbNo">
+                            <el-input v-model="otherForm.othsbNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="安灯人" prop="othMan">
+                            <el-input v-model="otherForm.othMan"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="问题描述" prop="othQdesc"><el-input v-model="otherForm.othQdesc"></el-input></el-form-item>
+            </el-form>
             <el-button type="primary" @click="zlAndonCfm()">确认</el-button>
             <el-button type="primary" @click="zlAndonCancel()">取消</el-button>
-            <div>新安灯记录</div>
         </el-dialog>
         <!-- 安灯记录 -->
         <el-dialog title="安灯记录" :visible.sync="andonLogVis">
-             <div>安灯记录</div>
+            <el-row>
+                <el-col :span="8"><div class="">安灯类型:{{currAdT}}</div></el-col>
+                <el-col :span="8"><div class="">状态:{{currAdSts}}</div></el-col>
+                <el-col :span="8"><div class="">安灯编号:{{currAdNo}}</div></el-col>
+               
+            </el-row>
+            <el-row>
+                <el-col :span="8"><div class="">安灯时间:{{currAdtime}}</div></el-col>
+                <el-col :span="8"><div class="">问题描述:{{currAdDesc}}</div></el-col>
+                <el-col :span="8"><div class="">按灯人:{{currAdMan}}</div></el-col>
+            </el-row>
+            <el-input v-model="AdRespMan" placeholder="响应人"></el-input>
+            <el-button type="primary" @click="AdResp()" :disabled="AdLife=0">响应</el-button>
+            <el-button type="primary" @click="AdResolve()" :disabled="AdLife=1">解决</el-button>
+            <el-button type="primary" @click="AdCfm()" :disabled="AdLife=2">确认</el-button>
+
+            <el-table :data="Adtab" style="width: 100%">
+                <el-table-column prop="AdMan" label="安灯人" width="180"></el-table-column>
+                <el-table-column prop="AdNo" label="序号" width="180"></el-table-column>
+                <el-table-column prop="AdsbNo" label="设备编号" width="180"></el-table-column>
+                <el-table-column prop="AdqDesc" label="问题描述" width="180"></el-table-column>
+                <el-table-column prop="AdTime" label="按灯时间" width="180"></el-table-column>
+                <el-table-column prop="AdprcsTime" label="处理时间" width="180"></el-table-column>
+                <el-table-column prop="AdprcsMan" label="处理人" width="180"></el-table-column>
+                <el-table-column prop="AdshutMan" label="关闭人" width="180"></el-table-column>
+                <el-table-column prop="AdshutTime" label="关闭时间" width="180"></el-table-column>
+                <el-table-column prop="AdStation" label="工作中心" width="180"></el-table-column>
+                <el-table-column prop="AdDuration" label="处理用时" width="180"></el-table-column>
+                <el-table-column prop="AdStop" label="是否停线" width="180"></el-table-column>
+                <el-table-column prop="AdFns" label="是否解决" width="180"></el-table-column>
+                <el-table-column prop="AdPlan" label="行动计划" width="180"></el-table-column>
+                <el-table-column prop="AdFreason" label="不能解决原因" width="180"></el-table-column>
+                <el-table-column prop="AdfnsDate" label="计划完成日期" width="180"></el-table-column>
+            </el-table> 
         </el-dialog>
 
     </div>
@@ -655,11 +789,11 @@ export default {
                             show: false
                         },
                         data: [
-                            {mark:'inner',value: 1, name: '0',colorB:'#b61414',colorT:'#000'},
-                            {mark:'inner',value: 1, name: '1',colorB:'#0ba0ea',colorT:'#000'},
-                            {mark:'inner',value: 1, name: '0',colorB:'#9914e6',colorT:'#000'},
-                            {mark:'inner',value: 1, name: '0',colorB:'#1aee48',colorT:'#000'},
-                            {mark:'inner',value: 1, name: '0',colorB:'#fbff23',colorT:'#000'}
+                            {mark:'inner',value: 1, name: '0',colorB:'#b61414',colorT:'#000',tip:1},
+                            {mark:'inner',value: 1, name: '1',colorB:'#0ba0ea',colorT:'#000',tip:2},
+                            {mark:'inner',value: 1, name: '0',colorB:'#9914e6',colorT:'#000',tip:3},
+                            {mark:'inner',value: 1, name: '0',colorB:'#1aee48',colorT:'#000',tip:4},
+                            {mark:'inner',value: 1, name: '0',colorB:'#fbff23',colorT:'#000',tip:5}
                         ],
                         itemStyle:{
                             normal:{
@@ -693,11 +827,11 @@ export default {
                             show: false
                         },
                         data: [
-                            {mark:'outter',value: 1, name: '质量',color:'#b61414'},
-                            {mark:'outter',value: 1, name: '工艺',color:'#0ba0ea'},
-                            {mark:'outter',value: 1, name: '设备',color:'#9914e6'},
-                            {mark:'outter',value: 1, name: '物料',color:'#1aee48'},
-                            {mark:'outter',value: 1, name: 'TBD',color:'#fbff23'},
+                            {mark:'outter',value: 1, name: '质量',color:'#b61414',tip:1},
+                            {mark:'outter',value: 1, name: '设备',color:'#0ba0ea',tip:2},
+                            {mark:'outter',value: 1, name: '工艺',color:'#9914e6',tip:3},
+                            {mark:'outter',value: 1, name: '物料',color:'#1aee48',tip:4},
+                            {mark:'outter',value: 1, name: 'TBD',color:'#fbff23',tip:5},
                         ],
                         itemStyle:{
                             normal:{
@@ -880,13 +1014,14 @@ export default {
             },
             unplanRule:{
                 unplanSstime:[{required:true,message:'开始时间为必须项！',trigger:'blur'}],
+                unplanStypem:[{required:true,message:'停机小类为必须项！',trigger:'blur'}],
                 unplanSqNo:[{required:true,message:'停机设备编号是多少？',trigger:'blur'}],
                 planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}]
             },
             unStypem:[{label:'1',value:'管理停机'},
                       {label:'2',value:'物料停机'},
                       {label:'3',value:'工艺停机'},
-                      {label:'4',value:'质量停机'},
+                    //   {label:'4',value:'质量停机'},
                       {label:'5',value:'设备停机'},
                       {label:'6',value:'缺料停机'},
                       {label:'7',value:'其他停机'}],
@@ -957,8 +1092,8 @@ export default {
             newAndonVis:false,
             //安灯记录弹窗参数
             andonLogVis:false,
-            //质量安灯的表单显示
-            zlVis:false,
+            //质量安灯的表单显示,0为质量，1为设备，2为其他三种按灯
+            zlVis:0,
             //质量安灯表格参数
             zlForm:{
                 no:1,
@@ -976,7 +1111,7 @@ export default {
                 zlRea:'',
                 zlTip:'',
                 zlAndonMan:'',
-                zlwthrStop:'',
+                // zlwthrStop:'',
             },
             zlRule:{
                 zlMan:[{required:true,message:'不良品记录人不能为空！',trigger:'blur'}],
@@ -992,11 +1127,67 @@ export default {
             },
             //如已存在不合格记录，则不用填写部分信息
             zlInpVis:false,
-            //除质量以外的其他按灯记录表
-            otherForm:{},
-            otherRule:{},
+            //设备按灯表
+            priority:[{label:0,value:'特急'},
+                      {label:1,value:'急'},
+                      {label:2,value:'一般'},
+                      {label:3,value:'不急'}],
+            sbP:[{label:0,value:'未停线'},
+                 {label:0,value:'已停线'}],
+            sbForm:{
+                sbworkNo:'',
+                sbStop:'',
+                sbYxj:'',
+                sbStation:'',
+                sbDpt:'',
+                sbMan:'',
+                sbNo:'',
+                sbName:'',
+                sbQpart:'',
+                sbQtype:'',
+                sbQdesc:'',
+                sbSafe:''
+            },
+            sbRule:{
+                sbYxj:[{required:true,message:'该报修记录的优先级是？',trigger:'blur'}],
+                sbDpt:[{required:true,message:'报修部门不能为空！',trigger:'blur'}],
+                sbMan:[{required:true,message:'报修人员不能为空！',trigger:'blur'}],
+                sbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
+                sbQpart:[{required:true,message:'哪里坏了？',trigger:'blur'}],
+                sbQtype:[{required:true,message:'报修类型是？',trigger:'blur'}],
+            },
+            sbInputVis:false,//如果在停机状态按灯，这停机状态不可更改
+            //除质量和设备以外的其他按灯记录表
+            otherForm:{
+                othworkNo:'',
+                othAndonT:'',
+                othStation:'',
+                othStop:'',
+                othsbNo:'',
+                othMan:'',
+                othQdesc:''
+            },
+            otherRule:{
+                othMan:[{required:true,message:'按灯人员不能为空！',trigger:'blur'}],
+                othsbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
+                othQdesc:[{required:true,message:'请稍微描述一下！',trigger:'blur'}],
+            },
+            othInputVis:false,//如果在停机状态按灯，这停机状态不可更改
             //如为质量停机，则不可主动开始
             wtherZLP:false,
+            //如果有按灯正在进行，则不能再新建按灯
+            wtherAD:false,
+            //按灯记录参数
+            currAdT:'',
+            currAdSts:'',
+            currAdNo:'',
+            currAdtime:'',
+            currAdDesc:'',
+            currAdMan:'',
+            //按灯记录表格
+            Adtab:[],
+            //安灯状态指示
+            AdLife:3,
 
 
         }
@@ -1136,6 +1327,9 @@ export default {
                         this.pauseType = data[0].sType;
                         this.pauseDesc = data[0].sDesc;
                         this.pauseMan = data[0].sMan;
+                        if(this.pauseType!="计划停机" || this.pauseType=="非计划停机"){
+                            this.wtherZLP = true
+                        }
                     }
                     this.creatable = true;
                     this.bgNo = data[0].bgNo
@@ -1219,14 +1413,14 @@ export default {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.length != 0){
-                    this.ordNo = data[0].作业单号
-                    this.ordNum = data[0].订单数量
-                    this.wlNo = data[0].物料编号
-                    this.wlDesc = data[0].物料描述
-                    this.downNum = data[0].完工数量
-                    this.failNum = data[0].不合格数量
-                    this.currBGD = data[0].报工编号
-                    this.pct = (data[0].合格数量/data[0].订单数量)*100
+                    this.ordNo = data[1].作业单号
+                    this.ordNum = data[1].订单数量
+                    this.wlNo = data[1].物料编号
+                    this.wlDesc = data[1].物料描述
+                    this.downNum = data[1].完工数量
+                    this.failNum = data[1].不合格数量
+                    this.currBGD = data[1].报工编号
+                    this.pct = (data[1].合格数量/data[1].订单数量)*100
                     // this.getBGDtest();
                 }else{
                     this.ordNo = ''
@@ -1945,66 +2139,173 @@ export default {
         },
         //质量安灯确认
         zlAndonCfm(){
-            var tmpName = null
-            if(this.zlVis){
-                tmpName = "zlForm"
-            }else{
-                tmpName = "otherForm"
-            }
-            this.$refs[tmpName].validate((valid) => {
-                if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
-                        fetch('api/WorkReport/zlAndonCfm',{
-                            method:'POST',
-                            headers:{
-                                'Content-Type':'application/json'
-                            },
-                            body:JSON.stringify({
-                                workNo:this.zlForm.zlworkNo,
-                                order:this.zlForm.no,
-                                fillMan:this.zlForm.zlMan,
-                                dpt:this.zlForm.zlDpt,
-                                cls:this.zlForm.zlCls,
-                                num:this.zlForm.zlNum,
-                                wlNo:this.zlForm.zlwlNo,
-                                wlDesc:this.zlForm.zlwlDesc,
-                                pos:this.zlForm.zlPos,
-                                qDesc:this.zlForm.zlQdesc,
-                                rePsnum:this.zlForm.zlRPsNum,
-                                sbNo:this.zlForm.zlsbNo,
-                                reason:this.zlForm.zlRea,
-                                tips:this.zlForm.zlTip,
-                                andonMan:this.zlForm.zlAndonMan,
-                                stopSts:this.zlForm.zlwthrStop
+            if(this.zlVis==0){
+                this.$refs['zlForm'].validate((valid) => {
+                    if (valid) {
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                            fetch('api/WorkReport/zlAndonCfm',{
+                                method:'POST',
+                                headers:{
+                                    'Content-Type':'application/json'
+                                },
+                                body:JSON.stringify({
+                                    workNo:this.zlForm.zlworkNo,
+                                    order:this.zlForm.no,
+                                    fillMan:this.zlForm.zlMan,
+                                    dpt:this.zlForm.zlDpt,
+                                    cls:this.zlForm.zlCls,
+                                    num:this.zlForm.zlNum,
+                                    wlNo:this.zlForm.zlwlNo,
+                                    wlDesc:this.zlForm.zlwlDesc,
+                                    pos:this.zlForm.zlPos,
+                                    qDesc:this.zlForm.zlQdesc,
+                                    rePsnum:this.zlForm.zlRPsNum,
+                                    sbNo:this.zlForm.zlsbNo,
+                                    reason:this.zlForm.zlRea,
+                                    tips:this.zlForm.zlTip,
+                                    andonMan:this.zlForm.zlAndonMan,
+                                })
+                            }).then(response=>response.json())
+                            .then(data=>{
+                                if(data[0].resSign){
+                                    this.$message.error("按灯成功，现在已停机待检");
+                                    this.newAndonVis = false;
+                                    //停机状态打开
+                                    this.wtherStop = true;
+                                    this.pauseType = "质量停机"
+                                    this.pauseDesc = this.zlForm.zlQdesc;
+                                    this.pauseMan = this.zlForm.zlAndonMan;
+                                    this.wtherZLP = true;
+                                    this.$refs['zlForm'].resetFields();
+                                    this.reNewADLog()
+                                }else{
+                                    this.$message.error("出错了");
+                                }
                             })
-                        }).then(response=>response.json())
-                        .then(data=>{
-                            if(data[0].resSign){
-                                this.$message.error("按灯成功，现在已停机待检");
-                                this.newAndonVis = false;
-                                //停机状态打开
-                                this.wtherStop = true;
-                                this.pauseType = "质量停机"
-                                this.pauseDesc = this.zlForm.zlQdesc;
-                                this.pauseMan = this.zlForm.zlAndonMan;
-                                this.wtherZLP = true;
-                                this.$refs[tmpName].resetFields();
-                            }
-                        })
-                       
+                        
+                        }else{
+                            this.$message.error("你没有权限！")
+                        }
                     }else{
-                        this.$message.error("你没有权限！")
+                        return false;
                     }
-                }else{
-                    return false;
-                }
-             })
+                })
+            }else if(this.zlVis==1){
+                this.$refs['sbForm'].validate((valid) => {
+                    if (valid) {
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                            fetch('api/WorkReport/sbAndonCfm',{
+                                method:'POST',
+                                headers:{
+                                    'Content-Type':'application/json'
+                                },
+                                body:JSON.stringify({
+                                    workNo:this.sbForm.sbworkNo,
+                                    priority:this.sbForm.sbYxj,
+                                    sbStop:this.sbForm.sbStation,
+                                    sbMan:this.sbForm.sbMan,
+                                    sbDpt:this.sbForm.sbDpt,
+                                    sbNo:this.sbForm.sbNo,
+                                    sbName:this.sbForm.sbName,
+                                    station:this.sbForm.sbStation,
+                                    qPart:this.sbForm.sbQpart,
+                                    qType:this.sbForm.sbQtype,
+                                    qDesc:this.sbForm.sbQdesc,
+                                    sbSafe:this.sbForm.sbSafe
+                                })
+                            }).then(response=>response.json())
+                            .then(data=>{
+                                if(data[0].resSign){
+                                    if(this.wtherStop && this.sbForm.sbStop=="已停线"){
+                                        //停机状态打开
+                                        this.wtherStop = true;
+                                        this.pauseType = "设备停机"
+                                        this.pauseDesc = this.sbForm.sbQdesc;
+                                        this.pauseMan = this.sbForm.sbMan;
+                                        this.wtherZLP = true;
+                                        this.$refs['sbForm'].resetFields();
+                                        this.newAndonVis = false;
+                                        this.$message.success("设备安灯成功,现已停线。")
+                                    }else{
+                                        this.$refs['sbForm'].resetFields();
+                                        this.newAndonVis = false;
+                                        this.wtherZLP = true;
+                                        this.$message.success("设备安灯成功")
+                                    }
+                                    this.reNewADLog();
+                                }else{
+                                    this.$message.error("按灯失败")
+                                }
+                            }).catch(data=>{
+                                alert(data)
+                            })
+                        }else{
+                            this.$message.error("你没有权限！");
+                        }
+                    }else{
+                        return false;
+                    }
+                })
+
+            }else{
+                this.$refs['otherForm'].validate((valid) => {
+                    if (valid) {
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                            fetch('api/WorkReport/othAndonCfm',{
+                                method:'POST',
+                                headers:{
+                                    'Content-Type':'application/json'
+                                },
+                                body:JSON.stringify({
+                                    workNo:this.otherForm.othworkNo,
+                                    adType:this.otherForm.othAndonT,
+                                    adStation:this.otherForm.othStation,
+                                    adStop:this.otherForm.othStop,
+                                    adMan:this.otherForm.othMan,
+                                    adQdesc:this.otherForm.othQdesc,
+                                    adsbNo:this.otherForm.othsbNo
+                                })
+                            }).then(response=>response.json())
+                            .then(data=>{
+                                if(data[0].resSign){
+                                    if(this.wtherStop && this.otherForm.othStop=="已停线"){
+                                        //停机状态打开
+                                        this.wtherStop = true;
+                                        this.pauseType = this.otherForm.othAndonT+"停机"
+                                        this.pauseDesc = this.otherForm.othQdesc;
+                                        this.pauseMan = this.otherForm.othMan;
+                                        this.wtherZLP = true;
+                                        this.$refs['otherForm'].resetFields();
+                                        this.newAndonVis = false;
+                                        this.$message.success(this.otherForm.othAndonT+"安灯成功,现已停线。")
+                                    }else{
+                                        this.$refs['otherForm'].resetFields();
+                                        this.newAndonVis = false;
+                                        this.wtherZLP = true;
+                                        this.$message.success(this.otherForm.othAndonT+"安灯成功")
+                                    }
+                                    this.reNewADLog()
+                                }else{
+                                    this.$message.error("按灯失败")
+                                }
+                            })
+                        }else{
+                            this.$message.error("你没有权限！")
+                        }
+                    }else{
+                        return false;
+                    }
+                })
+            }
+           
         },
         //质量安灯取消
         zlAndonCancel(){
             var tmpName = null
-            if(this.zlVis){
+            if(this.zlVis==0){
                 tmpName = "zlForm"
+            }else if(this.zlVis==1){
+                tmpName = "sbForm"
             }else{
                 tmpName = "otherForm"
             }
@@ -2015,16 +2316,142 @@ export default {
         zlAndonClose(done){
              this.$confirm('确认关闭？')
             .then(_ => {
-                if(this.zlVis){
+                if(this.zlVis==0){
                    this.$refs['zlForm'].resetFields();
+                }else if(this.zlVis==1){
+                   this.$refs['sbForm'].resetFields();
                 }else{
-                   this.$refs['otherForm'].resetFields();
+                    this.$refs['otherForm'].resetFields();
                 }
                 done();
             })
             .catch(_ => {});
-        }
+        },
+        //刷新按灯记录，内圈数据
+        reNewADLog(){
+            fetch('api/WorkReport/reNewADLog',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.pieOpt.series[0].data[0].name = data[0].zL.toString()
+                    this.pieOpt.series[0].data[1].name = data[0].sB.toString()
+                    this.pieOpt.series[0].data[2].name = data[0].gY.toString()
+                    this.pieOpt.series[0].data[3].name = data[0].wL.toString()
+                    this.pieOpt.series[0].data[4].name = data[0].tBD.toString()
+                    this.piebtn.setOption(this.pieOpt);
+                    var sm = data[0].zL+data[0].sB+data[0].gY+data[0].wL+data[0].tBD;
+                    if(sm!=0){
+                        this.wtherAD = true;
+                    }else{
+                        this.wtherAD = false;
+                    }
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        //按灯响应
+        AdResp(){
+            this.AdLife = 1;
+        },
+        //按灯解决
+        AdResolve(){
+            this.AdLife = 2;
+        },
+        AdCfm(){
+            this.AdLife = 3
+        },
+        //安灯记录打开时触发函数
+        AdLogOpen(tip){
+            fetch('api/WorkReport/AdLogOpen',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                    qType:tip,
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length !=0){
+                    switch (data[0].adType){
+                        case 1:
+                            this.currAdT = "质量按灯";
+                            break;
+                        case 2:
+                            this.currAdT = "设备按灯";
+                            break;
+                        case 3:
+                            this.currAdT = "工艺按灯";
+                            break;  
+                        case 4:
+                            this.currAdT = "物料按灯";
+                            break; 
+                        case 5:
+                            this.currAdT = "TBD按灯";
+                            break; 
+                    }
+                    this.currAdSts = data[0].adSts;
+                    this.currAdNo = data[0].adNo;
+                    this.currAdtime = data[0].adTime;
+                    this.currAdMan = data[0].adMan;
+                    this.currAdDesc = data[0].adqDesc;
+                    this.renewAdtab()
 
+                }else{
+                    this.AdLife = 3
+                }
+                this.renewAdtab(tip)
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        //刷新按灯记录表格
+        renewAdtab(tip){
+            fetch('api/WorkReport/renewAdtab',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                    qType:tip
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length !=0){
+                    this.Adtab = []
+                    var tmp = {
+                        AdMan:data[0].按灯人,
+                        AdNo:data[0].序号,
+                        AdsbNo:data[0].设备编号,
+                        AdqDesc:data[0].问题描述,
+                        AdTime:data[0].按灯时间,
+                        AdprcsTime:data[0].处理时间,
+                        AdprcsMan:data[0].处理人,
+                        AdshutMan:data[0].关闭人,
+                        AdshutTime:data[0].关闭时间,
+                        AdStation:data[0].工作中心,
+                        AdStop:data[0].是否停线,
+                        AdFns:data[0].临时解决,
+                        AdPlan:data[0].行动计划,
+                        AdFreasom:data[0].不能解决原因,
+                        AdfnsDate:data[0].计划完成日期
+                    }
+                    this.Adtab.push(tmp)
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        }
     },
     mounted(){
         // this.bgStage = 3;
@@ -2037,30 +2464,61 @@ export default {
         this.piebtn = echart.init(andonBtn);
         this.piebtn.setOption(this.pieOpt);
         this.piebtn.on('click',function(params){
-           bus.$emit('area',{mk:params.data.mark,name:params.data.name});
+           bus.$emit('area',{mk:params.data.mark,name:params.data.name,tip:params.data.tip});
         });
         bus.$on('area',msg=>{
             // console.log(msg)
+            if(this.bgStage == 0){
+                return;
+            }
+            
             if(msg.mk == "inner"){
                 this.andonLogVis = true;
+                this.AdLogOpen(msg.tip);
             }else{
+                if(this.wtherStop && this.wtherZLP){
+                    this.$message.error("现已是"+this.pauseType+"状态，不可进行新的按灯！请先处理停机按灯");
+                    return;
+                }
+                if(this.wtherStop && this.pauseType=="计划停机"){
+                    this.$message.error("现已是 计划停机状态，不可进行按灯");
+                    return;
+                }
+                if(this.wtherAD){
+                    this.$message.error("正在进行按灯，不能再新建按灯了")
+                }
+                 
                 if(msg.name=="质量"){
                     if(this.wtherStop){
                         this.$message.error("现在是停机状态，质量安灯需要在生产过程中进行，安灯完毕后会自动停机！")
                     }else{
-                        this.zlVis = true;
                         this.newAndonVis = true;
+                        this.zlVis = 0;
                         this.zlForm.zlworkNo = this.ordNo
-                        this.zlForm.zlwthrStop = this.wtherStop?"已停机":"未停机"
+                        
                         this.zlOpen();
                     }
-                }else{
-                    this.zlVis = false;
+                }else if(msg.name=="设备"){
                     this.newAndonVis = true;
+                    this.zlVis = 1;
+                    this.sbForm.sbworkNo = this.ordNo
+                    this.sbForm.sbStation = this.pLine;
+                    if(this.wtherStop){
+                        this.sbForm.sbStop = "已停线"
+                        this.sbInputVis = true;
+                    }
+                   
+                }else{
+                    this.newAndonVis = true;
+                    this.zlVis = 2;
+                    this.otherForm.othworkNo = this.ordNo;
+                    this.otherForm.othAndonT = msg.name;
+                    this.otherForm.othStation = this.pLine;
+                    if(this.wtherStop){
+                        this.otherForm.othStop = "已停线"
+                        this.othInputVis = true;
+                    }
                 }
-               
-                
-
             }
         })
         

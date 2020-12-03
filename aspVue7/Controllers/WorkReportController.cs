@@ -146,19 +146,116 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<zlOpenRes>($"EXECUTE dbo.QforZLAndonOpen @workNo='{prm.workNo}'").ToList();
             return testData;
         }
-        //质量安灯打开查询
+        //质量安灯确认查询
         [HttpPost("[action]")]
         public List<blpStoreRes> zlAndonCfm([FromBody] zlCfmPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforZLAndon @workNo='{prm.workNo}',@order='{prm.order}',@fillMan='{prm.fillMan}',@Dpt='{prm.dpt}',@Cls='{prm.cls}',@Num='{prm.num}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pos='{prm.pos}',@qDesc='{prm.qDesc}',@repassNum='{prm.rePsnum}',@sbNo='{prm.sbNo}',@reason='{prm.reason}',@tips='{prm.tips}',@andonMan='{prm.andonMan}',@stopSts='{prm.stopSts}'").ToList();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforZLAndon @workNo='{prm.workNo}',@order='{prm.order}',@fillMan='{prm.fillMan}',@Dpt='{prm.dpt}',@Cls='{prm.cls}',@Num='{prm.num}',@wlNo='{prm.wlNo}',@wlDesc='{prm.wlDesc}',@pos='{prm.pos}',@qDesc='{prm.qDesc}',@repassNum='{prm.rePsnum}',@sbNo='{prm.sbNo}',@reason='{prm.reason}',@tips='{prm.tips}',@andonMan='{prm.andonMan}'").ToList();
+            return testData;
+        }
+         //设备安灯确认查询
+        [HttpPost("[action]")]
+        public List<blpStoreRes> sbAndonCfm([FromBody] sbCfmPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforSBAndon @workNo='{prm.workNo}',@priority='{prm.priority}',@sbStop='{prm.sbStop}',@sbMan='{prm.sbMan}',@sbDpt='{prm.sbDpt}',@sbNo='{prm.sbNo}',@sbName='{prm.sbName}',@station='{prm.station}',@qPart='{prm.qPart}',@qType='{prm.qType}',@qDesc='{prm.qDesc}',@sbSafe='{prm.sbSafe}'").ToList();
+            return testData;
+        }
+         //其他安灯确认查询
+        [HttpPost("[action]")]
+        public List<blpStoreRes> othAndonCfm([FromBody] othAndonPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforWebAndon @workNo='{prm.workNo}',@andonMan='{prm.adMan}',@andonType='{prm.adType}',@station='{prm.adStation}',@andonStop='{prm.adStop}',@andonsbNo='{prm.adsbNo}',@andonQdesc='{prm.adQdesc}'").ToList();
+            return testData;
+        }
+          //内圈数据更新查询
+        [HttpPost("[action]")]
+        public List<reNewAdRes> othAndonCfm([FromBody]  blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<renewAdRes>($"EXECUTE dbo.QforRenewAndonCount @workNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+        //安灯记录打开查询
+        [HttpPost("[action]")]
+        public List<adLogRes> AdLogOpen([FromBody]  adLogPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<renewAdRes>($"EXECUTE dbo.QforWebAndonLog @workNo='{prm.workNo}'，@qType='{prm.qType}'").ToList();
+            return testData;
+        }
+        //安灯记录刷新查询
+        [HttpPost("[action]")]
+        public List<adLogTabRes> renewAdtab([FromBody]  adLogPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<adLogTabRes>($"EXECUTE dbo.QforRenewAndonLog @workNo='{prm.workNo}'，@qType='{prm.qType}'").ToList();
             return testData;
         }
         
     }
+    //按灯记录打开查询参数
+    public class adLogPrm{
+        public string workNo{get;set;}
+        public string qType{get;set;}
+    }
+    //安灯记录结果
+    public class adLogRes{
+        public int adType{get;set;}
+        public int adSts{get;set;}
+        public DateTime adTime{get;set;}
+        public string adqDesc{get;set;}
+        public string adMan{get;set;}
+    }
+    //安灯记录表格刷新结果类
+    public class adLogTabRes{
+        public string 按灯人{get;set;}
+        public int 序号{get;set;}
+        public string 问题描述{get;set;}
+        public DateTime 处理时间{get;set;}
+        public string 处理人{get;set;}
+        public string 关闭人{get;set;}
+        public DateTime 关闭时间{get;set;}
+        public string 工作中心{get;set;}
+        public string 是否停线{get;set;}
+        public bool 临时解决{get;set;}
+        public string 不能解决原因{get;set;}
+        public DateTime 计划完成日期{get;set;}
+    }
+    //按灯数据更新查询
+    public class reNewAdRes{
+        public bool resSign{get;set;}
+        public int zL{get;set;}
+        public int sB{get;set;}
+        public int gY{get;set;}
+        public int wL{get;set;}
+        public int tBD{get;set;}
+    }
+    //其他按灯类型参数
+    public class othAndonPrm{
+        public string workNo{get;set;}
+        public string adType{get;set;}
+        public string adStation{get;set;}
+        public string adStop{get;set;}
+        public string adMan{get;set;}
+        public string adQdesc{get;set;}
+        public string adsbNo{get;set;}
+    }
+    //设备按灯确认查询参数
+    public class sbCfmPrm{
+        public string workNo{get;set;}
+        public string priority{get;set;}
+        public string sbStop{get;set;}
+        public string sbMan{get;set;}
+        public string sbDpt{get;set;}
+        public string sbNo{get;set;}
+        public string sbName{get;set;}
+        public string station{get;set;}
+        public string qPart{get;set;}
+        public string qType{get;set;}
+        public string qDesc{get;set;}
+        public string sbSafe{get;set;}
+    }
     //质量按灯确认查询参数
     public class zlCfmPrm{
         public string workNo{get;set;}
-        public string order{get;set;}
+        public int order{get;set;}
         public string fillMan{get;set;}
         public string dpt{get;set;}
         public string cls{get;set;}
@@ -172,7 +269,6 @@ namespace aspVue7.Controllers
         public string reason{get;set;}
         public string tips{get;set;}
         public string andonMan{get;set;}
-        public string stopSts{get;set;}
 
     }
 
