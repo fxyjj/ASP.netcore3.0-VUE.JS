@@ -169,31 +169,75 @@ namespace aspVue7.Controllers
         }
           //内圈数据更新查询
         [HttpPost("[action]")]
-        public List<reNewAdRes> othAndonCfm([FromBody]  blpOpenPrm prm){
+        public List<reNewAdRes> reNewADLog([FromBody]  blpOpenPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<renewAdRes>($"EXECUTE dbo.QforRenewAndonCount @workNo='{prm.workNo}'").ToList();
+            var testData = model.Database.SqlQuery<reNewAdRes>($"EXECUTE dbo.QforRenewAndonCount @workNo='{prm.workNo}'").ToList();
             return testData;
         }
         //安灯记录打开查询
         [HttpPost("[action]")]
         public List<adLogRes> AdLogOpen([FromBody]  adLogPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<renewAdRes>($"EXECUTE dbo.QforWebAndonLog @workNo='{prm.workNo}'，@qType='{prm.qType}'").ToList();
+            var testData = model.Database.SqlQuery<adLogRes>($"EXECUTE dbo.QforWebAndonLog @workNo='{prm.workNo}',@qType='{prm.qType}'").ToList();
             return testData;
         }
         //安灯记录刷新查询
         [HttpPost("[action]")]
-        public List<adLogTabRes> renewAdtab([FromBody]  adLogPrm prm){
+        public List<adLogTabRes> reNewAdtab([FromBody]  adLogPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<adLogTabRes>($"EXECUTE dbo.QforRenewAndonLog @workNo='{prm.workNo}'，@qType='{prm.qType}'").ToList();
+            var testData = model.Database.SqlQuery<adLogTabRes>($"EXECUTE dbo.QforRenewAndonLog @workNo='{prm.workNo}',@qType='{prm.qType}'").ToList();
+            return testData;
+        }
+        //安灯响应
+        [HttpPost("[action]")]
+        public List<blpStoreRes> adResp([FromBody]  adRespPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforAndonResponse @prcsMan='{prm.respMan}',@workNo='{prm.workNo}',@qType='{prm.qtype}'").ToList();
+            return testData;
+        }
+
+        //安灯解决
+        [HttpPost("[action]")]
+        public List<blpStoreRes> adResolve([FromBody]  adResolvePrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforAndonResolve @solveMan='{prm.solveMan}',@workNo='{prm.workNo}',@qType='{prm.qtype}',@tmpSolve='{prm.tmpSolve}',@fReason='{prm.freason}',@plan='{prm.plan}',@planfnsDate='{prm.planfnsDate}'").ToList();
+            return testData;
+        }
+         //安灯关闭
+        [HttpPost("[action]")]
+        public List<blpStoreRes> adCfm([FromBody]  adCfmPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforAndonComfirm @cfmMan='{prm.cfmMan}',@workNo='{prm.workNo}',@qType='{prm.qtype}'").ToList();
             return testData;
         }
         
     }
+    //按灯确认参数
+    public class adCfmPrm{
+        public string workNo{get;set;}
+        public int qtype{get;set;}
+        public string cfmMan{get;set;}
+    }
+    //按灯解决参数
+    public class adResolvePrm{
+        public string workNo{get;set;}
+        public string solveMan{get;set;}
+        public int tmpSolve{get;set;}
+        public string freason{get;set;}
+        public string plan{get;set;}
+        public DateTime planfnsDate{get;set;}
+        public int qtype{get;set;}
+    }
+    //按灯响应参数
+    public class adRespPrm{
+        public string respMan{get;set;}
+        public string workNo{get;set;}
+        public int qtype{get;set;}
+    }
     //按灯记录打开查询参数
     public class adLogPrm{
         public string workNo{get;set;}
-        public string qType{get;set;}
+        public int qType{get;set;}
     }
     //安灯记录结果
     public class adLogRes{
@@ -202,6 +246,10 @@ namespace aspVue7.Controllers
         public DateTime adTime{get;set;}
         public string adqDesc{get;set;}
         public string adMan{get;set;}
+        public string adNo{get;set;}
+        public string adSolveMan{get;set;}
+        public string adRespMan{get;set;}
+        public string adCfmMan{get;set;}
     }
     //安灯记录表格刷新结果类
     public class adLogTabRes{
@@ -215,6 +263,7 @@ namespace aspVue7.Controllers
         public string 工作中心{get;set;}
         public string 是否停线{get;set;}
         public bool 临时解决{get;set;}
+        public string 行动计划{get;set;}
         public string 不能解决原因{get;set;}
         public DateTime 计划完成日期{get;set;}
     }

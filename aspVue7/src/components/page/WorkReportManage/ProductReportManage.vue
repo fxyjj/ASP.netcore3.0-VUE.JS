@@ -678,7 +678,7 @@
                     <el-input v-model="sbForm.sbQdesc"></el-input>
                 </el-form-item>
                 
-                <el-form-item label="故障描述" prop="sbQdesc">
+                <el-form-item label="安全性" prop="sbQdesc">
                     <el-select v-model="sbForm.sbSafe">
                         <el-option  value="涉及安全">涉及安全</el-option>
                         <el-option  value="不涉及安全">不涉及安全</el-option>
@@ -738,10 +738,15 @@
                 <el-col :span="8"><div class="">问题描述:{{currAdDesc}}</div></el-col>
                 <el-col :span="8"><div class="">按灯人:{{currAdMan}}</div></el-col>
             </el-row>
-            <el-input v-model="AdRespMan" placeholder="响应人"></el-input>
-            <el-button type="primary" @click="AdResp()" :disabled="AdLife=0">响应</el-button>
-            <el-button type="primary" @click="AdResolve()" :disabled="AdLife=1">解决</el-button>
-            <el-button type="primary" @click="AdCfm()" :disabled="AdLife=2">确认</el-button>
+            <el-row>
+                <el-col :span="8"><div class="">响应人:{{currAdRespMan}}</div></el-col>
+                <el-col :span="8"><div class="">关闭人:{{currAdSolveMan}}</div></el-col>
+                <!-- <el-col :span="8"><div class="">确认人:{{currAdCfmMan}}</div></el-col> -->
+            </el-row>
+            
+            <el-button type="primary" @click="respVis=true" :disabled="AdLife!=1">响应</el-button>
+            <el-button type="primary" @click="resolveVis=true" :disabled="AdLife!=2">解决</el-button>
+            <el-button type="primary" @click="cfmVis=true" :disabled="AdLife!=3">确认</el-button>
 
             <el-table :data="Adtab" style="width: 100%">
                 <el-table-column prop="AdMan" label="安灯人" width="180"></el-table-column>
@@ -756,11 +761,38 @@
                 <el-table-column prop="AdStation" label="工作中心" width="180"></el-table-column>
                 <el-table-column prop="AdDuration" label="处理用时" width="180"></el-table-column>
                 <el-table-column prop="AdStop" label="是否停线" width="180"></el-table-column>
-                <el-table-column prop="AdFns" label="是否解决" width="180"></el-table-column>
+                <el-table-column prop="AdFns" label="临时解决" width="180"></el-table-column>
                 <el-table-column prop="AdPlan" label="行动计划" width="180"></el-table-column>
                 <el-table-column prop="AdFreason" label="不能解决原因" width="180"></el-table-column>
                 <el-table-column prop="AdfnsDate" label="计划完成日期" width="180"></el-table-column>
             </el-table> 
+        </el-dialog>
+        <!-- 响应弹窗 -->
+        <el-dialog title="响应" :visible.sync="respVis" :before-close="respClose">
+            <el-input v-model="AdRespMan" placeholder="响应人"></el-input>
+            <el-button type="primary" @click="AdResp()">确认</el-button>
+            <el-button type="primary" @click="AdRespCancel()">取消</el-button>
+        </el-dialog>
+        <!-- 解决弹窗 -->
+        <el-dialog title="解决" :visible.sync="resolveVis" :before-close="resolveClose">
+            <el-input v-model="AdSolveMan" placeholder="解决人"></el-input>
+            <el-select v-model="AdTmpSolve" placeholder="临时解决">
+                <el-option :value="0">已解决</el-option>
+                <el-option :value="1">未解决</el-option>
+            </el-select>
+            <el-input v-model="AdfReason" :disabled="AdTmpSolve==0" placeholder="不能解决原因"></el-input>
+            <el-input v-model="Adplan" :disabled="AdTmpSolve==0" placeholder="行动计划"></el-input>
+            <el-date-picker v-model="AdplanfnsDate" type="date" placeholder="预计完成日期" :disabled="AdTmpSolve==0" style="width:203px"></el-date-picker>
+            
+            <el-button type="primary" @click="AdResolve()">确认</el-button>
+            <el-button type="primary" @click="AdResolveCancel()">取消</el-button>
+        </el-dialog>
+
+        <!-- 关闭按灯弹窗 -->
+        <el-dialog title="关闭" :visible.sync="cfmVis" :before-close="cfmClose">
+            <el-input v-model="AdcfmMan" placeholder="关闭人"></el-input>
+            <el-button type="primary" @click="AdCfm()">确认</el-button>
+            <el-button type="primary" @click="AdCfmCancel()">取消</el-button>
         </el-dialog>
 
     </div>
@@ -790,7 +822,7 @@ export default {
                         },
                         data: [
                             {mark:'inner',value: 1, name: '0',colorB:'#b61414',colorT:'#000',tip:1},
-                            {mark:'inner',value: 1, name: '1',colorB:'#0ba0ea',colorT:'#000',tip:2},
+                            {mark:'inner',value: 1, name: '0',colorB:'#0ba0ea',colorT:'#000',tip:2},
                             {mark:'inner',value: 1, name: '0',colorB:'#9914e6',colorT:'#000',tip:3},
                             {mark:'inner',value: 1, name: '0',colorB:'#1aee48',colorT:'#000',tip:4},
                             {mark:'inner',value: 1, name: '0',colorB:'#fbff23',colorT:'#000',tip:5}
@@ -1155,6 +1187,7 @@ export default {
                 sbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
                 sbQpart:[{required:true,message:'哪里坏了？',trigger:'blur'}],
                 sbQtype:[{required:true,message:'报修类型是？',trigger:'blur'}],
+                sbStop:[{required:true,message:'停机状态？',trigger:'blur'}],
             },
             sbInputVis:false,//如果在停机状态按灯，这停机状态不可更改
             //除质量和设备以外的其他按灯记录表
@@ -1179,15 +1212,33 @@ export default {
             wtherAD:false,
             //按灯记录参数
             currAdT:'',
+            currAdTmk:0,
             currAdSts:'',
             currAdNo:'',
             currAdtime:'',
             currAdDesc:'',
             currAdMan:'',
+            currAdRespMan:'',
+            currAdSolveMan:'',
+            currAdCfmMan:'',
             //按灯记录表格
             Adtab:[],
             //安灯状态指示
-            AdLife:3,
+            AdLife:4,
+            //按灯响应弹窗参数
+            respVis:false,
+            AdRespMan:'',
+            //按灯解决参数
+            resolveVis:false,
+            AdSolveMan:'',
+            AdTmpSolve:0,
+            AdfReason:'',
+            Adplan:'',
+            AdplanfnsDate:null,
+            //按灯关闭弹窗参数
+            cfmVis:false,
+            AdcfmMan:'',
+            //内圈数据总数
 
 
         }
@@ -1306,6 +1357,7 @@ export default {
         },
         //初始页面加载报工单信息，如无信息，则可以创建报工单
         getBGD(){
+            
             fetch('api/WorkReport/BGDstart',{
                 method:'POST',
                 headers:{
@@ -1322,14 +1374,18 @@ export default {
                 console.log(this.creatable)
                 console.log(data)
                 if(data.length != 0){
+                   
                     if(data[0].sMan != null){
                         this.wtherStop = true;
                         this.pauseType = data[0].sType;
                         this.pauseDesc = data[0].sDesc;
                         this.pauseMan = data[0].sMan;
-                        if(this.pauseType!="计划停机" || this.pauseType=="非计划停机"){
-                            this.wtherZLP = true
-                        }
+                        //质量安灯结束后如果为手动开机而退出了网页，此时再进如网站时检测不为安灯状态但是处理质量停机，则可以手动开启
+                        // console.log(this.wtherAD)
+                        // console.log(this.pauseType)
+                        // if(this.pauseType!="计划停机" && this.pauseType!="非计划停机" && this.wtherAD){
+                        //     this.wtherZLP = true
+                        // }
                     }
                     this.creatable = true;
                     this.bgNo = data[0].bgNo
@@ -1422,6 +1478,7 @@ export default {
                     this.currBGD = data[1].报工编号
                     this.pct = (data[1].合格数量/data[1].订单数量)*100
                     // this.getBGDtest();
+                    this.reNewADLog();
                 }else{
                     this.ordNo = ''
                     this.ordNum = 0
@@ -2202,7 +2259,7 @@ export default {
                                 body:JSON.stringify({
                                     workNo:this.sbForm.sbworkNo,
                                     priority:this.sbForm.sbYxj,
-                                    sbStop:this.sbForm.sbStation,
+                                    sbStop:this.sbForm.sbStop,
                                     sbMan:this.sbForm.sbMan,
                                     sbDpt:this.sbForm.sbDpt,
                                     sbNo:this.sbForm.sbNo,
@@ -2216,7 +2273,7 @@ export default {
                             }).then(response=>response.json())
                             .then(data=>{
                                 if(data[0].resSign){
-                                    if(this.wtherStop && this.sbForm.sbStop=="已停线"){
+                                    if(!this.wtherStop && this.sbForm.sbStop=="已停线"){
                                         //停机状态打开
                                         this.wtherStop = true;
                                         this.pauseType = "设备停机"
@@ -2268,7 +2325,7 @@ export default {
                             }).then(response=>response.json())
                             .then(data=>{
                                 if(data[0].resSign){
-                                    if(this.wtherStop && this.otherForm.othStop=="已停线"){
+                                    if(!this.wtherStop && this.otherForm.othStop=="已停线"){
                                         //停机状态打开
                                         this.wtherStop = true;
                                         this.pauseType = this.otherForm.othAndonT+"停机"
@@ -2347,11 +2404,18 @@ export default {
                     this.pieOpt.series[0].data[4].name = data[0].tBD.toString()
                     this.piebtn.setOption(this.pieOpt);
                     var sm = data[0].zL+data[0].sB+data[0].gY+data[0].wL+data[0].tBD;
+                    // console.log("count: "+sm);
+                    // console.log("pre是否按灯: "+this.wtherAD)
                     if(sm!=0){
                         this.wtherAD = true;
+                        if(this.wtherStop){
+                            this.wtherZLP = true;
+                        }
                     }else{
                         this.wtherAD = false;
                     }
+                    //  console.log("off是否按灯: "+this.wtherAD)
+                    
                 }
             }).catch(data=>{
                 alert(data)
@@ -2359,14 +2423,150 @@ export default {
         },
         //按灯响应
         AdResp(){
-            this.AdLife = 1;
+            fetch('api/WorkReport/adResp',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                    qtype:this.currAdTmk,
+                    respMan:this.AdRespMan,
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.AdLife = 2;
+                    this.AdRespMan = '';
+                    this.respVis = false;
+                    this.AdLogOpen(this.currAdTmk);//刷新数据
+
+                }else{
+                    this.$message.error("安灯响应出错了！")
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+            
+        },
+        AdRespCancel(){
+            this.AdRespMan = '';
+            this.respVis = false;
+        },
+        respClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                this.AdRespMan = '';
+                done();
+            })
+            .catch(_ => {});
         },
         //按灯解决
         AdResolve(){
-            this.AdLife = 2;
+            var bd = {};
+            if(this.AdTmpSolve==0){
+                bd = {
+                    workNo:this.ordNo,
+                    qtype:this.currAdTmk,
+                    solveMan:this.AdSolveMan,
+                    tmpSolve:this.AdTmpSolve,
+                }
+            }else{
+                    bd = {
+                        workNo:this.ordNo,
+                        qtype:this.currAdTmk,
+                        solveMan:this.AdSolveMan,
+                        tmpSolve:this.AdTmpSolve,
+                        freason:this.AdfReason,
+                        plan:this.Adplan,
+                        planfnsDate:this.AdplanfnsDate
+                    }
+            }
+            fetch('api/WorkReport/adResolve',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(bd)
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.AdLife = 3;
+                    this.AdSolveMan = '';
+                    this.AdTmpSolve = 0;
+                    this.AdfReason = '';
+                    this.Adplan='';
+                    this.AdplanfnsDate=null;
+                    this.resolveVis = false;
+                    this.AdLogOpen(this.currAdTmk);//刷新数据
+
+                }else{
+                    this.$message.error("安灯解决出错了！")
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+            
+        },
+        AdResolveCancel(){
+            this.AdSolveMan = '';
+            this.AdTmpSolve = 0;
+            this.AdfReason = '';
+            this.Adplan='';
+            this.AdplanfnsDate='';
+            this.resolveVis = false;
+        },
+        resolveClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                this.AdSolveMan = '';
+                this.AdTmpSolve = 0;
+                this.AdfReason = '';
+                this.Adplan='';
+                this.AdplanfnsDate='';
+                done();
+            })
+            .catch(_ => {});
         },
         AdCfm(){
-            this.AdLife = 3
+            fetch('api/WorkReport/adCfm',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                    qtype:this.currAdTmk,
+                    cfmMan:this.AdcfmMan,
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.AdLife = 4;
+                    this.AdcfmMan='';
+                    this.cfmVis=false;
+                    this.reNewADLog();//刷新内圈数据
+                    this.AdLogOpen(this.currAdTmk);//刷新表格数据
+                    this.wtherZLP = false;
+
+                }else{
+                    this.$message.error("安灯关闭出错了！")
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        AdCfmCancel(){
+            this.AdcfmMan='';
+            this.cfmVis=false;
+        },
+        cfmClose(done){
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                this.AdcfmMan='';
+                done();
+            })
+            .catch(_ => {});
         },
         //安灯记录打开时触发函数
         AdLogOpen(tip){
@@ -2382,6 +2582,7 @@ export default {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.length !=0){
+                    this.currAdTmk = data[0].adType;
                     switch (data[0].adType){
                         case 1:
                             this.currAdT = "质量按灯";
@@ -2404,10 +2605,22 @@ export default {
                     this.currAdtime = data[0].adTime;
                     this.currAdMan = data[0].adMan;
                     this.currAdDesc = data[0].adqDesc;
-                    this.renewAdtab()
+                    this.currAdRespMan = data[0].adRespMan;
+                    this.currAdSolveMan = data[0].adSolveMan;
+                    this.currAdCfmMan = data[0].adCfmMan;
+                    // this.renewAdtab()
+                    this.AdLife = data[0].adSts;
 
                 }else{
-                    this.AdLife = 3
+                     this.currAdSts = null
+                    this.currAdNo = ''
+                    this.currAdtime = ''
+                    this.currAdMan = ''
+                    this.currAdDesc =''
+                    this.currAdRespMan = ''
+                    this.currAdSolveMan =''
+                    this.currAdCfmMan = ''
+                    this.AdLife = 4
                 }
                 this.renewAdtab(tip)
             }).catch(data=>{
@@ -2429,24 +2642,27 @@ export default {
             .then(data=>{
                 if(data.length !=0){
                     this.Adtab = []
-                    var tmp = {
-                        AdMan:data[0].按灯人,
-                        AdNo:data[0].序号,
-                        AdsbNo:data[0].设备编号,
-                        AdqDesc:data[0].问题描述,
-                        AdTime:data[0].按灯时间,
-                        AdprcsTime:data[0].处理时间,
-                        AdprcsMan:data[0].处理人,
-                        AdshutMan:data[0].关闭人,
-                        AdshutTime:data[0].关闭时间,
-                        AdStation:data[0].工作中心,
-                        AdStop:data[0].是否停线,
-                        AdFns:data[0].临时解决,
-                        AdPlan:data[0].行动计划,
-                        AdFreasom:data[0].不能解决原因,
-                        AdfnsDate:data[0].计划完成日期
+                    for(var item of data){
+                        var tmp = {
+                            AdMan:item.按灯人,
+                            AdNo:item.序号,
+                            AdsbNo:item.设备编号,
+                            AdqDesc:item.问题描述,
+                            AdTime:item.按灯时间,
+                            AdprcsTime:item.处理时间,
+                            AdprcsMan:item.处理人,
+                            AdshutMan:item.关闭人,
+                            AdshutTime:item.关闭时间,
+                            AdStation:item.工作中心,
+                            AdStop:item.是否停线,
+                            AdFns:item.临时解决,
+                            AdPlan:item.行动计划,
+                            AdFreasom:item.不能解决原因,
+                            AdfnsDate:item.计划完成日期
+                        }
+                        this.Adtab.push(tmp)
                     }
-                    this.Adtab.push(tmp)
+                   
                 }
             }).catch(data=>{
                 alert(data)
@@ -2455,6 +2671,7 @@ export default {
     },
     mounted(){
         // this.bgStage = 3;
+        
         this.getOrder();
         this.getBGD();
         
@@ -2466,7 +2683,7 @@ export default {
         this.piebtn.on('click',function(params){
            bus.$emit('area',{mk:params.data.mark,name:params.data.name,tip:params.data.tip});
         });
-        bus.$on('area',msg=>{
+        bus.$on('area',(msg)=>{
             // console.log(msg)
             if(this.bgStage == 0){
                 return;
@@ -2486,18 +2703,22 @@ export default {
                 }
                 if(this.wtherAD){
                     this.$message.error("正在进行按灯，不能再新建按灯了")
+                    return;
+                }
+                if(this.pauseType=="质量停机" || this.pauseType=="设备停机"){
+                    this.$message.warning("这条信息提示您，现在是质量或者设备按灯结束状态，你需要先结束停机，再进行新的按灯任务！");
+                    return;
+                }
+                if(msg.name=="质量" && this.wtherStop){
+                    this.$message.error("现在是停机状态，质量安灯需要在生产过程中进行，安灯完毕后会自动停机！")
+                    return;
                 }
                  
                 if(msg.name=="质量"){
-                    if(this.wtherStop){
-                        this.$message.error("现在是停机状态，质量安灯需要在生产过程中进行，安灯完毕后会自动停机！")
-                    }else{
-                        this.newAndonVis = true;
-                        this.zlVis = 0;
-                        this.zlForm.zlworkNo = this.ordNo
-                        
-                        this.zlOpen();
-                    }
+                    this.newAndonVis = true;
+                    this.zlVis = 0;
+                    this.zlForm.zlworkNo = this.ordNo
+                    this.zlOpen();
                 }else if(msg.name=="设备"){
                     this.newAndonVis = true;
                     this.zlVis = 1;
