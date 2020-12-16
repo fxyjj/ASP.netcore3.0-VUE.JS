@@ -16,6 +16,12 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<orderRes>($"EXECUTE dbo.QforWebOrderRelease @prodLine='{prm.pline}',@srh='{prm.srhCont}' ").ToList();
             return testData;
         }
+         [HttpPost("[action]")]
+        public List<srhCls> getsrhItem([FromBody] srhPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<srhCls>($"EXECUTE dbo.QforSrhItem @prodLine='{prm.pline}',@srh='{prm.srhCont}' ").ToList();
+            return testData;
+        }
 
         [HttpPost("[action]")]
         public List<newRes> newOrder([FromBody] newPrm prm){
@@ -78,6 +84,14 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<newRes>($"EXECUTE dbo.QforOrderDateModify @workNo='{prm.workNo}',@start='{prm.sDate}',@end='{prm.eDate}'").ToList();
             return testData;
         }
+    }
+
+    //表头搜寻条件总类
+    public class srhCls{
+        public wlCls wl{get;set;}
+    }
+    public class wlCls{
+        public string wlNo{get;set;}
     }
 
     public class srhPrm{

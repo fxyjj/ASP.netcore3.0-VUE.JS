@@ -213,6 +213,13 @@ namespace aspVue7.Controllers
         public double 设备开动率{get;set;}
         public double 员工效率{get;set;}
         public double 合格率{get;set;}
+        public DateTime 作业完工时间{get;set;}
+        public DateTime 作业开始时间{get;set;}
+        public double 计划停机时间{get;set;}
+        public double 非计划停机时间{get;set;}
+        public int 定额件数{get;set;}
+        public int 定额人数{get;set;}
+        public int 生产人数{get;set;}
     }
     //不合格记录参数
     public class tabParam{

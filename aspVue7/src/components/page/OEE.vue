@@ -160,6 +160,7 @@
                             </el-col>
                             <el-col :span="6">
                                 <div id="pieChart" :style='{width:"100%",height:"150px"}'></div>
+                                <i class="el-icon-info" style="-user-selection:none;cursor:pointer;"  ></i><!--@click="oeeFcn()"-->
                             </el-col>
                         </el-row>
                     </div>
@@ -217,6 +218,81 @@
                 </div>
             </el-dialog>
         </div>
+        <el-dialog title="OEE公式" :visible.sync="oeeFcnVis" >
+            <div class="fcnRow">
+                <div class="subtitle">操作时间</div>
+                <div class="fcnPrm">
+                    <p>作业完工时间</p>
+                    <p>{{menus[disNo].workDtime}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>作业开始时间</p>
+                    <p>{{menus[disNo].workStime}}</p>
+                </div>
+                <div class="fcnPrm">结果1</div>
+                <div class="fcnPrm">
+                    <p>计划停机时间</p>
+                    <p>{{menus[disNo].planStime}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>非计划停机时间</p>
+                    <p>{{menus[disNo].unplanStime}}</p>
+                </div>
+                <div class="fcnPrm">结果2</div>
+            </div>
+            <div class="fcnRow">
+                <div class="subtitle">计划工作时间</div>
+                <div class="fcnPrm">
+                    <p>作业完工时间</p>
+                    <p>{{menus[disNo].workDtime}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>调试开始时间</p>
+                    <p>{{menus[disNo].testStime}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>计划停机时间</p>
+                    <p>{{menus[disNo].planStime}}</p>
+                </div>
+                <div class="fcnPrm">结果1</div>
+                <div class="fcnPrm">结果2</div>
+            </div>
+            <div class="fcnRow">
+                <div class="subtitle"> 设备开动率(A)</div>
+                <div class="fcnPrm">
+                    <p>操作时间</p>
+                    <p>操作时间</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>计划工作时间</p>
+                    <p>计划工作时间</p>
+                </div>
+                <div class="fcnPrm">结果</div>
+            </div>
+            <div class="fcnRow">
+                <div class="subtitle">员工效率(P)</div>
+                <div class="fcnPrm">{{menus[disNo].doneNo}}</div>
+                <div class="fcnPrm">操作时间</div>
+                <div class="fcnPrm">{{menus[disNo].fixNum}}</div>
+                <div class="fcnPrm">{{menus[disNo].fixMan}}</div>
+                <div class="fcnPrm">{{menus[disNo].prodMan}}</div>
+                <div class="fcnPrm">备注</div>
+                <div class="fcnPrm">结果</div>
+            </div>
+             <div class="fcnRow">
+                <div class="subtitle">合格率(Q)</div>
+                <div class="fcnPrm">{{menus[disNo].doneNo}}</div>
+                <div class="fcnPrm">{{menus[disNo].failNo}}</div>
+                <div class="fcnPrm">结果</div>
+            </div>
+            <div class="fcnRow">
+                <div class="subtitle">OEE(A*P*Q)</div>
+                <div class="fcnPrm">A:</div>
+                <div class="fcnPrm">P:</div>
+                <div class="fcnPrm">Q:</div>
+                <div class="fcnPrm">结果</div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -263,7 +339,16 @@ export default {
                     a:null,
                     p:null,
                     q:null,
-                    apq:0
+                    apq:0,
+                    //公式数据
+                    workDtime:'',
+                    workStime:'',
+                    planStime:'',
+                    unplanStime:'',
+                    testStime:'',
+                    fixNum:0,
+                    fixMan:0,
+                    prodMan:0
                     }],
             failedRec: [],
             stopRec: [],
@@ -391,10 +476,15 @@ export default {
                         bleedMargin:5
                     }
 				}]
-            }
-        };
+            },
+            oeeFcnVis:false,
+        }
     },
     methods: {
+        oeeFcn(){
+            this.oeeFcnVis = true;
+            console.log("这里是公式");
+        },
         //工具方程，日期转字符串
         dateToString(date){  
             var  year = date.getFullYear();  
@@ -697,7 +787,7 @@ export default {
         bus.$emit("Query",{dateunit:"日",prodline:"GEN_III_A+M",starttime:oldtime,endtime:newtime});
        
         bus.$on("pillInfo",msg=>{
-            if(this.status){
+            if(this.status && this.pauseS){
                 return;
             }
             this.wIcon = true;
@@ -775,7 +865,16 @@ export default {
                         a:(item.设备开动率*100).toFixed(2),
                         p:(item.员工效率*100).toFixed(2),
                         q:(item.合格率*100).toFixed(2),
-                        apq:(item.设备开动率*item.员工效率*item.合格率*100).toFixed(2)
+                        apq:(item.设备开动率*item.员工效率*item.合格率*100).toFixed(2),
+                        //公式数据
+                        workDtime:item.作业完工时间,
+                        workStime:item.作业开始时间,
+                        planStime:item.计划停机时间,
+                        unplanStime:item.非计划停机时间,
+                        testStime:item.调试开始时间,
+                        fixNum:item.定额件数,
+                        fixMan:item.定额人数,
+                        prodMan:item.生产人数
                     };
                     this.menus.push(stc);
                     c+=1;
@@ -884,4 +983,19 @@ export default {
   background-color:#000 !important;
   color: #000;
 }
+.subtitle{
+    display:inline-block;
+    font-size:40px;
+    margin:25px 5px;
+}
+.fcnPrm{
+    display:inline-block;
+    font-size:15px;
+    margin:2px 5px;
+}
+.fcnRow{
+    height:100px;
+    border-bottom: 2px solid rgba(0,0,0,0.4);
+}
+
 </style>

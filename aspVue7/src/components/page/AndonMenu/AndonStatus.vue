@@ -671,7 +671,12 @@ export default {
                 }
                 for(var item of this.lightBuffer){
                     if(item.status==4){
-                        var light = document.getElementById(l.line);
+                        var light = null
+                        if(l.line=="测试台1"||l.line=="测试台2"||l.line=="测试台3"||l.line=="测试台4"){
+                            light = document.getElementById("测试台");
+                        }else{
+                            light = document.getElementById(l.line);
+                        }
                         light.className="light";
                         light.style.background="";
 

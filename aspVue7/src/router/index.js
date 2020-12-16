@@ -21,6 +21,8 @@ export default new Router({
                         return '/OrderMaking'
                     case "workRep":
                         return '/WorkReport'
+                    case "gyMaint":
+                        return '/GYMaintance'
                     default:
                         return '/404'
                 }
@@ -117,6 +119,12 @@ export default new Router({
                     path: '/WorkReport',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/WorkReportManage/ProductReportManage.vue'),
                     meta: { title: '工单管理' }
+                },
+                {
+                    // vue-schart组件
+                    path: '/GYMaintance',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/GYMaintance.vue'),
+                    meta: { title: '工艺维护' }
                 },
                 // {
                 //     // 拖拽列表组件

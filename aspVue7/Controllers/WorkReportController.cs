@@ -31,6 +31,13 @@ namespace aspVue7.Controllers
         }
 
         [HttpPost("[action]")]
+        public List<blpStoreRes> closeOrd([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforCloseOrder @workNo='{prm.workNo}'").ToList();
+            return testData;
+        }
+
+        [HttpPost("[action]")]
         public List<crtRes> crtBGD([FromBody] crtPrm prm){
             var model = new BorgWarnerMisSQLContext();
             var testData = model.Database.SqlQuery<crtRes>($"EXECUTE dbo.QforCreateBGD @workNo='{prm.workNo}',@crtMan='{prm.crtMan}',@crtDate='{prm.crtDate}'").ToList();
@@ -92,7 +99,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<logRes> stopLog([FromBody] stopPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<logRes>($"select * from qforStopLog where 作业单号='{prm.workNo}'").ToList();
+            var testData = model.Database.SqlQuery<logRes>($"select * from qforStopLog where 报工编号='{prm.workNo}'").ToList();
             return testData;
         }
         //停机继续
@@ -104,9 +111,9 @@ namespace aspVue7.Controllers
         }
          //报工结束
         [HttpPost("[action]")]
-        public List<stopRes> BGClose([FromBody] stopPrm prm){
+        public List<stopRes> BGClose([FromBody] bgClosePrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforBGDClose @bgNo='{prm.workNo}'").ToList();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforBGDClose @bgNo='{prm.workNo}',@testT='{prm.testT}',@startT='{prm.startT}'").ToList();
             return testData;
         }
 
@@ -210,7 +217,102 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<blpStoreRes>($"EXECUTE dbo.QforAndonComfirm @cfmMan='{prm.cfmMan}',@workNo='{prm.workNo}',@qType='{prm.qtype}'").ToList();
             return testData;
         }
+        //员工信息
+         [HttpPost("[action]")]
+        public List<empInfoRes> empInfo([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<empInfoRes>($"execute dbo.QforEmployeeSrh @line='{prm.workNo}'").ToList();
+            return testData;
+        }
+
+         //设备编号信息
+         [HttpPost("[action]")]
+        public List<sbInfoRes> sbInfo([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<sbInfoRes>($"select 设备编号, 设备名称 from tblEquipmentInformation where 使用区域='{prm.workNo}' ORDER BY 设备编号").ToList();
+            return testData;
+        }
+        //部门信息
+        [HttpGet("[action]")]
+        public List<dptInfoRes> dptInfo(){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<dptInfoRes>("select 部门代码, 部门名称 from tblDept").ToList();
+            return testData;
+        }
+        //班组信息
+        [HttpPost("[action]")]
+        public List<clsInfoRes> clsInfo([FromBody] blpOpenPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<clsInfoRes>($"select 班组名称 from tblShift where 所属车间='{prm.workNo}'").ToList();
+            return testData;
+        }
+
+        //故障类型
+        [HttpGet("[action]")]
+        public List<gzTInfoRes> gzTInfo(){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<gzTInfoRes>("select 故障类型 from tblMalfunctionType").ToList();
+            return testData;
+        }
+        //故障部位
+        [HttpGet("[action]")]
+        public List<gzPInfoRes> gzPInfo(){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<gzPInfoRes>("select 故障部位 from tblMalfunctionPosition").ToList();
+            return testData;
+        }
+        //子物料信息
+        // [HttpGet("[action]")]
+        // public List<zwlInfoRes> zwlInfo(){
+        //     var model = new BorgWarnerMisSQLContext();
+        //     var testData = model.Database.SqlQuery<zwlInfoRes>("select top(20) Material as wlNo,[Material Description] as wlDesc from tblSAPMaterial").ToList();
+        //     return testData;
+        // }
+        //工位信息
+        // [HttpGet("[action]")]
+        // public List<gwInfoRes> gwInfo(){
+        //     var model = new BorgWarnerMisSQLContext();
+        //     var testData = model.Database.SqlQuery<gwInfoRes>("select 工位,工位描述 from tblPDStation").ToList();
+        //     return testData;
+        // }
         
+    }
+    //故障类型
+    public class gzTInfoRes{
+        public string 故障类型{get;set;}
+    }
+    //故障部位
+    public class gzPInfoRes{
+        public string 故障部位{get;set;}
+    }
+    //工位信息
+    public class gwInfoRes{
+        public string 工位{get;set;}
+        public string 工位描述{get;set;}
+    }
+    //子物料
+    public class zwlInfoRes{
+        public string wlNo{get;set;}
+        public string wlDesc{get;set;}
+    }
+    //班组信息
+    public class clsInfoRes{
+        public string 班组名称{get;set;}
+    }
+    //部门信息
+    public class dptInfoRes{
+        public string 部门代码{get;set;}
+        public string 部门名称{get;set;}
+    }
+    //设备编号信息
+    public class sbInfoRes{
+        public string 设备编号{get;set;}
+        public string 设备名称{get;set;}
+    }
+    //员工信息
+    public class empInfoRes{
+        public string name{get;set;}
+        public string pwd{get;set;}
     }
     //按灯确认参数
     public class adCfmPrm{
@@ -253,7 +355,9 @@ namespace aspVue7.Controllers
     }
     //安灯记录表格刷新结果类
     public class adLogTabRes{
+        public DateTime 按灯时间{get;set;}
         public string 按灯人{get;set;}
+        public string 设备编号{get;set;}
         public int 序号{get;set;}
         public string 问题描述{get;set;}
         public DateTime 处理时间{get;set;}
@@ -538,6 +642,13 @@ namespace aspVue7.Controllers
         public string sType{get;set;}
         public string sDesc{get;set;}
         public string sMan{get;set;}
+    }
+
+    //关闭工单参数
+    public class bgClosePrm{
+        public string workNo{get;set;}
+        public DateTime testT{get;set;}
+        public DateTime startT{get;set;}
     }
 
     //非/计划停机&记录 参数

@@ -4,28 +4,35 @@
             <el-col :span="4">
                 <el-card style="height:398px;margin-right:8px">
                     <div class="title" style="font-size:18px;"> 产线名：{{pLine}} </div>
+                    <el-select v-model="grp" @change="lsel($event)" class="selpt" size="medium">
+                        <el-option v-for="item in Grps" :key="item" :value="item">{{item}}</el-option>
+                    </el-select>
+                    <el-select v-model="pLine" class="selpt" size="medium">
+                        <el-option v-for="item in lines" :key="item" :value="item">{{item}}</el-option>
+                    </el-select>
+                    <el-button type="primary" @click="gotoProd()" style="width:98%;margin:2%;background:rgba(198,224,180,0.8);color:rgba(0,0,0,0.8);font-size:15px;">确定</el-button><!--class="selpt"-->
                     <div>
-                        <el-button class="Btns" @click="blpClick()" type="primary">不良品记录</el-button>
-                        <!-- <el-button class="Btns">异常报检</el-button> -->
-                        <!-- <el-button class="Btns">生产记录</el-button> -->
-                        <el-button class="Btns" @click="planS()" :disabled="wtherStop" type="primary">计划停机</el-button>
-                        <el-button class="Btns" @click="unplanS()" :disabled="wtherStop" type="primary">异常停机</el-button>
-                        <el-button class="Btns" @click="stopLog()" type="primary">停机信息</el-button>
-                        <el-button class="Btns">打印标签</el-button>
+                        <el-button class="Btns" @click="blpClick()" >不良品记录</el-button>
+                        <el-button class="Btns" @click="planS()" :disabled="wtherStop" >计划停机</el-button>
+                        <el-button class="Btns" @click="unplanS()" :disabled="wtherStop" >异常停机</el-button>
+                        <el-button class="Btns" @click="stopLog()" >停机信息</el-button>
+                        <el-button class="Btns" disabled>打印标签</el-button>
                     </div>
                 </el-card>
             </el-col>
             <el-col :span="20">
                 <el-card>
                     <el-steps :active="bgStage-1" style="margin:0px 50px">
-                        <el-step title="初始报工单" icon="el-icon-edit"></el-step>
-                        <el-step title="产品调试" icon="el-icon-upload"></el-step>
-                        <el-step title="开始生产" icon="el-icon-picture"></el-step>
-                        <el-step title="生产报工" icon="el-icon-picture"></el-step>
-                        <el-step title="报工完毕" icon="el-icon-picture"></el-step>
+                        <el-step title="初始报工单" icon="el-icon-s-order"></el-step>
+                        <el-step title="产品调试" icon="el-icon-s-operation"></el-step>
+                        <el-step title="开始生产" icon="el-icon-s-marketing"></el-step>
+                        <el-step title="生产报工" icon="el-icon-edit-outline"></el-step>
+                        <el-step title="报工完毕" icon="el-icon-switch-button"></el-step>
                     </el-steps>
                 </el-card>
-                <el-card v-if="bgStage==0" style="height:290px;margin:8px 0px"> 当前还没有报工单，您可以创建新的报工单！</el-card>
+                <el-card v-if="bgStage==0" style="height:290px;margin:8px 0px"> 
+                    <div style="text-align:center;font-size:30px;margin-top:100px">当前还没有报工单，您可以创建新的报工单！</div>
+                </el-card>
                 
                 <el-card v-else-if="!wtherStop" style="height:290px;margin:8px 0px">
                     <el-row>
@@ -41,7 +48,6 @@
                                     <div class="bgd">定额件数:{{bgfixNum}}</div>
                                     <div class="bgd">定额人数:{{bgfixMan}}</div>
                                     <div class="bgd">加工单元:{{bgWunit}}</div>
-                                    
                                 </div>
                             </el-card>
                         </el-col>
@@ -58,12 +64,16 @@
                                 <div class="bgd">调试时间:{{duration}}</div>
                             </el-card>
                             <el-card v-else-if="bgStage==2" style="height:250px" shadow="hover">
-                                <el-input v-model="testMan" placeholder="调试员"></el-input>
-                                <el-input v-model="Cgroup" placeholder="班组"></el-input>
-                                <el-date-picker v-model="testStart" type="datetime" placeholder="选择开始时间" style="width:203px"></el-date-picker>
+                                <el-select v-model="testMan" placeholder="调试员" @change="optrchge($event)" >
+                                    <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+                                </el-select>
+                                <el-select v-model="Cgroup" placeholder="班组" style="margin-top:5%">
+                                    <el-option v-for="item in clsName" :key="item.name" :value="item.name.substr(0,1)">{{item.name}}</el-option>
+                                </el-select>
+                                <el-date-picker v-model="testStart" type="datetime" placeholder="选择开始时间" style="margin:5% 0%;width:96%" ></el-date-picker>
                                 <el-row>
                                     <el-col :span="18">
-                                        <div class="clock" >{{Hr}}:{{Min}}:{{Sec}}</div>
+                                        <div class="clock"><strong style="font-size:28px"><div v-if="Hr.toString().length==1" style="display:inline-block">0</div>{{Hr}}:<div v-if="Min.toString().length==1" style="display:inline-block">0</div>{{Min}}:<div v-if="Sec.toString().length==1" style="display:inline-block">0</div>{{Sec}}</strong></div>
                                     </el-col>
                                     <el-col :span="6">
                                         <div class="clockCtrl" @click="tBegin">
@@ -85,11 +95,15 @@
                             <div v-if="bgStage==3">
                                     <div v-if="prodVis" class="fcnBtn" @click="Sc()">开始生产</div>
                                     <el-card v-else style="height:250px" shadow="hover" >
-                                        <el-input v-model="workMan" placeholder="加工人员"></el-input>
-                                        <el-input v-model="prodCgp" placeholder="所属班组"></el-input>
-                                        <el-date-picker v-model="prodStime" type="date" placeholder="生产日期" style="width:203px"></el-date-picker>
-                                        <el-date-picker v-model="workStime" type="datetime" placeholder="作业开始时间" style="width:203px"></el-date-picker>
-                                        <el-button type="primary" @click="prodComfirm()">确认</el-button>
+                                        <el-select v-model="workMan" placeholder="加工人员" @change="optrchge($event)">
+                                            <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+                                        </el-select>
+                                        <el-select v-model="prodCgp" placeholder="所属班组" style="margin:10px 0px">
+                                            <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                                        </el-select>
+                                        <el-date-picker v-model="prodStime" type="date" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
+                                        <el-date-picker v-model="workStime" type="datetime" placeholder="作业开始时间" style="width:96%"></el-date-picker>
+                                        <el-button type="primary" @click="prodComfirm()" style="width:100%;margin:10px 0px">确认</el-button>
                                     </el-card>
                             </div>
                             <el-card v-else-if="bgStage>=4" style="height:250px" shadow="hover" >
@@ -105,7 +119,7 @@
                         <el-col :span="4">
                             <div v-if="bgStage==4">
                                 <div class="fcnBtn" @click="Bg()">开始报工</div>
-                                <el-dialog title="报工记录" :visible.sync="BgVis" :before-close="BgClose">
+                                <el-dialog title="报工记录" :visible.sync="BgVis" :before-close="BgClose" width="450px">
                                     <el-form ref="BgForm" :rules="BgRule" :model="BgForm" label-width="120px">
                                          <el-form-item label="作业单号" prop="BgworkNo">
                                             <el-input  v-model="BgForm.BgworkNo" disabled></el-input>
@@ -114,7 +128,7 @@
                                             <el-input  v-model="BgForm.BgproceNo" disabled></el-input>
                                         </el-form-item>
                                         <el-form-item label="报工日期" prop="BgTime">
-                                            <el-date-picker v-model="BgForm.BgTime" type="date" style="width:203px"></el-date-picker>
+                                            <el-date-picker v-model="BgForm.BgTime" type="datetime" style="width:100%"></el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="生产人数" prop="BgprodNum">
                                             <el-input  v-model.number="BgForm.BgprodNum" ></el-input>
@@ -125,10 +139,7 @@
                                         <el-form-item  label="返工合格数量" prop="BgRepassNum">
                                             <el-input v-model.number="BgForm.BgRepassNum"></el-input>
                                         </el-form-item>
-                                        <!-- <el-form-item label="不良数量" prop="BgFlawNum">
-                                            <el-input v-model.number="BgForm.BgFlawNum"></el-input>
-                                        </el-form-item> -->
-                                            <el-form-item label="料废" prop="BgLf">
+                                        <el-form-item label="料废" prop="BgLf">
                                             <el-input v-model.number="BgForm.BgLf" ></el-input>
                                         </el-form-item>
                                         <el-form-item label="机废" prop="BgJf">
@@ -147,11 +158,10 @@
                                             <el-input v-model.number="BgForm.BgFailNum"></el-input>
                                         </el-form-item>
                                     </el-form>
-                                    <el-button type="primary" @click="BgComfirm('BgForm')">确认</el-button>
-                                    <el-button type="primary" @click="BgCancel()">取消</el-button>
+                                    <el-button type="primary" @click="BgComfirm('BgForm')" style="width:40%;margin:0px 5% 0px">确认</el-button>
+                                    <el-button type="primary" @click="BgCancel()" style="width:40%;margin:0px 5% 0px">取消</el-button>
                                 </el-dialog>   
                             </div>
-                            
                             <el-card v-else-if="bgStage>=5" style="height:250px" shadow="hover">
                                 <div class="bgd">完工时间:{{pBgdownTime}}</div>
                                 <div class="bgd">合格数量:{{pBgpassNum}}</div>
@@ -166,18 +176,16 @@
                         </el-col>
                         <el-col :span="1"><el-divider direction="vertical" style="height:250px;margin:0% 50%"></el-divider></el-col>
                         <el-col :span="4">
-                            <el-card v-if="bgStage>=5" style="height:250px" shadow="hover">
-                               <div class="fcnBtn" @click="BgComplete()">关闭报工单</div>
-                            </el-card>
+                            <div v-if="bgStage>=5" class="fcnBtn" @click="BgcloseBtn()">关闭报工单</div>
                         </el-col>
                     </el-row>   
                 </el-card>
                 <el-card v-else style="height:290px;margin:8px 0px">
-                    停机了
-                    <div>停机类型：{{pauseType}}</div>
-                    <div>停机描述：{{pauseDesc}}</div>
-                    <div>停机人：{{pauseMan}}</div>
-                    <el-button type="primary" @click="prodContinue()" :disabled="wtherZLP">立即开始</el-button>
+                    <div class="stopTxt">停机了</div>
+                    <div class="subStopTxt" style="margin-left:0%;">停机类型：<strong>{{pauseType}}</strong></div>
+                    <div class="subStopTxt">停机描述：<strong>{{pauseDesc}}</strong></div>
+                    <div class="subStopTxt" style="margin-right:0%;"> 停机人：<strong>{{pauseMan}}</strong></div>
+                    <el-button style="width:15%;height:80px;font-size:30px; margin:2% 0% 2% 5%" type="primary" @click="prodContinue()" :disabled="wtherZLP">返回</el-button>
                 </el-card>
             </el-col>
         </el-row>
@@ -201,14 +209,13 @@
                             <div class="tgs">物料编号：{{wlNo}}</div>
                             <div class="tgs">物料描述：{{wlDesc}}</div>
                             <div class="tgs">订单数量：{{ordNum}}</div>
-                            <div class="tgs" style="margin-right:1%;width:184px" >完工数量：{{downNum}}</div>
-                            <div class="tgs" style="margin-left:1%;width:184px" >不合格数量：{{failNum}}</div>
-                            <div class="tgs">当前报工单：{{currBGD}}</div>
+                            <div class="tgs" style="margin-right:1%;width:200px" >完工数量：{{downNum}}</div>
+                            <div class="tgs" style="margin-left:1%;width:200px" >不合格数量：{{failNum}}</div>
+                            <div class="tgs" style="width:45%">当前报工单：{{currBGD}}</div>
                             <el-row style="margin:1% 2% 2%">
                                 <el-col :span="3"><div style="font-size:25px">订单进度</div></el-col>
-                                <el-col :span="21"><el-progress :stroke-width="25" :percentage="pct" color="blue" style="margin-top:6px;"></el-progress></el-col>
+                                <el-col :span="21"><el-progress :stroke-width="25" :percentage="pct" color="blue" style="margin-top:6px"></el-progress></el-col>
                             </el-row>
-                            
                         </el-card>
                     </el-col>
                 </el-row>
@@ -229,24 +236,31 @@
                             <el-table-column prop="testHr" label="调试计划用时" width="100"></el-table-column>
                             <el-table-column  label="操作" fixed="right" width="160">
                                 <template slot-scope="scope">
-                                    <el-button @click="create(scope.row)" :disabled="creatable">创建</el-button><!--:style='{background:(scope.row.status=="创建"?"#85ce61":"#F5F5F5")}' size="small" :disabled="scope.row.status=='创建'?false:true"-->
-                                    <el-button @click="close(scope.row)">关闭</el-button>
+                                    <el-button @click="BGDcreate(scope.row)" :disabled="BGDcreatable">创建</el-button><!--:style='{background:(scope.row.status=="创建"?"#85ce61":"#F5F5F5")}' size="small" :disabled="scope.row.status=='创建'?false:true"-->
+                                    <el-button @click="close(scope.row)" type="danger">关闭</el-button>
                                 </template>
                             </el-table-column>
-
+                            
                         </el-table>
                     </el-card>
                 </el-row>
             </el-col>
+            <el-dialog title="关闭订单" :visible.sync="ordCloseVis" width="350px">
+                <div v-if="nfns" style="text-align:center">订单还未达到生产数量，是否继续关闭?</div>
+                <div v-else style="text-align:center">请确认关闭订单的操作，如确定，点击确认</div>
+                <div>
+                    <el-button type="primary" @click="clsCancel()" style="width:120px;margin:20px 5px 0px 25px">取消</el-button> 
+                    <el-button type="primary" @click="clsCfm()" style="width:120px;margin:20px 25px 0px 5px">确认</el-button> 
+                </div>
+            </el-dialog>
             <el-col :span="6">
                 <el-card style="height:580px;">
                     <div class="title">Andon设置</div>
-                    <div id="pieBtn" style="width:100%;height:370px;margin:15% 0%;text-align:center"></div><!--width:370px;-->
+                    <div id="pieBtn" style="width:100%;height:370px;margin:15% 0%"></div><!--width:370px;-->
                 </el-card>
             </el-col>
-           
         </el-row>
-        <el-dialog title="创建报工单" :visible.sync="crtVis" :before-close="crtClose" >
+        <el-dialog title="创建报工单" :visible.sync="crtVis" :before-close="crtClose" width="500px">
              <el-form ref="crtForm" :model="crtForm" :rules="crtRule" label-width="80px">
                 <el-form-item label="作业单号" prop="workNo">
                     <el-input v-model="crtForm.workNo" disabled></el-input>
@@ -279,36 +293,42 @@
                     <el-input v-model="crtForm.bgCate" disabled></el-input>
                 </el-form-item>
                  <el-form-item label="创建人" prop="crtMan">
-                    <el-input v-model="crtForm.crtMan" ></el-input>
+                    <el-select v-model="crtForm.crtMan" @change="optrchge($event)" style="width:100%">
+                        <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="创建日期" prop="crtDate">
-                   <el-date-picker v-model="crtForm.crtDate" type="date" placeholder="选择日期"></el-date-picker>
+                   <el-date-picker v-model="crtForm.crtDate" type="date" placeholder="选择日期" style="width:100%"></el-date-picker>
                 </el-form-item>
             </el-form>
             <el-button type="success" @click="crtCancel()" style="width:40%">取消</el-button>
             <el-button type="danger" style="width:40%;margin-left:20%" @click="crtconfirm('crtForm')">确认</el-button>
         </el-dialog>
-        <el-dialog title="调试结束提示" :visible.sync="testVis" :before-close="testClose">
+        <el-dialog title="调试结束提示" :visible.sync="testVis" :before-close="testClose" width="500px">
             <div>你现在点击了停止调试，如果确认操作无误，请核对一下调试信息，如需重新调试，点击取消按钮返回上一界面继续调试，如确认调试结束，点击确认。</div>
              <el-form ref="testForm" :model="testForm" :rules="testRule" label-width="120px">
                 <el-form-item label="作业单号" prop="workNo">
                     <el-input v-model="testForm.workNo" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束时间" prop="testEtime">
-                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" disabled></el-date-picker>
+                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" disabled style="width:100%"></el-date-picker>
                 </el-form-item>
                  <el-form-item label="调试累计用时" prop="testTime">
                     <el-input v-model="testForm.testTime" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="调试结束人员" prop="testMan">
-                     <el-input v-model="testForm.testMan"></el-input>
+                <el-form-item label="调试结束人员" prop="testMan" >
+                    <el-select v-model="testForm.testMan" @change="optrchge($event)" style="width:100%">
+                        <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="备注" prop="tips">
                      <el-input v-model="testForm.tips"></el-input>
                 </el-form-item>
              </el-form>
-            <el-button type="primary" @click="testComfirm('testForm')">确认</el-button>
-            <el-button type="primary" @click="testCancel()">取消</el-button>
+             <div>
+                 <el-button type="primary" @click="testCancel()" style="width:40%;margin:10px 5% 0px 5%">取消</el-button>
+                 <el-button type="primary" @click="testComfirm('testForm')" style="width:40%;margin:10px 5% 0px 5%">确认</el-button>
+             </div>
         </el-dialog>
         <!-- 不良品弹窗 -->
         <el-dialog title="不良品记录单" :visible.sync="blpVis" :before-close="blpClose">
@@ -326,7 +346,9 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="发现部门" prop="blpDpart">
-                            <el-input v-model="blpForm.blpDpart" :disabled="inputDis"></el-input>
+                            <el-select v-model="blpForm.blpDpart" :disabled="inputDis">
+                                <el-option v-for="item in deptName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -338,12 +360,16 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="填写人" prop="blpMan">
-                            <el-input v-model="blpForm.blpMan" :disabled="inputDis"></el-input>
+                            <el-select v-model="blpForm.blpMan" :disabled="inputDis" @change="optrchge($event)">
+                                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="发现班组" prop="blpCgroup">
-                            <el-input v-model="blpForm.blpCgroup" :disabled="inputDis"></el-input>
+                            <el-select v-model="blpForm.blpCgroup" :disabled="inputDis">
+                                <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -355,7 +381,6 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="填写日期" prop="blpDate">
-                            <!-- <el-input v-model="blpForm.blpDate" :disabled="inputDis"></el-input> -->
                             <el-date-picker v-model="blpForm.blpDate" type="date" placeholder="选择日期" :disabled="inputDis"></el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -381,12 +406,15 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="序号" prop="blpIDNo">
-                            <el-input v-model.number="blpForm.blpIDNo"  :disabled="inputDis"></el-input>
+                            <el-input v-model.number="blpForm.blpIDNo"  disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="子物料号" prop="blpZwlNo">
                             <el-input v-model="blpForm.blpZwlNo"></el-input>
+                            <!-- <el-select v-model="blpForm.blpZwlNo"  @change="wlNochge($event,0)">
+                                <el-option v-for="item in subWlNo" :key="item.wlNo" :value="item.wlNo">{{item.wlNo}}</el-option>
+                            </el-select> -->
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -403,7 +431,9 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="工位" prop="blpPos">
-                            <el-input v-model="blpForm.blpPos"></el-input>
+                            <el-select v-model="blpForm.blpPos">
+                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -441,15 +471,14 @@
             <el-button v-if="storeVis" type="primary" @click="blpStore()">保存</el-button>
             <el-button v-else type="primary" @click="blpComfirm()">确认</el-button>
         </el-dialog>
-
         <!-- 计划停机弹窗 -->
-        <el-dialog title="计划停机表单" :visible.sync="planVis" :before-close="planClose">
+        <el-dialog title="计划停机表单" :visible.sync="planVis" :before-close="planClose" width="450px">
               <el-form ref="planForm" :model="planForm" :rules="planRule" label-width="120px">
                 <el-form-item label="作业单号" prop="workNo">
-                    <el-input v-model="planForm.workNo" disabled></el-input>
+                    <el-input v-model="planForm.workNo" disabled style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="停机类型" prop="planStype">
-                    <el-select v-model="planForm.planStype" placeholder="请选择" @change="typeC">
+                    <el-select v-model="planForm.planStype" placeholder="请选择" @change="typeC" style="width:220px">
                         <el-option v-for="item in Stype" :key="item.label" :value="item.value">{{item.value}}</el-option>
                     </el-select>
                 </el-form-item>
@@ -457,56 +486,61 @@
                    <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" @change="defEndT"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="停机结束" prop="planSetime">
-                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" :disabled="wtherFix"></el-date-picker>
+                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" disabled></el-date-picker>
                 </el-form-item>
-                <el-form-item label="填写人" prop="planMan">
-                     <el-input v-model="planForm.planMan"></el-input>
+                <el-form-item label="填写人" prop="planMan" >
+                    <el-select v-model="planForm.planMan" @change="optrchge($event)" style="width:220px">
+                        <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                    </el-select>
                 </el-form-item>
              </el-form>
-            <el-button type="primary" @click="planComfirm('planForm')">确认</el-button>
-            <el-button type="primary" @click="planCancel()">取消</el-button>
-
+             <div>
+                <el-button type="primary" @click="planCancel()" style="width:120px;margin:10px 40px">取消</el-button>
+                <el-button type="primary" @click="planComfirm('planForm')" style="width:120px;margin:10px 40px">确认</el-button>
+             </div>
+            
         </el-dialog>
-
         <!-- 非计划停机弹窗 -->
-        <el-dialog title="非计划停机表单" :visible.sync="unplanVis" :before-close="unplanClose">
+        <el-dialog title="非计划停机表单" :visible.sync="unplanVis" :before-close="unplanClose" width="450px">
              <el-form ref="unplanForm" :model="unplanForm" :rules="unplanRule" label-width="120px">
-                <el-form-item label="作业单号" prop="workNo">
-                    <el-input v-model="unplanForm.workNo" disabled></el-input>
+                <el-form-item label="作业单号" prop="workNo" >
+                    <el-input v-model="unplanForm.workNo" disabled style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="停机类型" prop="unplanStype">
-                    <el-input v-model="unplanForm.unplanStype" disabled></el-input>
-                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                    <el-input v-model="unplanForm.unplanStype" disabled style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="停机描述" prop="unplanSDesc">
-                    <el-input v-model="unplanForm.unplanSDesc"></el-input>
-                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                    <el-input v-model="unplanForm.unplanSDesc" style="width:220px"></el-input>
                 </el-form-item>
-                 <el-form-item label="停机小类" prop="unplanStypem">
-                   <el-select v-model="unplanForm.unplanStypem" placeholder="请选择">
+                <el-form-item label="停机小类" prop="unplanStypem">
+                   <el-select v-model="unplanForm.unplanStypem" placeholder="请选择" style="width:220px">
                         <el-option v-for="item in unStypem" :key="item.label" :value="item.value">{{item.value}}</el-option>
                     </el-select>
                 </el-form-item>
                  <el-form-item label="设备编号" prop="unplanSqNo">
-                    <el-input v-model="unplanForm.unplanSqNo"></el-input>
-                    <!-- <el-date-picker v-model="unplanForm.unplanStype" type="datetime"  placeholder="选择日期" disabled></el-date-picker> -->
+                    <el-select v-model="unplanForm.unplanSqNo" style="width:220px">
+                        <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                    </el-select>
                 </el-form-item>
                  <el-form-item label="停机开始" prop="unplanSstime">
                    <el-date-picker v-model="unplanForm.unplanSstime" type="datetime"  placeholder="选择日期"></el-date-picker>
                 </el-form-item>
-                
-                <el-form-item label="填写人" prop="unplanMan">
-                     <el-input v-model="unplanForm.unplanMan"></el-input>
+                <el-form-item label="填写人" prop="unplanMan" >
+                    <el-select v-model="unplanForm.unplanMan" @change="optrchge($event)" style="width:220px">
+                        <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                    </el-select>
                 </el-form-item>
              </el-form>
-            <el-button type="primary" @click="unplanComfirm('unplanForm')">确认</el-button>
-            <el-button type="primary" @click="unplanCancel()">取消</el-button>
-
+             <div>
+                <el-button type="primary" @click="unplanCancel()" style="width:120px;margin:10px 40px">取消</el-button>
+                <el-button type="primary" @click="unplanComfirm('unplanForm')" style="width:120px;margin:10px 40px">确认</el-button>
+             </div>
+            
+            
         </el-dialog>
-
         <!-- 停机信息弹窗 -->
         <el-dialog title="停机情况" :visible.sync="sInfoVis">
-            <el-table :data="Stab" style="width: 100%">
+            <el-table :data="Stab" style="width: 100%" height="300px">
                 <el-table-column prop="sType" label="停机类型" width="180"></el-table-column>
                 <el-table-column prop="sDesc" label="停机描述" width="180"></el-table-column>
                 <el-table-column prop="sStart" label="停机开始" width="180"></el-table-column>
@@ -518,7 +552,6 @@
                 <el-table-column prop="status" label="状态" width="180"></el-table-column>
             </el-table> 
         </el-dialog>
-
         <!-- 添加安灯记录 -->
         <el-dialog title="新安灯记录" :visible.sync="newAndonVis" :before-close="zlAndonClose">
             <el-form v-if="zlVis==0" ref="zlForm" :model="zlForm" :rules="zlRule" label-width="120px">
@@ -535,19 +568,25 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="填写人" prop="zlMan">
-                            <el-input v-model="zlForm.zlMan" :disabled="zlInpVis"></el-input>
+                            <el-select v-model="zlForm.zlMan" @change="optrchge($event)">
+                                <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="发现部门" prop="zlDpt">
-                            <el-input v-model="zlForm.zlDpt" :disabled="zlInpVis"></el-input>
+                            <el-select v-model="zlForm.zlDpt" :disabled="zlInpVis">
+                                <el-option v-for="item in deptName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="发现班组" prop="zlCls">
-                            <el-input v-model="zlForm.zlCls" :disabled="zlInpVis"></el-input>
+                            <el-select v-model="zlForm.zlCls" :disabled="zlInpVis">
+                                <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                      <el-col :span="8">
@@ -559,7 +598,10 @@
                  <el-row>
                     <el-col :span="8">
                         <el-form-item label="物料号" prop="zlwlNo">
-                            <el-input v-model="zlForm.zlwlNo" ></el-input>
+                            <el-input v-model="zlForm.zlwlNo"></el-input>
+                            <!-- <el-select v-model="zlForm.zlwlNo" @change="wlNochge($event,1)">
+                                <el-option v-for="item in subWlNo" :key="item.wlNo" :value="item.wlNo">{{item.wlNo}}</el-option>
+                            </el-select> -->
                         </el-form-item>
                     </el-col>
                      <el-col :span="8">
@@ -569,7 +611,9 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="工位" prop="zlPos">
-                            <el-input v-model="zlForm.zlPos"></el-input>
+                            <el-select v-model="zlForm.zlPos" >
+                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -586,7 +630,9 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="设备编号" prop="zlsbNo">
-                            <el-input v-model="zlForm.zlsbNo"></el-input>
+                            <el-select v-model="zlForm.zlsbNo" >
+                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -603,17 +649,12 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="安灯人" prop="zlAndonMan">
-                            <el-input v-model="zlForm.zlAndonMan"></el-input>
+                            <el-select v-model="zlForm.zlAndonMan" @change="optrchge($event)">
+                                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <!-- <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="是否停线" prop="zlwhrStop">
-                            <el-input v-model="zlForm.zlwthrStop" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row> -->
             </el-form> 
             <el-form v-else-if="zlVis==1" ref="sbForm" :model="sbForm" :rules="sbRule" label-width="120px">
                 <el-form-item label="作业单号" prop="sbworkNo">
@@ -643,17 +684,23 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="报修部门" prop="sbDpt">
-                            <el-input v-model="sbForm.sbDpt"></el-input>
+                            <el-select v-model="sbForm.sbDpt">
+                                <el-option v-for="item in deptName" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="报修人员" prop="sbMan">
-                            <el-input v-model="sbForm.sbMan"></el-input>
+                            <el-select v-model="sbForm.sbMan" @change="optrchge($event)">
+                                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="设备编号" prop="sbNo">
-                            <el-input v-model="sbForm.sbNo"></el-input>
+                            <el-select v-model="sbForm.sbNo">
+                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -665,19 +712,24 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="故障部位" prop="sbQpart">
-                            <el-input v-model="sbForm.sbQpart"></el-input>
+                            <!-- <el-input v-model="sbForm.sbQpart"></el-input> -->
+                            <el-select v-model="sbForm.sbQpart">
+                                <el-option v-for="item in gzPos" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="故障类型" prop="sbQtype">
-                            <el-input v-model="sbForm.sbQtype"></el-input>
+                            <!-- <el-input v-model="sbForm.sbQtype"></el-input> -->
+                            <el-select v-model="sbForm.sbQtype">
+                                <el-option v-for="item in gzType" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-form-item label="故障描述" prop="sbQdesc">
                     <el-input v-model="sbForm.sbQdesc"></el-input>
                 </el-form-item>
-                
                 <el-form-item label="安全性" prop="sbQdesc">
                     <el-select v-model="sbForm.sbSafe">
                         <el-option  value="涉及安全">涉及安全</el-option>
@@ -685,7 +737,7 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <el-form v-else ref="otherform" :model="otherForm" :rules="otherRule" label-width="120px">
+            <el-form v-else ref="otherForm" :model="otherForm" :rules="otherRule" label-width="120px">
                  <el-form-item label="作业单号" prop="othworkNo">
                     <el-input v-model="otherForm.othworkNo" disabled></el-input>
                 </el-form-item>
@@ -711,19 +763,23 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="设备编号" prop="othsbNo">
-                            <el-input v-model="otherForm.othsbNo"></el-input>
+                            <el-select v-model="otherForm.othsbNo">
+                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="安灯人" prop="othMan">
-                            <el-input v-model="otherForm.othMan"></el-input>
+                            <el-select v-model="otherForm.othMan" @change="optrchge($event)">
+                                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-form-item label="问题描述" prop="othQdesc"><el-input v-model="otherForm.othQdesc"></el-input></el-form-item>
             </el-form>
-            <el-button type="primary" @click="zlAndonCfm()">确认</el-button>
-            <el-button type="primary" @click="zlAndonCancel()">取消</el-button>
+            <el-button type="primary" @click="zlAndonCancel()" style="width:30%;margin:2% 10% 0%">取消</el-button>
+            <el-button type="primary" @click="zlAndonCfm()" style="width:30%;margin:2% 10% 0%">确认</el-button>
         </el-dialog>
         <!-- 安灯记录 -->
         <el-dialog title="安灯记录" :visible.sync="andonLogVis">
@@ -731,7 +787,6 @@
                 <el-col :span="8"><div class="">安灯类型:{{currAdT}}</div></el-col>
                 <el-col :span="8"><div class="">状态:{{currAdSts}}</div></el-col>
                 <el-col :span="8"><div class="">安灯编号:{{currAdNo}}</div></el-col>
-               
             </el-row>
             <el-row>
                 <el-col :span="8"><div class="">安灯时间:{{currAdtime}}</div></el-col>
@@ -740,15 +795,10 @@
             </el-row>
             <el-row>
                 <el-col :span="8"><div class="">响应人:{{currAdRespMan}}</div></el-col>
-                <el-col :span="8"><div class="">关闭人:{{currAdSolveMan}}</div></el-col>
-                <!-- <el-col :span="8"><div class="">确认人:{{currAdCfmMan}}</div></el-col> -->
+                <el-col :span="8"><div class="">解决人:{{currAdSolveMan}}</div></el-col>
             </el-row>
             
-            <el-button type="primary" @click="respVis=true" :disabled="AdLife!=1">响应</el-button>
-            <el-button type="primary" @click="resolveVis=true" :disabled="AdLife!=2">解决</el-button>
-            <el-button type="primary" @click="cfmVis=true" :disabled="AdLife!=3">确认</el-button>
-
-            <el-table :data="Adtab" style="width: 100%">
+            <el-table :data="Adtab" style="width: 100%;margin-top:2%" height="200px">
                 <el-table-column prop="AdMan" label="安灯人" width="180"></el-table-column>
                 <el-table-column prop="AdNo" label="序号" width="180"></el-table-column>
                 <el-table-column prop="AdsbNo" label="设备编号" width="180"></el-table-column>
@@ -766,35 +816,69 @@
                 <el-table-column prop="AdFreason" label="不能解决原因" width="180"></el-table-column>
                 <el-table-column prop="AdfnsDate" label="计划完成日期" width="180"></el-table-column>
             </el-table> 
+            <el-button type="primary" @click="respVis=true" :disabled="AdLife!=1" style="font-size:30px;height:80px;width:20% ;margin:2% 6% 0%">响应</el-button>
+            <el-button type="primary" @click="resolveVis=true" :disabled="AdLife!=2" style="font-size:30px;height:80px;width:20% ;margin:2% 7% 0%">解决</el-button>
+            <el-button type="primary" @click="cfmVis=true" :disabled="AdLife!=3" style="font-size:30px;height:80px;width:20% ;margin:2% 6% 0%">确认</el-button>
         </el-dialog>
         <!-- 响应弹窗 -->
-        <el-dialog title="响应" :visible.sync="respVis" :before-close="respClose">
-            <el-input v-model="AdRespMan" placeholder="响应人"></el-input>
-            <el-button type="primary" @click="AdResp()">确认</el-button>
-            <el-button type="primary" @click="AdRespCancel()">取消</el-button>
+        <el-dialog title="响应" :visible.sync="respVis" :before-close="respClose" width="300px">
+            <el-select v-model="AdRespMan" placeholder="响应人" @change="optrchge($event)" style="width:100%">
+                <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+            </el-select>
+            <el-button type="primary" @click="AdRespCancel()" style="width:40%;margin:10px 5% 0px">取消</el-button>
+            <el-button type="primary" @click="AdResp()" style="width:40%;margin:10px 5% 0px">确认</el-button>
         </el-dialog>
         <!-- 解决弹窗 -->
-        <el-dialog title="解决" :visible.sync="resolveVis" :before-close="resolveClose">
-            <el-input v-model="AdSolveMan" placeholder="解决人"></el-input>
-            <el-select v-model="AdTmpSolve" placeholder="临时解决">
+        <el-dialog title="解决" :visible.sync="resolveVis" :before-close="resolveClose" width="300px">
+             <el-select v-model="AdSolveMan" placeholder="解决人" @change="optrchge($event)" style="width:100%">
+                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+            </el-select>
+            <el-select v-model="AdTmpSolve" placeholder="临时解决" style="width:100%;margin-top:10px" @change="clc()">
                 <el-option :value="0">已解决</el-option>
                 <el-option :value="1">未解决</el-option>
             </el-select>
-            <el-input v-model="AdfReason" :disabled="AdTmpSolve==0" placeholder="不能解决原因"></el-input>
-            <el-input v-model="Adplan" :disabled="AdTmpSolve==0" placeholder="行动计划"></el-input>
-            <el-date-picker v-model="AdplanfnsDate" type="date" placeholder="预计完成日期" :disabled="AdTmpSolve==0" style="width:203px"></el-date-picker>
-            
-            <el-button type="primary" @click="AdResolve()">确认</el-button>
-            <el-button type="primary" @click="AdResolveCancel()">取消</el-button>
+            <el-input v-model="AdfReason" :disabled="AdTmpSolve==0" placeholder="不能解决原因" style="width:100%;margin-top:10px"></el-input>
+            <el-input v-model="Adplan" :disabled="AdTmpSolve==0" placeholder="行动计划" style="width:100%;margin-top:10px"></el-input>
+            <el-date-picker v-model="AdplanfnsDate" type="date" placeholder="预计完成日期" :disabled="AdTmpSolve==0" style="width:100%;margin-top:10px"></el-date-picker>
+            <el-button type="primary" @click="AdResolveCancel()" style="width:40%;margin:10px 5% 0px">取消</el-button>
+            <el-button type="primary" @click="AdResolve()" style="width:40%;margin:10px 5% 0px">确认</el-button>
         </el-dialog>
-
         <!-- 关闭按灯弹窗 -->
-        <el-dialog title="关闭" :visible.sync="cfmVis" :before-close="cfmClose">
-            <el-input v-model="AdcfmMan" placeholder="关闭人"></el-input>
-            <el-button type="primary" @click="AdCfm()">确认</el-button>
-            <el-button type="primary" @click="AdCfmCancel()">取消</el-button>
+        <el-dialog title="关闭" :visible.sync="cfmVis" :before-close="cfmClose" width="300px">
+            <el-select v-model="AdcfmMan" placeholder="关闭人" @change="optrchge($event)" style="width:100%">
+                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+            </el-select>
+            <el-button type="primary" @click="AdCfmCancel()" style="width:40%;margin:10px 5% 0px">取消</el-button>
+            <el-button type="primary" @click="AdCfm()" style="width:40%;margin:10px 5% 0px">确认</el-button>
         </el-dialog>
-
+        <!-- 密码require -->
+        <el-dialog title="密码验证" :visible.sync="pwdVis" :before-close="pwdClose" width="350px">
+            <div style="display:inline-block;margin:5px 5px 5px 25px">填写人:</div>
+            
+            <el-input v-model="empName" disabled style="width:200px;margin:5px"></el-input>
+            <div style="display:inline-block;margin:5px 19px 5px 25px">密码:</div>
+            <el-input v-model="empPwd" type="password" style="width:200px;margin:5px"></el-input>
+            <div>
+                <el-button type="primary" @click="pwdValidate()" style="width:120px;margin:10px 16px">确认</el-button>
+                <el-button type="ptimary" @click="pwdCancel()" style="width:120px;margin:10px 16px">取消</el-button>
+            </div>
+        </el-dialog>
+        <!-- 关闭报工单弹窗，一次机会允许修改调试结束和作业开始时间 -->
+        <el-dialog title="关闭确认" :visible.sync="completeVis" :before-close="cmpletClose">
+            <div>现在即将关闭当前报工单，您有且仅有一次机会来修改此前可能误录入的部分时间数据，如需修改，请先勾选修改，再按需输入新的时间吗，支持修改的时间包括调试结束时间和作业开始时间。如无需修改，点击确认，报工单将直接关闭</div>
+            <div>
+                <div style="margin:2%;display:inline-block">调试结束时间: </div>
+                <el-date-picker v-model="lastTestTime" type="datetime"  placeholder="选择日期" :disabled="!tsTimeMdf"></el-date-picker>
+                <el-checkbox v-model="tsTimeMdf" style="margin-left:2%">修改</el-checkbox>
+            </div>
+            <div>
+                <div style="margin:2%;display:inline-block">作业开始时间: </div>
+                <el-date-picker v-model="lastStartTime" type="datetime"  placeholder="选择日期" :disabled="!sTimeMdf"></el-date-picker>
+                <el-checkbox v-model="sTimeMdf" style="margin-left:2%">修改</el-checkbox>
+            </div>
+            <el-button type="primary" @click="cmpletCfm()">确定</el-button>
+            <el-button type="primary" @click="cmpletCancel()">取消</el-button>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -803,6 +887,84 @@ import bus from '../../common/bus';
 export default {
     data(){
         return {
+            //关闭报工单弹窗控制器
+            completeVis:false,
+            //修改时间开关
+            tsTimeMdf:false,
+            sTimeMdf:false,
+            //最终修改的时间
+            lastTestTime:new Date(1998,1,12),
+            lastStartTime:new Date(1998,1,12),
+            //操作人员数组
+            optr:[],
+            //设备编号数组
+            eqpNo:[],
+            //部门数组
+            deptName:[],
+            //班组数组
+            clsName:[],
+            //子物料号数组
+            subWlNo:[],
+            //工位数组
+            statName:[],
+            //故障类型数组
+            gzType:[],
+            //故障部位
+            gzPos:[],
+            //选择产线的控制器
+            grp:'EGR阀装配线',
+            Grps:['EGR阀装配线','Cooler/Module线','电子线'],
+
+            //当前订单参数
+            pLine:'GDI阀装配线',
+            lines:["GEN_III_A+M",
+                      "GEN_III_V+F",
+                      "GEN_III_BPV",
+                      "GDI阀装配线",
+                      "LP阀装配线",
+                      "柔性线",
+                      "ETV装配线",
+                      "GEN_II阀装配线",
+                      ],
+            EGRLine:["GEN_III_A+M",
+                      "GEN_III_V+F",
+                      "GEN_III_BPV",
+                      "GDI阀装配线",
+                      "LP阀装配线",
+                      "柔性线",
+                      "ETV装配线",
+                      "GEN_II阀装配线",
+                      ],//"EGR_Group"
+            CMLine:["混合管装配线1",
+                      "混合管装配线2",
+                      "Cooler Line 1",
+                      "Cooler Line 2",
+                      "Cooler Line 3",
+                      "Cooler Line 4",
+                      "钎焊炉1",
+                      "钎焊炉2",
+                      "测试台1",
+                      "测试台2",
+                      "测试台3",
+                      "测试台4",
+                      "模块线1"],
+            ELELine:["HV Air PTC Line",
+                      "LV Air PTC Line",
+                      "Liquid Heater Line",
+                      "eCRV Line",
+                      "Marsilli 1",
+                      "Marsilli 2",
+                      "IPTE 1",
+                      "IPTE 2",
+                      "Huebers 1",
+                      "Huebers 2",
+                      "Ford节温器线",
+                      "HKMC节温器线",
+                      "GAC节温器线",
+                      "JLR节温器线",
+                      "蜡包装配线",
+                      "SGMM节温器线",
+                      "SGME节温器线"],
             bgReport:[],
             manInfo:[],
             allOrder:[],
@@ -846,7 +1008,6 @@ export default {
                                 }, 
                             }
                         }
-                        
                     },
                     {
                         name: '',
@@ -883,8 +1044,6 @@ export default {
                     }
                 ]
             },
-            //当前订单参数
-            pLine:'GDI阀装配线',
             ordNo:'',
             ordNum:'',
             wlNo:'',
@@ -913,7 +1072,7 @@ export default {
                 crtDate:[{required:true,message:'创建日期是必须的！',trigger:'blur'}],
             },
             //工单是否可创建
-            creatable:false,
+            BGDcreatable:false,
             //工单进程
             bgStage:0,
             //当前工单信息
@@ -970,17 +1129,17 @@ export default {
             BgForm:{
                 BgworkNo:'',
                 BgproceNo:'',
-                BgTime:new Date(),
+                BgTime:'',
                 BgprodNum:null,
                 BgpassNum:null, 
                 BgRepassNum:null,
                 BgFlawNum:null,
-                BgLf:null,
-                BgJf:null,
-                BgDf:null,
-                BgGf:null,
-                BgDcl:null,
-                BgFailNum:null
+                BgLf:0,
+                BgJf:0,
+                BgDf:0,
+                BgGf:0,
+                BgDcl:0,
+                BgFailNum:0
             },
             BgRule:{
                 BgTime:[{required:true,message:'请输入报工日期！',trigger:'blur'}],
@@ -988,12 +1147,12 @@ export default {
                 BgpassNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
                 BgRepassNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
                 BgFlawNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgLf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgJf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgDf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgGf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgDcl:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
-                BgFailNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}]
+                // BgLf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
+                // BgJf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
+                // BgDf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
+                // BgGf:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
+                // BgDcl:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}],
+                // BgFailNum:[{required:true,type:'number',message:'请输入数字！',trigger:'blur'}]
             },
             pBgdownTime:'',
             pBgpassNum:null,
@@ -1005,7 +1164,6 @@ export default {
             pBgfailNum:null,
             pBgRepassNum:null,
             //侧边按钮弹窗参数
-           
             planVis:false,//计划停机弹窗显影指示
             //停机挡板
             wtherStop:false,
@@ -1019,6 +1177,7 @@ export default {
                 planMan:''
             },
             planRule:{
+                planStype:[{required:true,message:'停机类型为必须项！',trigger:'blur'}],
                 planSstime:[{required:true,message:'开始时间为必须项！',trigger:'blur'}],
                 planSetime:[{required:true,message:'结束时间为必须项！',trigger:'blur'}],
                 planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}]
@@ -1105,13 +1264,13 @@ export default {
                 blpProceDesc:[{required:true,message:'工序描述是什么？',trigger:'blur'}],
                 //part2
                 blpIDNo:[{required:true,message:'序号不能为空！',trigger:'blur'}],
-                blpZwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
-                blpZwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
-                blpNum:[{required:true,message:'数量是是多少？',trigger:'blur'}],
+                // blpZwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
+                // blpZwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
+                blpNum:[{required:true,type:'number',message:'必须填数字哦',trigger:'blur'}],
                 blpPos:[{required:true,message:'哪个工位？',trigger:'blur'}],//工位
                 blpFDesc:[{required:true,message:'简短描述下呗！',trigger:'blur'}],//不良描述
-                blpRPsNum:[{required:true,message:'此处不能为空！',trigger:'blur'}],
-                blpPreason:[{required:true,message:'(!*_*!)为啥就过了？',trigger:'blur'}]
+                blpRPsNum:[{required:true,type:'number',message:'此处必须是数字哦！',trigger:'blur'}],
+                // blpPreason:[{required:true,message:'(!*_*!)为啥就过了？',trigger:'blur'}]
             },
             blpTab:[],
             //保存键显影指示
@@ -1149,11 +1308,11 @@ export default {
                 zlMan:[{required:true,message:'不良品记录人不能为空！',trigger:'blur'}],
                 zlDpt:[{required:true,message:'发现部门不能为空！',trigger:'blur'}],
                 zlCls:[{required:true,message:'发现班组不能为空！',trigger:'blur'}],
-                zlNum:[{required:true,message:'此处不能为空！',trigger:'blur'}],
+                zlNum:[{required:true,type:'number',message:'此处必须填数字！',trigger:'blur'}],
                 zlwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
                 zlwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
                 zlPos:[{required:true,message:'工位不能为空！',trigger:'blur'}],
-                zlRPsNum:[{required:true,message:'返工合格数量？',trigger:'blur'}],
+                zlRPsNum:[{required:true,type:'number',message:'返工合格数量？',trigger:'blur'}],
                 zlsbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
                 zlAndonMan:[{required:true,message:'安灯人是谁？',trigger:'blur'}],
             },
@@ -1185,8 +1344,8 @@ export default {
                 sbDpt:[{required:true,message:'报修部门不能为空！',trigger:'blur'}],
                 sbMan:[{required:true,message:'报修人员不能为空！',trigger:'blur'}],
                 sbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
-                sbQpart:[{required:true,message:'哪里坏了？',trigger:'blur'}],
-                sbQtype:[{required:true,message:'报修类型是？',trigger:'blur'}],
+                // sbQpart:[{required:true,message:'哪里坏了？',trigger:'blur'}],
+                // sbQtype:[{required:true,message:'报修类型是？',trigger:'blur'}],
                 sbStop:[{required:true,message:'停机状态？',trigger:'blur'}],
             },
             sbInputVis:false,//如果在停机状态按灯，这停机状态不可更改
@@ -1234,16 +1393,82 @@ export default {
             AdTmpSolve:0,
             AdfReason:'',
             Adplan:'',
-            AdplanfnsDate:null,
+            AdplanfnsDate:new Date(1998,1,12),
             //按灯关闭弹窗参数
             cfmVis:false,
             AdcfmMan:'',
             //内圈数据总数
-
-
+            //密码弹窗
+            pwdVis:false,
+            empName:'',
+            empPwd:'',
+            empPwdTrue:'',
+            //关闭订单参数
+            nfns:false,//如果未完工数量不为0 说明订单还未完成，需要额外提示
+            ordCloseVis:false,//关闭订单弹窗控制器
+            tgOrd:''//要关闭的订单作业单号
         }
     },
     methods:{
+        clc(){
+            this.AdfReason='';
+            this.Adplan='';
+            this.AdplanfnsDate = new Date(1998,1,12);
+        },
+        //选择产线
+        lsel(event){
+            this.pLine='',
+            console.log(event);
+            if(event=="EGR阀装配线"){
+                this.lines=this.EGRLine;
+            }else if(event=="Cooler/Module线"){
+                this.lines=this.CMLine;
+            }else if(event=="电子线"){
+                this.lines=this.ELELine;
+            }
+        },
+        gotoProd(){
+           
+            if(this.pLine==''){
+                this.$message.error("请选择一个加工单元！")
+                return;
+            }
+            this.getOrder();
+            this.getBGD();
+            this.getDMenu();
+             console.log(this.BGDcreatable)
+             //所有订单数据表格加载
+            fetch('api/WorkReport/allOrdDisp',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    prodLine:this.pLine
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                this.allOrder = []
+                for(var item of data){
+                    var tmp = {
+                        workNo:item.作业单号,
+                        wlNo:item.物料编号,
+                        wlDesc:item.物料描述,
+                        proceNo:item.工序号,
+                        proceName:item.工序名称,
+                        sTime:item.开始日期,
+                        eTime:item.完工日期,
+                        ordNum:item.订单数量,
+                        unfnsNum:item.未完工数量,
+                        leftHr:(item.剩余工时).toFixed(2),
+                        testHr:item.调试计划用时
+                    };
+                    this.allOrder.push(tmp);
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
          //工具方程，日期转字符串
         dateToString(date){  
             var  year = date.getFullYear();  
@@ -1267,11 +1492,14 @@ export default {
             if(sec.length == 1){  
                 sec = "0" + sec;  
             }  
-
             var dateTime = year + "-" + month + "-" + day+" "+hour+":"+min+":"+sec; 
             return dateTime;  
         },
-        create(row){
+        BGDcreate(row){
+            if(row.unfnsNum<=0){
+                this.$message.warning("该订单已达到生产值，请及时关闭。")
+                return;
+            }
             fetch('api/WorkReport/BGDInfo',{
                 method:'POST',
                 headers:{
@@ -1299,10 +1527,47 @@ export default {
             .catch(data=>{
                 alert(data)
             })
-            
         },
         close(row){
             console.log(row);
+            this.tgOrd = row.workNo;
+            this.ordCloseVis = true;
+            if(row.unfnsNum != 0){
+                this.nfns = true;
+            }else{
+                this.nfns = false;
+            }
+        },
+        clsCfm(){
+            if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                fetch('api/WorkReport/closeOrd',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        workNo:this.tgOrd
+                    })
+                }).then(response=>response.json())
+                .then(data=>{
+                    if(data[0].resSign){
+                        this.$message.success("关闭成功")
+                        this.getallOrder()
+                    }else{
+                        this.$message.success("关闭失败")
+                    }
+                }).catch(data=>{
+                    alert(data)
+                })
+                this.ordCloseVis = false;
+            }else{
+                this.$message.error("你没有权限")
+            }
+            
+        },
+        clsCancel(){
+            this.nfns = false;
+            this.ordCloseVis = false;
         },
         //创建弹窗叉叉按钮
         crtClose(done){
@@ -1365,14 +1630,10 @@ export default {
                 },
                 body:JSON.stringify({
                     workunit:this.pLine,
-                    // workNo:this.ordNo
                 })
             })
             .then(response=>response.json())
             .then(data=>{
-                console.log("长度"+data.length)
-                console.log(this.creatable)
-                console.log(data)
                 if(data.length != 0){
                    
                     if(data[0].sMan != null){
@@ -1386,8 +1647,12 @@ export default {
                         // if(this.pauseType!="计划停机" && this.pauseType!="非计划停机" && this.wtherAD){
                         //     this.wtherZLP = true
                         // }
+                    }else{
+                        this.wtherStop = false;
+                        this.wtherZLP = false;
+                        this.wtherAD = false;
                     }
-                    this.creatable = true;
+                    this.BGDcreatable = true;
                     this.bgNo = data[0].bgNo
                     this.bgcrtMan = data[0].initMan
                     this.bgcrtDate = (data[0].crtDate).substr(0,10)
@@ -1396,8 +1661,7 @@ export default {
                     this.bgfixNum = data[0].fixNum
                     this.bgWunit = data[0].workUnit
                     this.bgfixMan = data[0].fixMan
-                    if(data[0].wgTime != null){
-                        console.log("报工完成");
+                    if(data[0].wgTime.substr(0,4) != '0001'){
                         this.pBgdownTime =(data[0].wgTime).substr(0,10);
                         this.pBgpassNum = data[0].passNum;
                         this.pBgLf = data[0].lf;
@@ -1422,7 +1686,6 @@ export default {
                         this.bgStage = 5;
                     }else{
                         if(data[0].workMan != null){
-                            console.log('生产已经开始');
                             //调试数据
                             this.tStime = data[0].tsTime
                             this.tEtime = data[0].teTime
@@ -1437,7 +1700,6 @@ export default {
                             //阶段指示
                             this.bgStage = 4;
                         }else if(data[0].duration != 0){
-                            console.log("调试了")
                             this.tStime = data[0].tsTime
                             this.tEtime = data[0].teTime
                             this.tSman = data[0].tsMan
@@ -1449,9 +1711,13 @@ export default {
                             this.bgStage = 1
                         }
                     }
-                   
+                }else{
+                    this.bgStage = 0
+                    this.wtherStop = false;
+                    this.wtherZLP = false;
+                    this.wtherAD = false;
+                    this.BGDcreatable = false;
                 }
-                 console.log(this.creatable)
             }).catch(data=>{
                 alert(data)
             })
@@ -1469,15 +1735,14 @@ export default {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.length != 0){
-                    this.ordNo = data[1].作业单号
-                    this.ordNum = data[1].订单数量
-                    this.wlNo = data[1].物料编号
-                    this.wlDesc = data[1].物料描述
-                    this.downNum = data[1].完工数量
-                    this.failNum = data[1].不合格数量
-                    this.currBGD = data[1].报工编号
-                    this.pct = (data[1].合格数量/data[1].订单数量)*100
-                    // this.getBGDtest();
+                    this.ordNo = data[0].作业单号
+                    this.ordNum = data[0].订单数量
+                    this.wlNo = data[0].物料编号
+                    this.wlDesc = data[0].物料描述
+                    this.downNum = data[0].完工数量
+                    this.failNum = data[0].不合格数量
+                    this.currBGD = data[0].报工编号
+                    this.pct = ((data[0].合格数量/data[0].订单数量)*100).toFixed(0)
                     this.reNewADLog();
                 }else{
                     this.ordNo = ''
@@ -1489,7 +1754,6 @@ export default {
                     this.currBGD = ''
                     this.pct = 0
                 }
-            
             }).catch(data=>{
                 alert(data);
             })
@@ -1543,8 +1807,8 @@ export default {
                     this.$message.success("生产已开始！")
                     this.scworkMan = this.workMan;
                     this.scBZ = this.prodCgp;
-                    this.scStart = dateToString(this.workStime);
-                    this.scDate = dateToString(this.prodStime);
+                    this.scStart = this.dateToString(this.workStime);
+                    this.scDate = this.dateToString(this.prodStime);
                     this.workMan = '';
                     this.prodCgp = '';
                     this.workStime = '';
@@ -1624,7 +1888,6 @@ export default {
                             })
                         }).then(response=>response.json())
                         .then(data=>{
-                            console.log(data)
                             if(data[0].resSign){
                                 this.$message.success("调试已结束！");
                                 this.testVis=false;
@@ -1638,8 +1901,6 @@ export default {
                                 this.testStart = null,
                                 this.$refs[formName].resetFields();
                                 this.bgStage = 3;
-                                console.log(this.tStime)
-                                console.log(this.tEtime)
                             }else{
                                 this.$message.warning("该报工单已存在调试记录，现在还不能撤销调试操作！")
                             }
@@ -1712,7 +1973,6 @@ export default {
                                 this.$message.error("报工单不存在或者该报工单不属于订单报工！请核实");
                             }
                         })
-                       
                     }else{
                         this.$message.error("你没有权限！")
                     }
@@ -1721,7 +1981,6 @@ export default {
                     return false;
                 }
             })
-           
         },
         BgCancel(){
             this.$refs['BgForm'].resetFields();
@@ -1735,27 +1994,65 @@ export default {
             })
             .catch(_ => {});
         },
+        //关闭弹窗弹出函数
+        BgcloseBtn(){
+            if(this.wtherAD){
+                this.$message.error("还有按灯未处理，现在还不能关闭该报工单，请处理按灯先！");
+                return;
+            }
+            this.completeVis = true
+        },
         //关闭报工单操作
-        BgComplete(){
+        cmpletCfm(){
+            if(this.tsTimeMdf && this.lastTestTime.getFullYear()==1998){
+                this.$message.error("勾选了修改就要填入有效时间哦！")
+                return;
+            }
+            if(this.sTimeMdf && this.lastStartTime.getFullYear()==1998){
+                this.$message.error("勾选了修改就要填入有效时间哦！")
+                return;
+            }
             fetch('api/WorkReport/BGClose',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify({
-                    workNo:this.bgNo
+                    workNo:this.bgNo,
+                    testT:this.lastTestTime,
+                    startT:this.lastStartTime
                 })
             }).then(response=>response.json())
             .then(data=>{
                 if(data[0].resSign){
+                    
                     this.$message.success("报工结束！")
-                    this.creatable = false;
+                    this.BGDcreatable = false;
                     this.bgStage = 0;
                     this.getOrder()
+                    this.cmpletCancel()
                 }else{
                     this.$message.error("出现了意外的情况！")
                 }
             })
+        },
+        //关闭弹窗取消
+        cmpletCancel(){
+            //初始化弹窗所有参数
+            this.completeVis=false
+            this.tsTimeMdf=false
+            this.sTimeMdf=false
+            this.lastTestTime=new Date(1998,1,12)
+            this.lastStartTime=new Date(1998,1,12)
+        },
+        //关闭工单弹窗关闭函数
+        cmpletClose(){
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                this.cmpletCancel()
+                done();
+            })
+            .catch(_ => {});
         },
         //计划停机弹窗参数
         planS(){
@@ -1763,7 +2060,6 @@ export default {
                 this.planVis=true
                 this.planForm.workNo = this.ordNo
             }
-           
         },
         planComfirm(formName){
             this.$refs[formName].validate((valid) => {
@@ -1804,7 +2100,6 @@ export default {
                     return false;
                 }
             })
-            
         },
         planCancel(){
             this.$refs['planForm'].resetFields();
@@ -1824,7 +2119,6 @@ export default {
                 this.unplanVis=true
                 this.unplanForm.workNo = this.ordNo
             }
-           
         },
         unplanComfirm(formName){
             this.$refs[formName].validate((valid) => {
@@ -1858,7 +2152,6 @@ export default {
                                 this.$message.error("需要关闭的报工单不存在，请核实！")
                             }
                         })
-                      
                     }else{
                         this.$message.error("你没有权限")
                     }
@@ -1866,7 +2159,6 @@ export default {
                     return false;
                 }
             })
-            
         },
         unplanCancel(){
             this.$refs['unplanForm'].resetFields();
@@ -1892,7 +2184,7 @@ export default {
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify({
-                    workNo:this.ordNo
+                    workNo:this.bgNo
                 })
             }).then(response=>response.json())
             .then(data=>{
@@ -1938,9 +2230,7 @@ export default {
                 }else if(this.planForm.planStype =="晨餐"){
                     n = 45
                 }
-                console.log(n);
                 const tmpT = new Date(this.planForm.planSstime)
-                // console.log(new Date(tmpT.setMinutes(tmpT.getMinutes()+n)))
                 this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
             }else{
                 this.wtherFix = false;
@@ -2012,13 +2302,13 @@ export default {
                         this.blpForm.blpMwlNo = this.wlNo
                         this.blpForm.blpMwldesc = this.wlDesc
                         this.blpForm.blpPline = this.pLine
+                        this.blpForm.blpIDNo = 1
                         //确认按钮
                         this.storeVis = true;
                     }
                 }).catch(data=>{
                     alert(data)
                 })
-                
             }
         },
         //不良品弹窗函数，保存按钮函数
@@ -2059,11 +2349,19 @@ export default {
                                 this.storeVis = false;
                                 this.inputDis = true;
                                 this.renewlTab();
+                                this.blpForm.blpIDNo +=1;
+                                this.blpForm.blpZwlNo = '';
+                                this.blpForm.blpZwlDesc = '';
+                                this.blpForm.blpNum = '';
+                                this.blpForm.blpPos='';
+                                this.blpForm.blpFDesc = '';
+                                this.blpForm.blpRPsNum = '';
+                                this.blpForm.blpPreason = '';
+                                this.blpForm.blpTip='';
                             }else{
                                 this.$message.error("找不到作业单对应的报工单！")
                             }
                         })
-                        
                     }else{
                         this.$message.error("你没有权限")
                     }
@@ -2071,7 +2369,6 @@ export default {
                     return false;
                 }
             })
-            
         },
         //不良品确认按钮
         blpComfirm(){
@@ -2126,7 +2423,6 @@ export default {
                     return false;
                 }
             })
-
         },
         blpClose(done){
             this.$confirm('确认关闭？')
@@ -2192,7 +2488,6 @@ export default {
             }).catch(data=>{
                 alert(data)
             })
-             
         },
         //质量安灯确认
         zlAndonCfm(){
@@ -2239,7 +2534,6 @@ export default {
                                     this.$message.error("出错了");
                                 }
                             })
-                        
                         }else{
                             this.$message.error("你没有权限！")
                         }
@@ -2303,7 +2597,6 @@ export default {
                         return false;
                     }
                 })
-
             }else{
                 this.$refs['otherForm'].validate((valid) => {
                     if (valid) {
@@ -2354,7 +2647,6 @@ export default {
                     }
                 })
             }
-           
         },
         //质量安灯取消
         zlAndonCancel(){
@@ -2404,8 +2696,6 @@ export default {
                     this.pieOpt.series[0].data[4].name = data[0].tBD.toString()
                     this.piebtn.setOption(this.pieOpt);
                     var sm = data[0].zL+data[0].sB+data[0].gY+data[0].wL+data[0].tBD;
-                    // console.log("count: "+sm);
-                    // console.log("pre是否按灯: "+this.wtherAD)
                     if(sm!=0){
                         this.wtherAD = true;
                         if(this.wtherStop){
@@ -2414,8 +2704,6 @@ export default {
                     }else{
                         this.wtherAD = false;
                     }
-                    //  console.log("off是否按灯: "+this.wtherAD)
-                    
                 }
             }).catch(data=>{
                 alert(data)
@@ -2423,6 +2711,9 @@ export default {
         },
         //按灯响应
         AdResp(){
+            if(this.AdRespMan==''){
+                this.$message.error("谁响应的?")
+            }
             fetch('api/WorkReport/adResp',{
                 method:'POST',
                 headers:{
@@ -2440,14 +2731,12 @@ export default {
                     this.AdRespMan = '';
                     this.respVis = false;
                     this.AdLogOpen(this.currAdTmk);//刷新数据
-
                 }else{
                     this.$message.error("安灯响应出错了！")
                 }
             }).catch(data=>{
                 alert(data)
             })
-            
         },
         AdRespCancel(){
             this.AdRespMan = '';
@@ -2463,24 +2752,18 @@ export default {
         },
         //按灯解决
         AdResolve(){
-            var bd = {};
-            if(this.AdTmpSolve==0){
-                bd = {
-                    workNo:this.ordNo,
-                    qtype:this.currAdTmk,
-                    solveMan:this.AdSolveMan,
-                    tmpSolve:this.AdTmpSolve,
-                }
-            }else{
-                    bd = {
-                        workNo:this.ordNo,
-                        qtype:this.currAdTmk,
-                        solveMan:this.AdSolveMan,
-                        tmpSolve:this.AdTmpSolve,
-                        freason:this.AdfReason,
-                        plan:this.Adplan,
-                        planfnsDate:this.AdplanfnsDate
-                    }
+            if(this.AdSolveMan==''){
+                this.$message.error("谁解决的？")
+                return;
+            }
+            var bd = {
+                workNo:this.ordNo,
+                qtype:this.currAdTmk,
+                solveMan:this.AdSolveMan,
+                tmpSolve:this.AdTmpSolve,
+                freason:this.AdfReason,
+                plan:this.Adplan,
+                planfnsDate:this.AdplanfnsDate
             }
             fetch('api/WorkReport/adResolve',{
                 method:'POST',
@@ -2496,17 +2779,15 @@ export default {
                     this.AdTmpSolve = 0;
                     this.AdfReason = '';
                     this.Adplan='';
-                    this.AdplanfnsDate=null;
+                    this.AdplanfnsDate=new Date(1998,1,12);
                     this.resolveVis = false;
                     this.AdLogOpen(this.currAdTmk);//刷新数据
-
                 }else{
                     this.$message.error("安灯解决出错了！")
                 }
             }).catch(data=>{
                 alert(data)
             })
-            
         },
         AdResolveCancel(){
             this.AdSolveMan = '';
@@ -2529,6 +2810,10 @@ export default {
             .catch(_ => {});
         },
         AdCfm(){
+            if(this.AdcfmMan==''){
+                this.$message.error("谁确认的？")
+                return;
+            }
             fetch('api/WorkReport/adCfm',{
                 method:'POST',
                 headers:{
@@ -2548,7 +2833,6 @@ export default {
                     this.reNewADLog();//刷新内圈数据
                     this.AdLogOpen(this.currAdTmk);//刷新表格数据
                     this.wtherZLP = false;
-
                 }else{
                     this.$message.error("安灯关闭出错了！")
                 }
@@ -2608,11 +2892,11 @@ export default {
                     this.currAdRespMan = data[0].adRespMan;
                     this.currAdSolveMan = data[0].adSolveMan;
                     this.currAdCfmMan = data[0].adCfmMan;
-                    // this.renewAdtab()
                     this.AdLife = data[0].adSts;
-
                 }else{
-                     this.currAdSts = null
+                    this.currAdTmk=null;
+                    this.currAdT=''
+                    this.currAdSts = null
                     this.currAdNo = ''
                     this.currAdtime = ''
                     this.currAdMan = ''
@@ -2657,26 +2941,204 @@ export default {
                             AdStop:item.是否停线,
                             AdFns:item.临时解决,
                             AdPlan:item.行动计划,
-                            AdFreasom:item.不能解决原因,
+                            AdFreason:item.不能解决原因,
                             AdfnsDate:item.计划完成日期
                         }
                         this.Adtab.push(tmp)
                     }
-                   
                 }
             }).catch(data=>{
                 alert(data)
             })
-        }
+        },
+        optrchge(name){
+            console.log(name);
+            if(name!=''){
+                this.pwdVis = true;
+                this.empName = name;
+            }
+        },
+        pwdClose(done){
+             this.$confirm('确认关闭？')
+            .then(_ => {
+                this.empName = '';
+                this.empPwd = '';
+                this.testMan='';
+                this.workMan='';
+                this.crtForm.crtMan='';
+                this.testForm.testMan='';
+                this.blpForm.blpMan='';
+                this.planForm.planMan='';
+                this.unplanForm.unplanMan='';
+                this.zlForm.zlMan='';
+                this.zlForm.zlAndonMan='';
+                this.sbForm.sbMan='';
+                this.otherForm.othMan='';
+                this.AdRespMan='';
+                this.AdSolveMan='';
+                this.AdcfmMan='';
+                done();
+            })
+            .catch(_ => {});
+        },
+        pwdValidate(){
+            for(var item of this.optr){
+                if(item.name==this.empName){
+                   if(this.empPwd==item.pwd){
+                        this.$message.success("身份验证成功！");
+                        this.pwdVis = false;
+                        this.empName = '';
+                        this.empPwd = '';
+                    }else{
+                        this.$message.error("密码错误");
+                       
+                    }
+                    break;
+                }
+            }
+        },
+        pwdCancel(){
+            this.empName = '';
+            this.empPwd = '';
+            this.pwdVis = false;
+            this.testMan='';
+            this.workMan='';
+            this.crtForm.crtMan='';
+            this.testForm.testMan='';
+            this.blpForm.blpMan='';
+            this.planForm.planMan='';
+            this.unplanForm.unplanMan='';
+            this.zlForm.zlMan='';
+            this.zlForm.zlAndonMan='';
+            this.sbForm.sbMan='';
+            this.otherForm.othMan='';
+            this.AdRespMan='';
+            this.AdSolveMan='';
+            this.AdcfmMan='';
+        },
+        // wlNochge(name,ind){
+        //     console.log(name);
+        //     for(var item of this.subWlNo){
+        //         if(item.wlNo==name){
+        //             if(ind==0){
+        //                 this.blpForm.blpZwlDesc=item.wlDesc;
+        //             }else{
+        //                 this.zlForm.zlwlDesc=item.wlDesc;
+        //             }
+        //             break;
+        //         }
+        //     } 
+        // },
+        getallOrder(){
+            //所有订单数据表格加载
+            fetch('api/WorkReport/allOrdDisp',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    prodLine:this.pLine
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                this.allOrder = []
+                for(var item of data){
+                    var tmp = {
+                        workNo:item.作业单号,
+                        wlNo:item.物料编号,
+                        wlDesc:item.物料描述,
+                        proceNo:item.工序号,
+                        proceName:item.工序名称,
+                        sTime:item.开始日期,
+                        eTime:item.完工日期,
+                        ordNum:item.订单数量,
+                        unfnsNum:item.未完工数量,
+                        leftHr:(item.剩余工时).toFixed(2),
+                        testHr:item.调试计划用时
+                    };
+                    this.allOrder.push(tmp);
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+         getDMenu(){
+            //获取操作人员信息
+            fetch('api/WorkReport/empInfo',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.grp
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                // console.log(data)
+                this.optr=[];
+                for(var item of data){
+                    var tmp={
+                        name:item.name,
+                        pwd:item.pwd
+                    }
+                    this.optr.push(tmp);
+                }
+            }).catch(data=>{
+                alert(data);
+            })
+            //获取设备编号信息
+            fetch('api/WorkReport/sbInfo',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.pLine
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                console.log("设备编号")
+                console.log(data)
+                this.eqpNo =[];
+                for(var item of data){
+                    var tmp={
+                        sbNo:item.设备编号,
+                        sbDesc:item.设备名称
+                    }
+                    this.eqpNo.push(tmp);
+                }
+            }).catch(data=>{
+                alert(data);
+            })
+            //获班组信息
+            fetch('api/WorkReport/clsInfo',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.grp
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                // console.log(data)
+                this.clsName =[];
+                for(var item of data){
+                    var tmp={
+                        name:item.班组名称
+                    }
+                    this.clsName.push(tmp);
+                }
+            }).catch(data=>{
+                alert(data);
+            })
+        },
     },
     mounted(){
-        // this.bgStage = 3;
-        
         this.getOrder();
         this.getBGD();
-        
-        console.log("进度"+this.bgStage);
-
+        this.getallOrder();
+        this.getDMenu();
         var andonBtn = document.getElementById("pieBtn");
         this.piebtn = echart.init(andonBtn);
         this.piebtn.setOption(this.pieOpt);
@@ -2684,11 +3146,9 @@ export default {
            bus.$emit('area',{mk:params.data.mark,name:params.data.name,tip:params.data.tip});
         });
         bus.$on('area',(msg)=>{
-            // console.log(msg)
             if(this.bgStage == 0){
                 return;
             }
-            
             if(msg.mk == "inner"){
                 this.andonLogVis = true;
                 this.AdLogOpen(msg.tip);
@@ -2701,24 +3161,24 @@ export default {
                     this.$message.error("现已是 计划停机状态，不可进行按灯");
                     return;
                 }
-                if(this.wtherAD){
-                    this.$message.error("正在进行按灯，不能再新建按灯了")
-                    return;
-                }
-                if(this.pauseType=="质量停机" || this.pauseType=="设备停机"){
-                    this.$message.warning("这条信息提示您，现在是质量或者设备按灯结束状态，你需要先结束停机，再进行新的按灯任务！");
-                    return;
-                }
-                if(msg.name=="质量" && this.wtherStop){
-                    this.$message.error("现在是停机状态，质量安灯需要在生产过程中进行，安灯完毕后会自动停机！")
+               
+                if(this.wtherStop && this.pauseType!="非计划停机" && this.pauseType!="计划停机"){
+                    this.$message.warning("这条信息提示您，现在是停机按灯结束状态，你需要先结束停机，再进行新的按灯任务！");
                     return;
                 }
                  
-                if(msg.name=="质量"){
-                    this.newAndonVis = true;
-                    this.zlVis = 0;
-                    this.zlForm.zlworkNo = this.ordNo
-                    this.zlOpen();
+                if(this.wtherAD){
+                    this.$message.error("正在进行按灯，不能再新建按灯了")
+                    return;
+                }else if(msg.name=="质量"){
+                    if(this.wtherStop){
+                        this.$message.error("现在是停机状态，不能在新建按灯了！");
+                    }else{
+                        this.newAndonVis = true;
+                        this.zlVis = 0;
+                        this.zlForm.zlworkNo = this.ordNo
+                        this.zlOpen();
+                    }
                 }else if(msg.name=="设备"){
                     this.newAndonVis = true;
                     this.zlVis = 1;
@@ -2728,7 +3188,6 @@ export default {
                         this.sbForm.sbStop = "已停线"
                         this.sbInputVis = true;
                     }
-                   
                 }else{
                     this.newAndonVis = true;
                     this.zlVis = 2;
@@ -2743,38 +3202,110 @@ export default {
             }
         })
         
-        
-        //所有订单数据表格加载
-        fetch('api/WorkReport/allOrdDisp',{
-            method:'POST',
+       
+         //获取部门信息
+        fetch('api/WorkReport/dptInfo',{
+            methods:'GET',
             headers:{
                 'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                prodLine:this.pLine
-            })
+            }
         }).then(response=>response.json())
         .then(data=>{
-            this.allOrder = []
+            // console.log(data)
+            this.deptName =[];
             for(var item of data){
-                var tmp = {
-                    workNo:item.作业单号,
-                    wlNo:item.物料编号,
-                    wlDesc:item.物料描述,
-                    proceNo:item.工序号,
-                    proceName:item.工序名称,
-                    sTime:item.开始日期,
-                    eTime:item.完工日期,
-                    ordNum:item.订单数量,
-                    unfnsNum:item.未完工数量,
-                    leftHr:(item.剩余工时).toFixed(2),
-                    testHr:item.调试计划用时
-                };
-                this.allOrder.push(tmp);
+                var tmp={
+                    name:item.部门名称,
+                    code:item.部门代码
+                }
+                this.deptName.push(tmp);
             }
         }).catch(data=>{
-            alert(data)
+            alert(data);
         })
+
+        //故障类型
+        fetch('api/WorkReport/gzTInfo',{
+            methods:'GET',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(response=>response.json())
+        .then(data=>{
+             console.log("工位")
+            console.log(data)
+            this.gzType =[];
+            for(var item of data){
+                var tmp={
+                    name:item.故障类型
+                }
+                this.gzType.push(tmp);
+            }
+        }).catch(data=>{
+            alert(data);
+        })
+
+        //故障部位
+        fetch('api/WorkReport/gzPInfo',{
+            methods:'GET',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(response=>response.json())
+        .then(data=>{
+             console.log("工位")
+            console.log(data)
+            this.gzPos =[];
+            for(var item of data){
+                var tmp={
+                    name:item.故障部位
+                }
+                this.gzPos.push(tmp);
+            }
+        }).catch(data=>{
+            alert(data);
+        })
+       
+        //获工位信息
+        // fetch('api/WorkReport/gwInfo',{
+        //     methods:'GET',
+        //     headers:{
+        //         'Content-Type':'application/json'
+        //     }
+        // }).then(response=>response.json())
+        // .then(data=>{
+        //      console.log("工位")
+        //     console.log(data)
+        //     this.statName =[];
+        //     for(var item of data){
+        //         var tmp={
+        //             name:item.工位,
+        //             desc:item.工位描述
+        //         }
+        //         this.statName.push(tmp);
+        //     }
+        // }).catch(data=>{
+        //     alert(data);
+        // })
+         //获子物料信息
+        // fetch('api/WorkReport/zwlInfo',{
+        //     methods:'GET',
+        //     headers:{
+        //         'Content-Type':'application/json'
+        //     }
+        // }).then(response=>response.json())
+        // .then(data=>{
+        //     this.subWlNo =[];
+        //     for(var item of data){
+        //         var tmp={
+        //             wlNo:item.wlNo,
+        //             wlDesc:item.wlDesc
+        //         }
+        //         this.subWlNo.push(tmp);
+        //     }
+        // }).catch(data=>{
+        //     alert(data);
+        // })
     }
 }
 </script>
@@ -2786,11 +3317,15 @@ export default {
     font-size:30px;
     text-align:left;
     line-height:40px;
+    text-align:center;
 }
 .Btns{
-    width:100px;
+    width:48%;
     border:1px solid rgba(220,220,220,0.5);
-    margin:2%;
+    margin:1%;
+    font-size:15px;
+    background:rgba(198,224,180,0.8);
+    color:rgba(0,0,0,0.8)
 }
 .tgs{
     font-size:25px;
@@ -2816,9 +3351,11 @@ export default {
 }
 .clock{
     border-radius:10%;
-    border:1px solid #000;
+    border:1px solid rgba(0,0,0,0.5);
+    margin-top:7%;
+    margin-right:20%;
     height:80px;
-    width:80px;
+    width:120px;
     line-height:80px;
     text-align:center
 }
@@ -2827,12 +3364,29 @@ export default {
     width:30px;
     height:30px;
     font-size:25px;
-    margin:45% 25%;
+    margin:30% 0%;
     line-height:30px;
     border: 1px solid rgba(0,0,0,0.5);
     text-align:center;
     cursor:pointer;
     user-select: none;
+}
+
+.selpt{
+    width:100%;
+    height:50px;
+    font-size:50px;
+    margin:2% 0%;
+}
+.stopTxt{
+    font-size:100px;
+    text-align:center;
+    color:rgba(0,0,0,0.4)
+}
+.subStopTxt{
+    display:inline-block;
+    font-size:30px;
+    margin:2% 5%;
 }
 
 </style>

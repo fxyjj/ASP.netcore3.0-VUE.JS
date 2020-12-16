@@ -61,7 +61,7 @@
             </div>
         </el-col>
         <el-col :span="4">
-            <div class="mode" style="background:#7030A0">
+            <div id="gyMaint" class="mode" style="background:#7030A0" @click="go($event)">
                 <i class="el-icon-setting" style="line-height:150px;font-size:70px;color:white"></i>
                 <h3 class="subTitle">工艺维护</h3>
             </div>

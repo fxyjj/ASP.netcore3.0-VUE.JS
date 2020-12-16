@@ -529,6 +529,21 @@ export default {
                 srhItem = str;
             }
             // console.log(srhItem);
+            //  fetch('api/OrderRelease/getsrhItem',{
+            //     method:'POST',
+            //     headers:{
+            //          'Content-Type': 'application/json'
+            //     },
+            //     body:JSON.stringify({
+            //         pline:this.selProdVal,
+            //         srhCont:srhItem
+            //     })
+            // }) .then(response=>response.json())
+            // .then(data=>{
+            //     console.log(data)
+            // }).catch(data=>{
+            //     alert(data)
+            // });
             fetch('api/OrderRelease/getOrder',{
                 method:'POST',
                 headers:{
@@ -566,6 +581,7 @@ export default {
                 .catch(data=>{
                     alert(data);
                 })
+
         },
         //选择示踪，用于数据的批量处理
         handleSelectionChange(val) {

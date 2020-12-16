@@ -212,7 +212,15 @@ export default {
                     index: 'WorkReport',
                     title: '工单管理'
                 },
-            ],  
+            ], 
+            //工单管理页面内容
+            item_gyMaint:[
+                {
+                    icon: 'el-icon-data-analysis',
+                    index: 'GYMaintance',
+                    title: '工艺维护'
+                },
+            ], 
         };
     },
     computed: {
@@ -248,8 +256,11 @@ export default {
                 this.items = this.item_prodPlan;
                 break;
             case "workRep":
-            this.items = this.item_workRep;
-            break;
+                this.items = this.item_workRep;
+                break;
+            case "gyMaint":
+                this.items = this.item_gyMaint;
+                break;
         }
     }
 };
