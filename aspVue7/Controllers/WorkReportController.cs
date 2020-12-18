@@ -106,7 +106,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<stopRes> pContinue([FromBody] stopPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPContinue @workNo='{prm.workNo}'").ToList();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPContinue @workNo='{prm.workNo}',@stopTime='{prm.stopEnd}'").ToList();
             return testData;
         }
          //报工结束
@@ -275,7 +275,61 @@ namespace aspVue7.Controllers
         //     var testData = model.Database.SqlQuery<gwInfoRes>("select 工位,工位描述 from tblPDStation").ToList();
         //     return testData;
         // }
+         //报工单总览信息
+        [HttpPost("[action]")]
+        public List<BGDViewRes> BGDView([FromBody] BGDViewPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<BGDViewRes>($"select * from tblOrdersub1 where 加工单元='{prm.line}' and cast(创建日期 as date) between cast('{prm.pdateS}' as date) and cast('{prm.pdateE}' as date) order by 创建日期").ToList();
+            return testData;
+        }
         
+        
+    }
+    //报工单总览参数
+    public class BGDViewPrm{
+        public string  line{get;set;}
+        public string pdateS{get;set;}
+        public string pdateE{get;set;}
+    }
+    //报工单总览结果类
+    public class BGDViewRes{
+        public string 报工编号{get;set;}
+        public string 创建人{get;set;}
+        public DateTime 创建日期{get;set;}
+        public string 所属车间{get;set;}
+        public string 加工单元{get;set;}
+        public string 工作组{get;set;}
+        public string 加工人员{get;set;}
+        public string 所属班组{get;set;}
+        public DateTime 生产日期{get;set;}
+        public string 作业单号{get;set;}
+        public string 物料编号{get;set;}
+        public string 物料描述{get;set;}
+        public int 工序号{get;set;}
+        public string 工序名称{get;set;}
+        public string 报工类别{get;set;}
+        public int 定额件数{get;set;}
+        public DateTime 调试开始时间{get;set;}
+        public double 调试时间{get;set;}
+        public DateTime 调试结束时间{get;set;}
+        public DateTime 作业开始时间{get;set;}
+        public DateTime 作业完工时间{get;set;}
+        public double 计划停机时间{get;set;}
+        public double 非计划停机时间{get;set;}
+        public double 完工数量{get;set;}
+        public double 合格数量{get;set;}
+        public double 料废{get;set;}
+        public double 机废{get;set;}
+        public double 调废{get;set;}
+        public double 工废{get;set;}
+        public double 待处理{get;set;}
+        public double 不良数量{get;set;}
+        public double 返工合格数量{get;set;}
+        public string 不合格单编号{get;set;}
+        public bool 状态{get;set;}
+        public int 生产人数{get;set;}
+        public int 定额人数{get;set;}
+        public DateTime 班次日期{get;set;}
     }
     //故障类型
     public class gzTInfoRes{

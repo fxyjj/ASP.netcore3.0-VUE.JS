@@ -122,6 +122,12 @@ export default new Router({
                 },
                 {
                     // vue-schart组件
+                    path: '/ReportOverview',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/WorkReportManage/ReportOverview.vue'),
+                    meta: { title: '工单总览' }
+                },
+                {
+                    // vue-schart组件
                     path: '/GYMaintance',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/GYMaintance.vue'),
                     meta: { title: '工艺维护' }

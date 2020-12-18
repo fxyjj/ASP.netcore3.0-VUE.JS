@@ -187,6 +187,16 @@
                     <div class="subStopTxt" style="margin-right:0%;"> 停机人：<strong>{{pauseMan}}</strong></div>
                     <el-button style="width:15%;height:80px;font-size:30px; margin:2% 0% 2% 5%" type="primary" @click="prodContinue()" :disabled="wtherZLP">返回</el-button>
                 </el-card>
+                <el-dialog title="结束停机确认" :visible.sync="ctnVis" :before-close="sctnClose" width="300px">
+                    <div v-if="pauseType=='非计划停机'">
+                        <div style="display:inline-block">请输入结束时间</div>
+                        <el-date-picker type="datetime" v-model="chuckCtn"></el-date-picker> 
+                    </div>
+                    <div v-else>点击确认以开始继续生产！</div>
+                    <el-button type="primary" @click="sctnCfm()">确认</el-button>
+                    <el-button type="primary" @click="sctnCancel()">取消</el-button>
+
+                </el-dialog>
             </el-col>
         </el-row>
         <el-row>
@@ -237,7 +247,7 @@
                             <el-table-column  label="操作" fixed="right" width="160">
                                 <template slot-scope="scope">
                                     <el-button @click="BGDcreate(scope.row)" :disabled="BGDcreatable">创建</el-button><!--:style='{background:(scope.row.status=="创建"?"#85ce61":"#F5F5F5")}' size="small" :disabled="scope.row.status=='创建'?false:true"-->
-                                    <el-button @click="close(scope.row)" type="danger">关闭</el-button>
+                                    <el-button @click="close(scope.row)" type="danger" :disabled="BGDcreatable">关闭</el-button>
                                 </template>
                             </el-table-column>
                             
@@ -311,10 +321,10 @@
                     <el-input v-model="testForm.workNo" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束时间" prop="testEtime">
-                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" disabled style="width:100%"></el-date-picker>
+                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" style="width:100%"></el-date-picker>
                 </el-form-item>
                  <el-form-item label="调试累计用时" prop="testTime">
-                    <el-input v-model="testForm.testTime" disabled></el-input>
+                    <el-input v-model.number="testForm.testTime"></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束人员" prop="testMan" >
                     <el-select v-model="testForm.testMan" @change="optrchge($event)" style="width:100%">
@@ -483,10 +493,10 @@
                     </el-select>
                 </el-form-item>
                  <el-form-item label="停机开始" prop="planSstime">
-                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" @change="defEndT"></el-date-picker>
+                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" :disabled="planSable"></el-date-picker><!--@change="defEndT"-->
                 </el-form-item>
                 <el-form-item label="停机结束" prop="planSetime">
-                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" disabled></el-date-picker>
+                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" :disabled="planSable"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="填写人" prop="planMan" >
                     <el-select v-model="planForm.planMan" @change="optrchge($event)" style="width:220px">
@@ -887,6 +897,9 @@ import bus from '../../common/bus';
 export default {
     data(){
         return {
+            //chuck的后门，修改非计划停机的时间
+            chuckCtn:new Date(1998,1,12),
+            ctnVis:false,
             //关闭报工单弹窗控制器
             completeVis:false,
             //修改时间开关
@@ -1106,6 +1119,8 @@ export default {
             },
             testRule:{
                 testMan:[{required:true,max:9,message:'是谁调试的？',trigger:'blur'}],
+                testEtime:[{required:true,message:'调试是什么时候结束的？',trigger:'blur'}],
+                testTime:[{required:true,type:'number',message:'调试累计时间是多少？',trigger:'blur'}]
             },
             //测试结束显示测试参数
             tStime:null,
@@ -1207,7 +1222,8 @@ export default {
                 unplanSstime:[{required:true,message:'开始时间为必须项！',trigger:'blur'}],
                 unplanStypem:[{required:true,message:'停机小类为必须项！',trigger:'blur'}],
                 unplanSqNo:[{required:true,message:'停机设备编号是多少？',trigger:'blur'}],
-                planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}]
+                planMan:[{required:true,max:10,message:'停机填写人是谁？',trigger:'blur'}],
+                unplanSDesc:[{required:true,message:'发生了什么问题？',trigger:'blur'}],
             },
             unStypem:[{label:'1',value:'管理停机'},
                       {label:'2',value:'物料停机'},
@@ -1346,6 +1362,7 @@ export default {
                 sbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
                 // sbQpart:[{required:true,message:'哪里坏了？',trigger:'blur'}],
                 // sbQtype:[{required:true,message:'报修类型是？',trigger:'blur'}],
+                sbQdesc:[{required:true,message:'出什么问题了？',trigger:'blur'}],
                 sbStop:[{required:true,message:'停机状态？',trigger:'blur'}],
             },
             sbInputVis:false,//如果在停机状态按灯，这停机状态不可更改
@@ -1406,10 +1423,56 @@ export default {
             //关闭订单参数
             nfns:false,//如果未完工数量不为0 说明订单还未完成，需要额外提示
             ordCloseVis:false,//关闭订单弹窗控制器
-            tgOrd:''//要关闭的订单作业单号
+            tgOrd:'',//要关闭的订单作业单号
+            //计划停机结束时间可用性
+            planSable:false,
         }
     },
     methods:{
+        //##################chuck 的专属后门函数######################
+        sctnCfm(){
+            fetch('api/WorkReport/pContinue',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    workNo:this.ordNo,
+                    stopEnd:this.chuckCtn
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data[0].resSign){
+                    this.pauseType = '';
+                    this.pauseDesc = '';
+                    this.pauseMan = '';
+                    this.wtherStop = false;
+                    this.$message.success("生产继续")
+                    this.ctnVis = false;
+                    this.chuckCtn = new Date(1998,1,12)
+                }else{
+                    this.$message.error("停机失败")
+                }
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        sctnCancel(){
+            this.ctnVis = false;
+            this.chuckCtn = new Date(1998,1,12)
+        },
+        sctnClose(done){
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                this.chuckCtn=new Date(1998,1,12)
+                done();
+            })
+            .catch(_ => {});
+        },
+        prodContinue(){
+            this.ctnVis = true; 
+        },
+        //############################################################
         clc(){
             this.AdfReason='';
             this.Adplan='';
@@ -1539,7 +1602,7 @@ export default {
             }
         },
         clsCfm(){
-            if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+            if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                 fetch('api/WorkReport/closeOrd',{
                     method:'POST',
                     headers:{
@@ -1587,7 +1650,7 @@ export default {
         crtconfirm(formname){
             this.$refs[formname].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/crtBGD',{
                             method:'POST',
                             headers:{
@@ -1742,7 +1805,7 @@ export default {
                     this.downNum = data[0].完工数量
                     this.failNum = data[0].不合格数量
                     this.currBGD = data[0].报工编号
-                    this.pct = ((data[0].合格数量/data[0].订单数量)*100).toFixed(0)
+                    this.pct = parseInt(((data[0].合格数量/data[0].订单数量)*100).toFixed(0))
                     this.reNewADLog();
                 }else{
                     this.ordNo = ''
@@ -1869,7 +1932,7 @@ export default {
         testComfirm(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/BGDtest',{
                             method:'POST',
                             headers:{
@@ -1932,7 +1995,7 @@ export default {
         BgComfirm(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/ProdBG',{
                             method:'POST',
                             headers:{
@@ -2064,7 +2127,7 @@ export default {
         planComfirm(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/planStop',{
                             method:'POST',
                             headers:{
@@ -2123,7 +2186,7 @@ export default {
         unplanComfirm(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/unPlanStop',{
                             method:'POST',
                             headers:{
@@ -2215,7 +2278,66 @@ export default {
         typeC(){
             this.planForm.planSstime = '';
             this.planForm.planSetime = '';
-            this.wtherFix = false;
+            if(this.planForm.planStype!="培训" && this.planForm.planStype!="会议" && this.planForm.planStype!="前道工序库存不足" && this.planForm.planStype!="IC线换料"){
+                this.planSable = true;
+                 this.wtherFix = true
+                var n = 0
+                if(this.planForm.planStype =="午休"|| this.planForm.planStype =="晚间休息"){
+                    n = 15
+                }else if(this.planForm.planStype =="午餐" || this.planForm.planStype =="晚餐" || this.planForm.planStype =="夜宵" || this.planForm.planStype =="周TMP"){
+                    n = 30
+                }else if(this.planForm.planStype =="晨餐"){
+                    n = 45
+                }
+                const tmpS = new Date()
+                switch(this.planForm.planStype){
+                    case "晨餐":
+                        tmpS.setHours(4);
+                        tmpS.setMinutes(0);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "午餐":
+                        tmpS.setHours(11);
+                        tmpS.setMinutes(40);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "午休":
+                        tmpS.setHours(14);
+                        tmpS.setMinutes(0);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "晚餐":
+                        tmpS.setHours(17);
+                        tmpS.setMinutes(20);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "晚间休息":
+                        tmpS.setHours(22);
+                        tmpS.setMinutes(0);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "夜宵":
+                        tmpS.setHours(0);
+                        tmpS.setMinutes(0);
+                        tmpS.setSeconds(0);
+                        break;
+                    case "周TMP":
+                        tmpS.setHours(15);
+                        tmpS.setMinutes(25);
+                        tmpS.setSeconds(0);
+                        break;
+                    default:
+                        break;
+                }
+                this.planForm.planSstime=new Date(tmpS);
+                // console.log(this.planForm.planSstime)
+                const tmpT = new Date(this.planForm.planSstime)
+                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
+
+            }else{
+                this.planSable = false;
+                this.wtherFix = false;
+            }
 
         },
         //计划停机时选择完开始时间后定义结束时间
@@ -2230,36 +2352,14 @@ export default {
                 }else if(this.planForm.planStype =="晨餐"){
                     n = 45
                 }
+                
                 const tmpT = new Date(this.planForm.planSstime)
                 this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
             }else{
                 this.wtherFix = false;
             }
         },
-        prodContinue(){
-            fetch('api/WorkReport/pContinue',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    workNo:this.ordNo
-                })
-            }).then(response=>response.json())
-            .then(data=>{
-                if(data[0].resSign){
-                    this.pauseType = '';
-                    this.pauseDesc = '';
-                    this.pauseMan = '';
-                    this.wtherStop = false;
-                    this.$message.success("生产继续")
-                }else{
-                    this.$message.error("停机失败")
-                }
-            }).catch(data=>{
-                alert(data)
-            }) 
-        },
+       
         //不良品记录按钮点击
         blpClick(){
             if(this.bgStage!=0){
@@ -2315,7 +2415,7 @@ export default {
         blpStore(){
             this.$refs['blpForm'].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/BLPstore',{
                             method:'POST',
                             headers:{
@@ -2380,7 +2480,7 @@ export default {
         blpAdd(){
             this.$refs['blpForm'].validate((valid) => {
                 if (valid) {
-                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                    if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                         fetch('api/WorkReport/BLPAdd',{
                             method:'POST',
                             headers:{
@@ -2494,7 +2594,7 @@ export default {
             if(this.zlVis==0){
                 this.$refs['zlForm'].validate((valid) => {
                     if (valid) {
-                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                             fetch('api/WorkReport/zlAndonCfm',{
                                 method:'POST',
                                 headers:{
@@ -2544,7 +2644,7 @@ export default {
             }else if(this.zlVis==1){
                 this.$refs['sbForm'].validate((valid) => {
                     if (valid) {
-                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                             fetch('api/WorkReport/sbAndonCfm',{
                                 method:'POST',
                                 headers:{
@@ -2600,7 +2700,7 @@ export default {
             }else{
                 this.$refs['otherForm'].validate((valid) => {
                     if (valid) {
-                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eying" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
+                        if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
                             fetch('api/WorkReport/othAndonCfm',{
                                 method:'POST',
                                 headers:{

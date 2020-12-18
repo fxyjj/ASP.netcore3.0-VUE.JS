@@ -26,6 +26,38 @@ namespace aspVue7.Controllers
             return testData;
         }
 
+        [HttpPost("[action]")]
+        public List<milinRes> crtKey([FromBody] milinPrm prm)
+        {
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<milinRes>($"EXECUTE dbo.QforKeyCreate @kStr='{prm.kstr}' ").ToList();
+            return testData;
+        }
+
+        [HttpGet("[action]")]
+        public List<kTabRes> keyTab()
+        {
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<kTabRes>("select * from tblWebToken where validate = 1 ").ToList();
+            return testData;
+        }
+
+        //密令表格结果
+        public class kTabRes{
+            public string token{get;set;}
+            public DateTime cdate{get;set;}
+            public int validate{get;set;}
+        }
+
+        //密令参数
+        public class milinPrm{
+            public string kstr{get;set;}
+        }
+        //密令结果
+        public class milinRes{
+            public bool resSign{get;set;}
+        }
+
         public class reqInfo{
             public string queryInfo{get;set;}
         }

@@ -212,6 +212,11 @@ export default {
                     index: 'WorkReport',
                     title: '工单管理'
                 },
+                {
+                    icon: 'el-icon-data-analysis',
+                    index: 'ReportOverview',
+                    title: '工单总览'
+                },
             ], 
             //工单管理页面内容
             item_gyMaint:[

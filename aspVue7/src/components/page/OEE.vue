@@ -160,7 +160,7 @@
                             </el-col>
                             <el-col :span="6">
                                 <div id="pieChart" :style='{width:"100%",height:"150px"}'></div>
-                                <i class="el-icon-info" style="-user-selection:none;cursor:pointer;"  ></i><!--@click="oeeFcn()"-->
+                                <i class="el-icon-info" style="-user-selection:none;cursor:pointer;"  @click="oeeFcn()"></i><!---->
                             </el-col>
                         </el-row>
                     </div>
@@ -229,7 +229,10 @@
                     <p>作业开始时间</p>
                     <p>{{menus[disNo].workStime}}</p>
                 </div>
-                <div class="fcnPrm">结果1</div>
+                <div class="fcnPrm">
+                    <p>结果1</p>
+                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)}}</p>
+                </div>
                 <div class="fcnPrm">
                     <p>计划停机时间</p>
                     <p>{{menus[disNo].planStime}}</p>
@@ -238,7 +241,10 @@
                     <p>非计划停机时间</p>
                     <p>{{menus[disNo].unplanStime}}</p>
                 </div>
-                <div class="fcnPrm">结果2</div>
+                <div class="fcnPrm">
+                    <p>结果2</p>
+                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p>
+                </div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">计划工作时间</div>
@@ -251,46 +257,74 @@
                     <p>{{menus[disNo].testStime}}</p>
                 </div>
                 <div class="fcnPrm">
+                    <p>结果1</p>
+                    <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)}}</p>
+                </div>
+                <div class="fcnPrm">
                     <p>计划停机时间</p>
                     <p>{{menus[disNo].planStime}}</p>
                 </div>
-                <div class="fcnPrm">结果1</div>
-                <div class="fcnPrm">结果2</div>
+                
+                <div class="fcnPrm">
+                    <p>结果2</p>
+                    <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime}}</p></div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle"> 设备开动率(A)</div>
                 <div class="fcnPrm">
                     <p>操作时间</p>
-                    <p>操作时间</p>
+                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p>
                 </div>
                 <div class="fcnPrm">
                     <p>计划工作时间</p>
-                    <p>计划工作时间</p>
+                    <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime}}</p>
                 </div>
-                <div class="fcnPrm">结果</div>
+                <div class="fcnPrm">{{(TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)}}</div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">员工效率(P)</div>
-                <div class="fcnPrm">{{menus[disNo].doneNo}}</div>
-                <div class="fcnPrm">操作时间</div>
-                <div class="fcnPrm">{{menus[disNo].fixNum}}</div>
-                <div class="fcnPrm">{{menus[disNo].fixMan}}</div>
-                <div class="fcnPrm">{{menus[disNo].prodMan}}</div>
+                <div class="fcnPrm">
+                    <p>完工数量</p>
+                    <p>{{menus[disNo].doneNo}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>操作时间</p>
+                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p></div>
+                <div class="fcnPrm">
+                    <p>定额数量</p>
+                    <p>{{menus[disNo].fixNum}}</p>
+                </div>
+                 <div class="fcnPrm">
+                     <p>结果</p>
+                     <p>{{menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)}}</p></div>
                 <div class="fcnPrm">备注</div>
-                <div class="fcnPrm">结果</div>
+                <div class="fcnPrm">
+                    <p>定额人数:{{menus[disNo].fixMan}}</p>
+                    <p>生产人数:{{menus[disNo].prodMan}}</p>
+                </div>
+                <div class="fcnPrm">
+                </div>
             </div>
              <div class="fcnRow">
                 <div class="subtitle">合格率(Q)</div>
-                <div class="fcnPrm">{{menus[disNo].doneNo}}</div>
-                <div class="fcnPrm">{{menus[disNo].failNo}}</div>
-                <div class="fcnPrm">结果</div>
+                <div class="fcnPrm">
+                    <p>完工数量</p>
+                    <p>{{menus[disNo].doneNo}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>不良数量</p>
+                    <p>{{menus[disNo].failNo}}</p>
+                </div>
+                <div class="fcnPrm">
+                    <p>结果</p>
+                    <p>{{(menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo}}</p></div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">OEE(A*P*Q)</div>
-                <div class="fcnPrm">A:</div>
-                <div class="fcnPrm">P:</div>
-                <div class="fcnPrm">Q:</div>
-                <div class="fcnPrm">结果</div>
+                <div class="fcnPrm">A:{{(TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)}}</div>
+                <div class="fcnPrm">P:{{menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)}}</div>
+                <div class="fcnPrm">Q:{{(menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo}}</div>
+                <div class="fcnPrm">{{((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime))*(menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60))*((menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo)}}</div>
             </div>
         </el-dialog>
     </div>
@@ -481,9 +515,42 @@ export default {
         }
     },
     methods: {
+        //工具方程,计算日期相差分钟数
+        TimeDifference(start,end)
+        {
+            //判断开始时间是否大于结束日期
+            if(start>end)
+            {
+                this.$message.error("开始时间不能大于结束时间！");
+                return false;
+            }
+            var begin1=start.substr(0,10).split("-");
+            var end1=end.substr(0,10).split("-");
+            //将拆分的数组重新组合，并实例成化新的日期对象
+            var date1=new Date(begin1[1] + - + begin1[2] + - + begin1[0]);
+            var date2=new Date(end1[1] + - + end1[2] + - + end1[0]);
+            //得到两个日期之间的差值m，以分钟为单位
+            //Math.abs(date2-date1)计算出以毫秒为单位的差值
+            //Math.abs(date2-date1)/1000得到以秒为单位的差值
+            //Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
+            var m=parseInt(Math.abs(date2-date1)/1000/60);
+            //小时数和分钟数相加得到总的分钟数
+            //time1.substr(11,2)截取字符串得到时间的小时数
+            //parseInt(time1.substr(11,2))*60把小时数转化成为分钟
+            var min1=parseInt(start.substr(11,2))*60+parseInt(start.substr(14,2));
+            var min2=parseInt(end.substr(11,2))*60+parseInt(end.substr(14,2));
+            //两个分钟数相减得到时间部分的差值，以分钟为单位
+            var n=min2-min1;
+            //将日期和时间两个部分计算出来的差值相加，即得到两个时间相减后的分钟数
+            var minutes=m+n;
+            console.log(min1)
+            console.log(min2)
+            // console.log()
+            return minutes;
+        },
         oeeFcn(){
             this.oeeFcnVis = true;
-            console.log("这里是公式");
+            this.TimeDifference(this.menus[this.disNo].workStime,this.menus[this.disNo].workDtime)
         },
         //工具方程，日期转字符串
         dateToString(date){  
