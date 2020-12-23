@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             tagsList: [],
-            collapse: false
+            collapse: true
         };
     },
     components: {

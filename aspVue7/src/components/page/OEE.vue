@@ -218,88 +218,89 @@
                 </div>
             </el-dialog>
         </div>
-        <el-dialog title="OEE公式" :visible.sync="oeeFcnVis" >
+        <el-dialog title="OEE公式" :visible.sync="oeeFcnVis" width="1300px" >
             <div class="fcnRow">
                 <div class="subtitle">操作时间</div>
                 <div class="fcnPrm">
                     <p>作业完工时间</p>
-                    <p>{{menus[disNo].workDtime}}</p>
+                    <p>(({{menus[disNo].workDtime}} -</p>
                 </div>
                 <div class="fcnPrm">
                     <p>作业开始时间</p>
-                    <p>{{menus[disNo].workStime}}</p>
+                    <p>{{menus[disNo].workStime}})</p>
                 </div>
                 <div class="fcnPrm">
                     <p>结果1</p>
-                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)}}</p>
+                    <p>= {{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)}})</p>
                 </div>
                 <div class="fcnPrm">
                     <p>计划停机时间</p>
-                    <p>{{menus[disNo].planStime}}</p>
+                    <p>- {{menus[disNo].planStime}}</p>
                 </div>
                 <div class="fcnPrm">
                     <p>非计划停机时间</p>
-                    <p>{{menus[disNo].unplanStime}}</p>
+                    <p>- {{menus[disNo].unplanStime}}</p>
                 </div>
                 <div class="fcnPrm">
                     <p>结果2</p>
-                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p>
+                    <p>= {{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p>
                 </div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">计划工作时间</div>
                 <div class="fcnPrm">
                     <p>作业完工时间</p>
-                    <p>{{menus[disNo].workDtime}}</p>
+                    <p>({{menus[disNo].workDtime}} - </p>
                 </div>
                 <div class="fcnPrm">
                     <p>调试开始时间</p>
-                    <p>{{menus[disNo].testStime}}</p>
+                    <p>{{menus[disNo].testStime}})</p>
                 </div>
                 <div class="fcnPrm">
                     <p>结果1</p>
-                    <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)}}</p>
+                    <p> = {{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)}}</p>
                 </div>
                 <div class="fcnPrm">
                     <p>计划停机时间</p>
-                    <p>{{menus[disNo].planStime}}</p>
+                    <p>- {{menus[disNo].planStime}}</p>
                 </div>
                 
                 <div class="fcnPrm">
                     <p>结果2</p>
-                    <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime}}</p></div>
+                    <p> = {{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime}}</p></div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle"> 设备开动率(A)</div>
                 <div class="fcnPrm">
                     <p>操作时间</p>
-                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p>
+                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}} / </p>
                 </div>
                 <div class="fcnPrm">
                     <p>计划工作时间</p>
                     <p>{{TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime}}</p>
                 </div>
-                <div class="fcnPrm">{{(TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)}}</div>
+                <div class="fcnPrm"> = {{((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*100/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)).toFixed(2)}}%</div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">员工效率(P)</div>
                 <div class="fcnPrm">
                     <p>完工数量</p>
-                    <p>{{menus[disNo].doneNo}}</p>
+                    <p>({{menus[disNo].doneNo}} /</p>
                 </div>
                 <div class="fcnPrm">
                     <p>操作时间</p>
-                    <p>{{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}</p></div>
+                    <p>(({{TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime}}/60) *</p></div>
                 <div class="fcnPrm">
                     <p>定额数量</p>
-                    <p>{{menus[disNo].fixNum}}</p>
+                    <p>{{menus[disNo].fixNum}})</p>
                 </div>
                  <div class="fcnPrm">
                      <p>结果</p>
-                     <p>{{menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)}}</p></div>
+                     <p> = {{(menus[disNo].doneNo*100/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)).toFixed(2)}}%</p></div>
                 <div class="fcnPrm">备注</div>
                 <div class="fcnPrm">
                     <p>定额人数:{{menus[disNo].fixMan}}</p>
+                    <!-- <el-divider></el-divider> -->
                     <p>生产人数:{{menus[disNo].prodMan}}</p>
                 </div>
                 <div class="fcnPrm">
@@ -308,23 +309,24 @@
              <div class="fcnRow">
                 <div class="subtitle">合格率(Q)</div>
                 <div class="fcnPrm">
-                    <p>完工数量</p>
-                    <p>{{menus[disNo].doneNo}}</p>
+                    <p>不良数量</p>
+                    <p>100% - ({{menus[disNo].failNo}} / </p>
                 </div>
                 <div class="fcnPrm">
-                    <p>不良数量</p>
-                    <p>{{menus[disNo].failNo}}</p>
+                    <p>完工数量</p>
+                    <p>{{menus[disNo].doneNo}})</p>
                 </div>
+                
                 <div class="fcnPrm">
                     <p>结果</p>
-                    <p>{{(menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo}}</p></div>
+                    <p> = {{((menus[disNo].doneNo-menus[disNo].failNo)*100/menus[disNo].doneNo).toFixed(2)}}%</p></div>
             </div>
             <div class="fcnRow">
                 <div class="subtitle">OEE(A*P*Q)</div>
-                <div class="fcnPrm">A:{{(TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)}}</div>
-                <div class="fcnPrm">P:{{menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)}}</div>
-                <div class="fcnPrm">Q:{{(menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo}}</div>
-                <div class="fcnPrm">{{((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime))*(menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60))*((menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo)}}</div>
+                <div class="fcnPrm">A:{{((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*100/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime)).toFixed(2)}}%</div>
+                <div class="fcnPrm"> * P:{{(menus[disNo].doneNo*100/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60)).toFixed(2)}}%</div>
+                <div class="fcnPrm"> * Q:{{((menus[disNo].doneNo-menus[disNo].failNo)*100/menus[disNo].doneNo).toFixed(2)}}</div>
+                <div class="fcnPrm"> = {{(((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)/(TimeDifference(menus[disNo].testStime,menus[disNo].workDtime)-menus[disNo].planStime))*(menus[disNo].doneNo/((TimeDifference(menus[disNo].workStime,menus[disNo].workDtime)-menus[disNo].planStime-menus[disNo].unplanStime)*menus[disNo].fixNum/60))*((menus[disNo].doneNo-menus[disNo].failNo)/menus[disNo].doneNo)).toFixed(4)*100}}%</div>
             </div>
         </el-dialog>
     </div>
@@ -1057,7 +1059,7 @@ export default {
 }
 .fcnPrm{
     display:inline-block;
-    font-size:15px;
+    font-size:25px;
     margin:2px 5px;
 }
 .fcnRow{

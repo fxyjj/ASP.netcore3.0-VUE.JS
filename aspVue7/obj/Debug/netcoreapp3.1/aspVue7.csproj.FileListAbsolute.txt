@@ -173,7 +173,6 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreap
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.pdb
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\obj\Debug\netcoreapp3.1\aspVue7.genruntimeconfig.cache
-C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\static\table.json
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\src\assets\third_party_icon\iconfont.json
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -186,3 +185,4 @@ C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreap
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\NPOI.OpenXml4Net.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\NPOI.OpenXmlFormats.dll
 C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
+C:\Users\sexiao\Desktop\WebAPP\ASP.netcore3.0-VUE.JS\aspVue7\bin\Debug\netcoreapp3.1\static_NA\table.json

@@ -224,6 +224,14 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<empInfoRes>($"execute dbo.QforEmployeeSrh @line='{prm.workNo}'").ToList();
             return testData;
         }
+        
+         //员工信息
+         [HttpGet("[action]")]
+        public List<empInfoRes> optr2Info(){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<empInfoRes>("SELECT [Name] as name,[Password] as pwd FROM tblemployees WHERE(Job=N'MT' or Job=N'ME') order by [Name]").ToList();
+            return testData;
+        }
 
          //设备编号信息
          [HttpPost("[action]")]
@@ -275,15 +283,49 @@ namespace aspVue7.Controllers
         //     var testData = model.Database.SqlQuery<gwInfoRes>("select 工位,工位描述 from tblPDStation").ToList();
         //     return testData;
         // }
-         //报工单总览信息
+        //报工单总览信息
         [HttpPost("[action]")]
         public List<BGDViewRes> BGDView([FromBody] BGDViewPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<BGDViewRes>($"select * from tblOrdersub1 where 加工单元='{prm.line}' and cast(创建日期 as date) between cast('{prm.pdateS}' as date) and cast('{prm.pdateE}' as date) order by 创建日期").ToList();
+            var testData = model.Database.SqlQuery<BGDViewRes>($"select * from qforOrderDailySheetAS where 加工单元='{prm.line}' and cast(班次日期 as date) between cast(dbo.dateTransfer('{prm.pdateS}') as date) and cast(dbo.dateTransfer('{prm.pdateE}') as date) order by 班次日期").ToList();
             return testData;
         }
-        
-        
+        //报工单编辑信息
+        [HttpPost("[action]")]
+        public List<blpStoreRes> editCfm([FromBody] BGDeditPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"execute QforBGDEdit @bgNo='{prm.bgNo}',@prodDate='{prm.prodDate}',@clsDate='{prm.clsDate}',@cls='{prm.cls}',@workMan='{prm.workMan}',@testStime='{prm.testStime}',@testEtime='{prm.testEtime}',@workStime='{prm.workStime}',@workEtime='{prm.workEtime}',@planStime='{prm.planStime}',@unplanStime='{prm.unplanStime}',@doneNum='{prm.doneNum}',@passNum='{prm.passNum}',@failNum='{prm.failNum}',@lf='{prm.lf}',@jf='{prm.jf}',@df='{prm.df}',@gf='{prm.gf}',@dcl='{prm.dcl}',@prodMan='{prm.prodMan}',@repassNum='{prm.repassNum}'").ToList();
+            return testData;
+        }
+        [HttpPost("[action]")]
+        public List<blpStoreRes> delBGD([FromBody] BGDeditPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<blpStoreRes>($"execute QforBGDDelete @bgNo='{prm.bgNo}'").ToList();
+            return testData;
+        }
+    }
+    public class BGDeditPrm{
+        public  string bgNo{get;set;}
+        public DateTime prodDate{get;set;}
+        public DateTime clsDate{get;set;}
+        public string cls{get;set;}
+        public string workMan{get;set;}
+        public DateTime testStime{get;set;}
+        public DateTime workStime{get;set;}
+        public DateTime workEtime{get;set;}
+        public double planStime{get;set;}
+        public double unplanStime{get;set;}
+        public double doneNum{get;set;}
+        public double passNum{get;set;}
+        public double failNum{get;set;}
+        public double lf{get;set;}
+        public double jf{get;set;}
+        public double df{get;set;}
+        public double gf{get;set;}
+        public double dcl{get;set;}
+        public int prodMan{get;set;}
+        public DateTime testEtime{get;set;}
+        public double repassNum{get;set;}
     }
     //报工单总览参数
     public class BGDViewPrm{
@@ -294,42 +336,51 @@ namespace aspVue7.Controllers
     //报工单总览结果类
     public class BGDViewRes{
         public string 报工编号{get;set;}
-        public string 创建人{get;set;}
-        public DateTime 创建日期{get;set;}
-        public string 所属车间{get;set;}
-        public string 加工单元{get;set;}
-        public string 工作组{get;set;}
-        public string 加工人员{get;set;}
-        public string 所属班组{get;set;}
         public DateTime 生产日期{get;set;}
+        public DateTime 班次日期{get;set;}
+        public string 加工单元{get;set;}
+        public string 所属班组{get;set;}
+        public string 加工人员{get;set;}
         public string 作业单号{get;set;}
         public string 物料编号{get;set;}
         public string 物料描述{get;set;}
         public int 工序号{get;set;}
         public string 工序名称{get;set;}
-        public string 报工类别{get;set;}
         public int 定额件数{get;set;}
         public DateTime 调试开始时间{get;set;}
         public double 调试时间{get;set;}
-        public DateTime 调试结束时间{get;set;}
         public DateTime 作业开始时间{get;set;}
         public DateTime 作业完工时间{get;set;}
         public double 计划停机时间{get;set;}
         public double 非计划停机时间{get;set;}
         public double 完工数量{get;set;}
         public double 合格数量{get;set;}
+        public double 不良数量{get;set;}
         public double 料废{get;set;}
         public double 机废{get;set;}
         public double 调废{get;set;}
         public double 工废{get;set;}
         public double 待处理{get;set;}
-        public double 不良数量{get;set;}
-        public double 返工合格数量{get;set;}
-        public string 不合格单编号{get;set;}
-        public bool 状态{get;set;}
+        public double 理论时间{get;set;}
+        public double 计划工作时间{get;set;}
+        public double 操作时间{get;set;}
+        public double 定额产量{get;set;}
+        public double 合格率{get;set;}
+        public double 员工效率{get;set;}
+        public double 设备开动率{get;set;}
         public int 生产人数{get;set;}
         public int 定额人数{get;set;}
-        public DateTime 班次日期{get;set;}
+        public bool oee{get;set;}
+        public string 工作组{get;set;}
+         public bool 状态{get;set;}
+        public string 报工类别{get;set;}
+        public DateTime 调试结束时间{get;set;}
+        public double 调试到完工{get;set;}
+        public double 作业到完工{get;set;}
+        public string 订单类型{get;set;}
+        public double 返工合格数量{get;set;}
+        public double 一次合格率{get;set;}
+        public double 停机率{get;set;}
     }
     //故障类型
     public class gzTInfoRes{

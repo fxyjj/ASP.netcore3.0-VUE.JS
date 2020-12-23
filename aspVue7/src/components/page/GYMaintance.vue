@@ -8,21 +8,21 @@
         </el-card>
         <el-card>
             <el-table :data="tableData" style="width: 100%"  height="860" border fit>
-                <el-table-column prop="wlNo" label="物料编号"></el-table-column>
-                <el-table-column prop="station" label="工作中心"></el-table-column>
-                <el-table-column prop="planCT" label="PlanChangeOverTime"></el-table-column>
-                <el-table-column prop="wlDesc" label="物料描述"></el-table-column>
+                <el-table-column prop="wlNo" label="物料编号" width="120"></el-table-column>
+                <el-table-column prop="station" label="工作中心" width="150"></el-table-column>
+                <el-table-column prop="planCT" label="PlanChangeOverTime" width="150"></el-table-column>
+                <el-table-column prop="wlDesc" label="物料描述" width="220"></el-table-column>
                 <el-table-column prop="opAc" label="OpAc"></el-table-column>
-                <el-table-column prop="oprTxt" label="OperationShortText"></el-table-column>
-                <el-table-column prop="bNum" label="BaseQuantity"></el-table-column>
-                <el-table-column prop="cGroup" label="工作组"></el-table-column>
+                <el-table-column prop="oprTxt" label="OperationShortText" width="150"></el-table-column>
+                <el-table-column prop="bNum" label="BaseQuantity" width="100"></el-table-column>
+                <el-table-column prop="cGroup" label="工作组" width="120"></el-table-column>
                 <el-table-column prop="type" label="类型"></el-table-column>
                 <el-table-column prop="stdVal" label="StdVal"></el-table-column>
-                <el-table-column prop="binCap" label="BatchCapcity"></el-table-column>
-                <el-table-column prop="bchNum" label="BatchQuantity"></el-table-column>
+                <el-table-column prop="binCap" label="BatchCapcity" width="100"></el-table-column>
+                <el-table-column prop="bchNum" label="BatchQuantity" width="120"></el-table-column>
                 <el-table-column prop="prt" label="print"></el-table-column>
-                <el-table-column prop=subsidy label="SubsidyAmount"></el-table-column>
-                <el-table-column prop="coeff" label="EquivalentCoefficient"></el-table-column>
+                <el-table-column prop=subsidy label="SubsidyAmount" width="120"></el-table-column>
+                <el-table-column prop="coeff" label="EquivalentCoefficient" width="150"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="150px" >
                     <template slot-scope="scope">
                         <!-- <el-button @click="order(scope.row)" :style='{background:(scope.row.status=="创建"?"#85ce61":"#F5F5F5")}' size="small" :disabled="scope.row.status=='创建'?false:true">下达</el-button> -->

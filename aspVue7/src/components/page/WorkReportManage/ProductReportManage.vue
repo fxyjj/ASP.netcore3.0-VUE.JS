@@ -51,7 +51,7 @@
                                 </div>
                             </el-card>
                         </el-col>
-                        <el-col :span="1" ><el-divider style="height:250px;margin:0% 50%" direction="vertical"></el-divider></el-col>
+                        <el-col :span="1" ><div style="visibility:hidden">无用工具</div></el-col>
                         <el-col :span="4">
                             <!-- 调试完成后显示 -->
                             <el-card v-if="bgStage>=3" style="height:250px" shadow="hover">
@@ -64,7 +64,7 @@
                                 <div class="bgd">调试时间:{{duration}}</div>
                             </el-card>
                             <el-card v-else-if="bgStage==2" style="height:250px" shadow="hover">
-                                <el-select v-model="testMan" placeholder="调试员" @change="optrchge($event)" >
+                                <el-select v-model="testMan" placeholder="调试员"  ><!--@change="optrchge($event,0)"-->
                                     <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
                                 </el-select>
                                 <el-select v-model="Cgroup" placeholder="班组" style="margin-top:5%">
@@ -90,18 +90,18 @@
                                 <div class="fcnBtn" @click="Ts()">开始调试</div>
                             </div>
                         </el-col>
-                        <el-col :span="1"><el-divider direction="vertical" style="height:250px;margin:0% 50%"></el-divider></el-col>
+                        <el-col :span="1"><div style="visibility:hidden">无用工具</div></el-col>
                         <el-col :span="4">  
                             <div v-if="bgStage==3">
                                     <div v-if="prodVis" class="fcnBtn" @click="Sc()">开始生产</div>
                                     <el-card v-else style="height:250px" shadow="hover" >
-                                        <el-select v-model="workMan" placeholder="加工人员" @change="optrchge($event)">
+                                        <el-select v-model="workMan" placeholder="加工人员" ><!--@change="optrchge($event,0)"-->
                                             <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
                                         </el-select>
                                         <el-select v-model="prodCgp" placeholder="所属班组" style="margin:10px 0px">
                                             <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
                                         </el-select>
-                                        <el-date-picker v-model="prodStime" type="date" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
+                                        <el-date-picker v-model="prodStime" type="date" value-format="yyyy-MM-dd" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
                                         <el-date-picker v-model="workStime" type="datetime" placeholder="作业开始时间" style="width:96%"></el-date-picker>
                                         <el-button type="primary" @click="prodComfirm()" style="width:100%;margin:10px 0px">确认</el-button>
                                     </el-card>
@@ -115,7 +115,7 @@
                                 <div class="bgd">{{scDate}}</div>
                             </el-card>
                         </el-col>
-                        <el-col :span="1"><el-divider direction="vertical" style="height:250px;margin:0% 50%"></el-divider></el-col>
+                        <el-col :span="1"><div style="visibility:hidden">无用工具</div></el-col>
                         <el-col :span="4">
                             <div v-if="bgStage==4">
                                 <div class="fcnBtn" @click="Bg()">开始报工</div>
@@ -174,18 +174,20 @@
                                 <div class="bgd">返工合格数量:{{pBgRepassNum}}</div>
                             </el-card>
                         </el-col>
-                        <el-col :span="1"><el-divider direction="vertical" style="height:250px;margin:0% 50%"></el-divider></el-col>
+                        <el-col :span="1"><div style="visibility:hidden">无用工具</div></el-col>
                         <el-col :span="4">
                             <div v-if="bgStage>=5" class="fcnBtn" @click="BgcloseBtn()">关闭报工单</div>
                         </el-col>
                     </el-row>   
                 </el-card>
                 <el-card v-else style="height:290px;margin:8px 0px">
-                    <div class="stopTxt">停机了</div>
+                    <el-row>
+                        <el-col :span="20"><div class="stopTxt">停机了</div> </el-col>
+                        <el-col :span="4"> <el-button style="height:100px;width:200px;font-size:30px; margin:10% 5% 5% 5%" type="primary" @click="prodContinue()" :disabled="wtherZLP">返回</el-button></el-col>
+                    </el-row>
                     <div class="subStopTxt" style="margin-left:0%;">停机类型：<strong>{{pauseType}}</strong></div>
                     <div class="subStopTxt">停机描述：<strong>{{pauseDesc}}</strong></div>
                     <div class="subStopTxt" style="margin-right:0%;"> 停机人：<strong>{{pauseMan}}</strong></div>
-                    <el-button style="width:15%;height:80px;font-size:30px; margin:2% 0% 2% 5%" type="primary" @click="prodContinue()" :disabled="wtherZLP">返回</el-button>
                 </el-card>
                 <el-dialog title="结束停机确认" :visible.sync="ctnVis" :before-close="sctnClose" width="300px">
                     <div v-if="pauseType=='非计划停机'">
@@ -202,7 +204,7 @@
         <el-row>
              <el-col :span="18">
                 <el-row>
-                     <el-col :span="5">
+                     <!-- <el-col :span="5">
                           <el-card style="margin-right:8px">
                                 <div class="title">当班员工信息</div>
                                 <el-table :data="manInfo" style="" height="220">
@@ -212,7 +214,7 @@
                                 </el-table>
                             </el-card>
                     </el-col>
-                    <el-col :span="19">
+                    <el-col :span="19"> -->
                         <el-card style="margin-right:8px;height:300px;">
                             <div class="title" >当前订单</div>
                             <div class="tgs">订单编号：{{ordNo}}</div>
@@ -227,7 +229,7 @@
                                 <el-col :span="21"><el-progress :stroke-width="25" :percentage="pct" color="blue" style="margin-top:6px"></el-progress></el-col>
                             </el-row>
                         </el-card>
-                    </el-col>
+                    <!-- </el-col> -->
                 </el-row>
                 <el-row>
                     <el-card style="margin-top:8px;margin-right:8px">
@@ -303,7 +305,7 @@
                     <el-input v-model="crtForm.bgCate" disabled></el-input>
                 </el-form-item>
                  <el-form-item label="创建人" prop="crtMan">
-                    <el-select v-model="crtForm.crtMan" @change="optrchge($event)" style="width:100%">
+                    <el-select v-model="crtForm.crtMan" @change="optrchge($event,0)" style="width:100%">
                         <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
                     </el-select>
                 </el-form-item>
@@ -327,7 +329,7 @@
                     <el-input v-model.number="testForm.testTime"></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束人员" prop="testMan" >
-                    <el-select v-model="testForm.testMan" @change="optrchge($event)" style="width:100%">
+                    <el-select v-model="testForm.testMan" @change="optrchge($event,0)" style="width:100%">
                         <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                     </el-select>
                 </el-form-item>
@@ -370,7 +372,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="填写人" prop="blpMan">
-                            <el-select v-model="blpForm.blpMan" :disabled="inputDis" @change="optrchge($event)">
+                            <el-select v-model="blpForm.blpMan" :disabled="inputDis" @change="optrchge($event,0)">
                                 <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                             </el-select>
                         </el-form-item>
@@ -442,7 +444,7 @@
                     <el-col :span="6">
                         <el-form-item label="工位" prop="blpPos">
                             <el-select v-model="blpForm.blpPos">
-                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                                <el-option  v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -493,13 +495,13 @@
                     </el-select>
                 </el-form-item>
                  <el-form-item label="停机开始" prop="planSstime">
-                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" :disabled="planSable"></el-date-picker><!--@change="defEndT"-->
+                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" @change="defEndT"></el-date-picker><!---->
                 </el-form-item>
                 <el-form-item label="停机结束" prop="planSetime">
                     <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" :disabled="planSable"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="填写人" prop="planMan" >
-                    <el-select v-model="planForm.planMan" @change="optrchge($event)" style="width:220px">
+                    <el-select v-model="planForm.planMan" @change="optrchge($event,0)" style="width:220px">
                         <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                     </el-select>
                 </el-form-item>
@@ -536,7 +538,7 @@
                    <el-date-picker v-model="unplanForm.unplanSstime" type="datetime"  placeholder="选择日期"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="填写人" prop="unplanMan" >
-                    <el-select v-model="unplanForm.unplanMan" @change="optrchge($event)" style="width:220px">
+                    <el-select v-model="unplanForm.unplanMan" @change="optrchge($event,0)" style="width:220px">
                         <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                     </el-select>
                 </el-form-item>
@@ -578,7 +580,7 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="填写人" prop="zlMan">
-                            <el-select v-model="zlForm.zlMan" @change="optrchge($event)">
+                            <el-select v-model="zlForm.zlMan" @change="optrchge($event,0)">
                                 <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
                             </el-select>
                         </el-form-item>
@@ -622,7 +624,7 @@
                      <el-col :span="8">
                         <el-form-item label="工位" prop="zlPos">
                             <el-select v-model="zlForm.zlPos" >
-                                <el-option v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
+                                <el-option  v-for="item in eqpNo" :key="item.sbNo" :value="item.sbNo">{{item.sbNo}}</el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -659,7 +661,7 @@
                     </el-col>
                      <el-col :span="8">
                         <el-form-item label="安灯人" prop="zlAndonMan">
-                            <el-select v-model="zlForm.zlAndonMan" @change="optrchge($event)">
+                            <el-select v-model="zlForm.zlAndonMan" @change="optrchge($event,0)">
                                 <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                             </el-select>
                         </el-form-item>
@@ -701,7 +703,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="报修人员" prop="sbMan">
-                            <el-select v-model="sbForm.sbMan" @change="optrchge($event)">
+                            <el-select v-model="sbForm.sbMan" @change="optrchge($event,0)">
                                 <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                             </el-select>
                         </el-form-item>
@@ -780,7 +782,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="安灯人" prop="othMan">
-                            <el-select v-model="otherForm.othMan" @change="optrchge($event)">
+                            <el-select v-model="otherForm.othMan" @change="optrchge($event,0)">
                                 <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
                             </el-select>
                         </el-form-item>
@@ -832,16 +834,16 @@
         </el-dialog>
         <!-- 响应弹窗 -->
         <el-dialog title="响应" :visible.sync="respVis" :before-close="respClose" width="300px">
-            <el-select v-model="AdRespMan" placeholder="响应人" @change="optrchge($event)" style="width:100%">
-                <el-option v-for="item in optr" :key="item.name" :value="item.name" >{{item.name}}</el-option>
+            <el-select v-model="AdRespMan" placeholder="响应人" @change="optrchge($event,1)" style="width:100%">
+                <el-option v-for="item in optr2" :key="item.name" :value="item.name" >{{item.name}}</el-option>
             </el-select>
             <el-button type="primary" @click="AdRespCancel()" style="width:40%;margin:10px 5% 0px">取消</el-button>
             <el-button type="primary" @click="AdResp()" style="width:40%;margin:10px 5% 0px">确认</el-button>
         </el-dialog>
         <!-- 解决弹窗 -->
         <el-dialog title="解决" :visible.sync="resolveVis" :before-close="resolveClose" width="300px">
-             <el-select v-model="AdSolveMan" placeholder="解决人" @change="optrchge($event)" style="width:100%">
-                <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
+             <el-select v-model="AdSolveMan" placeholder="解决人" @change="optrchge($event,1)" style="width:100%">
+                <el-option v-for="item in optr2" :key="item.name" :value="item.name">{{item.name}}</el-option>
             </el-select>
             <el-select v-model="AdTmpSolve" placeholder="临时解决" style="width:100%;margin-top:10px" @change="clc()">
                 <el-option :value="0">已解决</el-option>
@@ -855,7 +857,7 @@
         </el-dialog>
         <!-- 关闭按灯弹窗 -->
         <el-dialog title="关闭" :visible.sync="cfmVis" :before-close="cfmClose" width="300px">
-            <el-select v-model="AdcfmMan" placeholder="关闭人" @change="optrchge($event)" style="width:100%">
+            <el-select v-model="AdcfmMan" placeholder="关闭人" @change="optrchge($event,0)" style="width:100%">
                 <el-option v-for="item in optr" :key="item.name" :value="item.name">{{item.name}}</el-option>
             </el-select>
             <el-button type="primary" @click="AdCfmCancel()" style="width:40%;margin:10px 5% 0px">取消</el-button>
@@ -908,8 +910,12 @@ export default {
             //最终修改的时间
             lastTestTime:new Date(1998,1,12),
             lastStartTime:new Date(1998,1,12),
+            //标记,0 为班组长数组，1为祭祀数组
+            sign:0,
             //操作人员数组
             optr:[],
+            //响应&解决人员
+            optr2:[],
             //设备编号数组
             eqpNo:[],
             //部门数组
@@ -1132,8 +1138,8 @@ export default {
             prodVis:true,
             workMan:'',
             prodCgp:'',
-            prodStime:'',
-            workStime:'',
+            prodStime:new Date(),
+            workStime:new Date(),
             //生产结果参数
             scworkMan:'',
             scBZ:'',
@@ -1144,7 +1150,7 @@ export default {
             BgForm:{
                 BgworkNo:'',
                 BgproceNo:'',
-                BgTime:'',
+                BgTime:new Date(),
                 BgprodNum:null,
                 BgpassNum:null, 
                 BgRepassNum:null,
@@ -1215,7 +1221,7 @@ export default {
                 unplanStypem:'',
                 unplanSDesc:'',
                 unplanSqNo:'',
-                unplanSstime:'',
+                unplanSstime:new Date(),
                 unplanMan:''
             },
             unplanRule:{
@@ -1250,7 +1256,7 @@ export default {
                 blpMan:'',//填写人
                 blpCgroup:'',
                 blpMwldesc:'',
-                blpDate:'',
+                blpDate:new Date(),
                 blpbgNo:'',
                 blpProceNo:null,
                 blpProceDesc:'',
@@ -1261,7 +1267,7 @@ export default {
                 blpNum:null,
                 blpPos:'',//工位
                 blpFDesc:'',//不良描述
-                blpRPsNum:null,
+                blpRPsNum:0,
                 blpPreason:'',
                 blpTip:''
             },
@@ -1285,7 +1291,7 @@ export default {
                 blpNum:[{required:true,type:'number',message:'必须填数字哦',trigger:'blur'}],
                 blpPos:[{required:true,message:'哪个工位？',trigger:'blur'}],//工位
                 blpFDesc:[{required:true,message:'简短描述下呗！',trigger:'blur'}],//不良描述
-                blpRPsNum:[{required:true,type:'number',message:'此处必须是数字哦！',trigger:'blur'}],
+                // blpRPsNum:[{required:true,type:'number',message:'此处必须是数字哦！',trigger:'blur'}],
                 // blpPreason:[{required:true,message:'(!*_*!)为啥就过了？',trigger:'blur'}]
             },
             blpTab:[],
@@ -1313,7 +1319,7 @@ export default {
                 zlwlDesc:'',
                 zlPos:'',
                 zlQdesc:'',
-                zlRPsNum:null,
+                zlRPsNum:0,
                 zlsbNo:'',
                 zlRea:'',
                 zlTip:'',
@@ -1328,7 +1334,7 @@ export default {
                 zlwlNo:[{required:true,message:'物料编号不能为空！',trigger:'blur'}],
                 zlwlDesc:[{required:true,message:'物料描述不能为空！',trigger:'blur'}],
                 zlPos:[{required:true,message:'工位不能为空！',trigger:'blur'}],
-                zlRPsNum:[{required:true,type:'number',message:'返工合格数量？',trigger:'blur'}],
+                // zlRPsNum:[{required:true,type:'number',message:'返工合格数量？',trigger:'blur'}],
                 zlsbNo:[{required:true,message:'设备编号不能为空！',trigger:'blur'}],
                 zlAndonMan:[{required:true,message:'安灯人是谁？',trigger:'blur'}],
             },
@@ -1480,8 +1486,7 @@ export default {
         },
         //选择产线
         lsel(event){
-            this.pLine='',
-            console.log(event);
+            this.pLine=''
             if(event=="EGR阀装配线"){
                 this.lines=this.EGRLine;
             }else if(event=="Cooler/Module线"){
@@ -1491,7 +1496,6 @@ export default {
             }
         },
         gotoProd(){
-           
             if(this.pLine==''){
                 this.$message.error("请选择一个加工单元！")
                 return;
@@ -1499,7 +1503,6 @@ export default {
             this.getOrder();
             this.getBGD();
             this.getDMenu();
-             console.log(this.BGDcreatable)
              //所有订单数据表格加载
             fetch('api/WorkReport/allOrdDisp',{
                 method:'POST',
@@ -1592,7 +1595,6 @@ export default {
             })
         },
         close(row){
-            console.log(row);
             this.tgOrd = row.workNo;
             this.ordCloseVis = true;
             if(row.unfnsNum != 0){
@@ -1770,7 +1772,6 @@ export default {
                             this.duration = data[0].duration
                             this.bgStage = 3;
                         }else{
-                            console.log("没有调试")
                             this.bgStage = 1
                         }
                     }
@@ -1874,8 +1875,8 @@ export default {
                     this.scDate = this.dateToString(this.prodStime);
                     this.workMan = '';
                     this.prodCgp = '';
-                    this.workStime = '';
-                    this.prodStime = '';
+                    this.workStime = new Date();
+                    this.prodStime = new Date();
                     this.bgStage = 4;
                 }else{
                     this.$message.error("开始失败！");
@@ -2330,7 +2331,6 @@ export default {
                         break;
                 }
                 this.planForm.planSstime=new Date(tmpS);
-                // console.log(this.planForm.planSstime)
                 const tmpT = new Date(this.planForm.planSstime)
                 this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
 
@@ -3051,11 +3051,11 @@ export default {
                 alert(data)
             })
         },
-        optrchge(name){
-            console.log(name);
+        optrchge(name,sig){
             if(name!=''){
                 this.pwdVis = true;
                 this.empName = name;
+                this.sign = sig;
             }
         },
         pwdClose(done){
@@ -3082,7 +3082,13 @@ export default {
             .catch(_ => {});
         },
         pwdValidate(){
-            for(var item of this.optr){
+            var tmp = []
+            if(this.sign == 0){
+                tmp = this.optr;
+            }else{
+                tmp = this.optr2;
+            }
+            for(var item of tmp){
                 if(item.name==this.empName){
                    if(this.empPwd==item.pwd){
                         this.$message.success("身份验证成功！");
@@ -3174,7 +3180,6 @@ export default {
                 })
             }).then(response=>response.json())
             .then(data=>{
-                // console.log(data)
                 this.optr=[];
                 for(var item of data){
                     var tmp={
@@ -3197,8 +3202,6 @@ export default {
                 })
             }).then(response=>response.json())
             .then(data=>{
-                console.log("设备编号")
-                console.log(data)
                 this.eqpNo =[];
                 for(var item of data){
                     var tmp={
@@ -3221,7 +3224,6 @@ export default {
                 })
             }).then(response=>response.json())
             .then(data=>{
-                // console.log(data)
                 this.clsName =[];
                 for(var item of data){
                     var tmp={
@@ -3311,7 +3313,6 @@ export default {
             }
         }).then(response=>response.json())
         .then(data=>{
-            // console.log(data)
             this.deptName =[];
             for(var item of data){
                 var tmp={
@@ -3332,14 +3333,32 @@ export default {
             }
         }).then(response=>response.json())
         .then(data=>{
-             console.log("工位")
-            console.log(data)
             this.gzType =[];
             for(var item of data){
                 var tmp={
                     name:item.故障类型
                 }
                 this.gzType.push(tmp);
+            }
+        }).catch(data=>{
+            alert(data);
+        })
+
+        //故障类型
+        fetch('api/WorkReport/optr2Info',{
+            methods:'GET',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(response=>response.json())
+        .then(data=>{
+            this.optr2 =[];
+            for(var item of data){
+                var tmp={
+                    name:item.name,
+                    pwd:item.pwd
+                }
+                this.optr2.push(tmp);
             }
         }).catch(data=>{
             alert(data);
@@ -3353,8 +3372,6 @@ export default {
             }
         }).then(response=>response.json())
         .then(data=>{
-             console.log("工位")
-            console.log(data)
             this.gzPos =[];
             for(var item of data){
                 var tmp={

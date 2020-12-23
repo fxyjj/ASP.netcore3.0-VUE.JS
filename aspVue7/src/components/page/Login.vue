@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <img src='../../assets/img/bwlogo.png' style="width:20%;margin:20px"/>
-        <div>version:20201218</div>
+        <div>version:20201223</div>
         <div class="ms-login" id="loginPage">
             
             <div class="ms-title">用户登录</div>
@@ -186,7 +186,6 @@ export default {
                 // console.log("new pwd:"+this.param.password)
                 // var ciphertext = CryptoJS.AES.encrypt(this.param.password,"secretkey1234567").toString();
                 var ciphertext = shaJS(this.param.password);
-                console.log(ciphertext);
                 fetch('api/Login/validate',{
                             method:'POST',
                             headers: {
@@ -278,13 +277,13 @@ export default {
             // this.regRight = false;
             // var ciphertext = CryptoJS.AES.encrypt(this.regParam.pwd,"secretkey123").toString();
             var ciphertext = shaJS(this.regParam.pwd);
-            console.log(this.regParam.name)
-            console.log(this.regParam.key)
-            console.log(this.regParam.user)
-            console.log("ori: "+this.regParam.pwd)
-            console.log("cipher: "+ciphertext)
-            console.log(this.regParam.Cpwd)
-            console.log(this.regRight)
+            // console.log(this.regParam.name)
+            // console.log(this.regParam.key)
+            // console.log(this.regParam.user)
+            // console.log("ori: "+this.regParam.pwd)
+            // console.log("cipher: "+ciphertext)
+            // console.log(this.regParam.Cpwd)
+            // console.log(this.regRight)
 
             fetch('api/Login/registration',{
                             method:'POST',
@@ -300,7 +299,6 @@ export default {
                         })
                         .then(response=>response.json())
                         .then(data=>{
-                            console.log(data)
                             if(data[0].令牌有效性 == 1){
                                 if(data[0].令牌使用情况 == 1){
                                     if(data[0].用户名使用情况 == 0){
@@ -400,11 +398,6 @@ export default {
                  this.mdfyTips = "请确认两次输入的密码一致！"
                 return;
             }
-
-            console.log(this.mdfyForm.username)
-            console.log(this.mdfyForm.permit)
-            console.log(this.mdfyForm.newpwd)
-
             // var ciphertext = CryptoJS.AES.encrypt(this.mdfyForm.newpwd,"secretkey123").toString();
             var ciphertext = shaJS(this.mdfyForm.newpwd);
             fetch('api/Login/modifyPwd',{

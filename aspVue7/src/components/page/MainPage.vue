@@ -40,11 +40,12 @@
                 <h3 class="subTitle">生产计划</h3>
             </div>
         </el-col>
-        <el-col :span="4">
-            <div id="exit" class="mode" style="background:#BFBFBF" @click="exit()">
-                <i class="iconfont el-icon-blinklighttuichu" style="line-height:150px;color:white"></i>
-                <h3 class="subTitle">返回登陆</h3>
+        <el-col :span="4"> 
+            <div id="workRep" class="mode" style="background:#0066FF"  @click="go($event)"><!-- -->
+                <i class="el-icon-document-copy" style="line-height:150px;font-size:70px;color:white"></i>
+                <h3 class="subTitle">工单管理</h3>
             </div>
+            
         </el-col>
         <el-col :span="2">
             <div style="visibility:hidden">这是用来填充的</div>
@@ -61,7 +62,7 @@
             </div>
         </el-col>
         <el-col :span="4">
-            <div id="gyMaint" class="mode" style="background:#7030A0" ><!--@click="go($event)"-->
+            <div id="gyMaint" class="mode" style="background:#7030A0" @click="go($event)"><!---->
                 <i class="el-icon-setting" style="line-height:150px;font-size:70px;color:white"></i>
                 <h3 class="subTitle">工艺维护</h3>
             </div>
@@ -79,9 +80,9 @@
             </div>
         </el-col>
          <el-col :span="4">
-            <div id="workRep" class="mode" style="background:#0066FF"  @click="go($event)"><!-- -->
-                <i class="el-icon-document-copy" style="line-height:150px;font-size:70px;color:white"></i>
-                <h3 class="subTitle">工单管理</h3>
+            <div id="exit" class="mode" style="background:#BFBFBF" @click="exit()">
+                <i class="iconfont el-icon-blinklighttuichu" style="line-height:150px;color:white"></i>
+                <h3 class="subTitle">返回登陆</h3>
             </div>
         </el-col>
     </el-row>

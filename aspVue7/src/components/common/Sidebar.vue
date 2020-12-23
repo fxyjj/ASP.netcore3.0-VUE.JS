@@ -54,7 +54,7 @@ import bus from '../common/bus';
 export default {
     data() {
         return {
-            collapse: false,
+            collapse: true,
             items: [
                 // {
                 //     icon: 'el-icon-menu',
@@ -151,38 +151,36 @@ export default {
             ],
             //Andon页面内容
             item_andon:[
-                 {
-                    icon: 'el-icon-s-opportunity',
-                    index: '4',
-                    title: 'Andon',
-                    subs:[
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'Andon',
-                            title: '安灯信息汇总'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonNum',
-                            title: '安灯数量'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonCate',
-                            title: '安灯类别'
-                        },
-                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'TopIssue',
-                            title: 'Top Issues'
-                        },
                         {
-                            icon:'el-icon-s-marketing',
-                            index: 'AndonStatus',
-                            title: '安灯状态'
-                        }
-                    ]
-                }
+                        icon:'el-icon-info',
+                        index: 'Andon',
+                        title: '安灯信息汇总'
+                    },
+                        {
+                        icon:'el-icon-files',
+                        index: 'AndonNum',
+                        title: '安灯数量'
+                    },
+                        {
+                        icon:'el-icon-folder',
+                        index: 'AndonCate',
+                        title: '安灯类别'
+                    },
+                        {
+                        icon:'el-icon-question',
+                        index: 'TopIssue',
+                        title: 'Top Issues'
+                    },
+                    {
+                        icon:'el-icon-share',
+                        index: 'AndonStatus',
+                        title: '安灯状态'
+                    },
+                    {
+                        icon:'el-icon-notebook-1',
+                        index: 'AndonLog',
+                        title: '安灯历史'
+                    }
             ],
             //OEE页面内容
             item_oee:[
@@ -195,7 +193,7 @@ export default {
             //生产计划页面
             item_prodPlan:[
                 {
-                    icon: 'el-icon-data-analysis',
+                    icon: 'el-icon-document-checked',
                     index: 'OrderMaking',
                     title: '订单下达'
                 },
@@ -208,20 +206,20 @@ export default {
             //工单管理页面内容
             item_workRep:[
                  {
-                    icon: 'el-icon-data-analysis',
+                    icon: 'el-icon-tickets',
                     index: 'WorkReport',
                     title: '工单管理'
                 },
                 {
-                    icon: 'el-icon-data-analysis',
+                    icon: 'el-icon-document',
                     index: 'ReportOverview',
                     title: '工单总览'
                 },
             ], 
-            //工单管理页面内容
+            //工艺维护页面内容
             item_gyMaint:[
                 {
-                    icon: 'el-icon-data-analysis',
+                    icon: 'el-icon-set-up',
                     index: 'GYMaintance',
                     title: '工艺维护'
                 },

@@ -63,6 +63,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/AndonStatus.vue'),
                     meta: { title: '安灯状态' }
                 },
+                {
+                    path: '/AndonLog',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/AndonMenu/AndonLog.vue'),
+                    meta: { title: '安灯历史' }
+                },
                 // {
                 //     path: '/table',
                 //     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),

@@ -5,7 +5,7 @@
             <el-button type="primary" @click="clrKey()">清除</el-button>
             <el-button type="primary" @click="cfmKey()" :disabled="key.length==0">初始化该密令</el-button>
         </el-card>
-        <el-card>
+        <el-card style="height:300px">
             <div class="keyStyle">{{key}}</div>
         </el-card>
         <el-card>
@@ -88,3 +88,12 @@ export default {
     }
 }
 </script>
+<style scoped>
+.keyStyle{
+    font-weight:bold;
+    font-size:200px;
+    text-align:center;
+    line-height:300px;
+    color:rgba(43, 62, 114, 0.6)
+}
+</style>

@@ -14,7 +14,7 @@
                 </router-link>
 
                  <router-link to="/PwdModify">
-                    <div class="man-btn" type="button">修改密码</div>
+                    <div class="man-btn" type="button">修改密码(已经弃用了，修改密码在用户管理处)</div>
                 </router-link>
 
                  <router-link to="/CreateKey">
