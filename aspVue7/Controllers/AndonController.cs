@@ -125,11 +125,49 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<andonSts> andonStatus(){
             var model = new BorgWarnerMisSQLContext();
-            // var p1 = prm.date;
-            // var p2 = prm.dateunit;
-            // var p3 = prm.status;
             var testData = model.Database.SqlQuery<andonSts>("select * from dbo.qforAndonGeneral where 当前状态 != 4").ToList();
             return testData; 
+        }
+        [HttpPost("[action]")]
+        public List<logRes> logSrh([FromBody] logPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<logRes>($"execute dbo.QforAndonLogSrh @srh='{prm.srh}'").ToList();
+            return testData; 
+        }
+        //按灯历史查询参数
+        public class logPrm{
+            public string srh{get;set;}
+        }
+        //按灯历史结果参数
+        public class logRes{
+            public string 是否停线{get;set;}
+            public string 工作中心{get;set;}
+            public string 设备编号{get;set;}
+            public int 问题类别{get;set;}
+            public string 问题描述{get;set;}
+            public string 按灯人{get;set;}
+            public DateTime 按灯时间{get;set;}
+            public string 处理人{get;set;}
+            public DateTime 处理时间{get;set;}
+            public bool 临时解决{get;set;}
+            public string 不能解决原因{get;set;}
+            public string 行动计划{get;set;}
+            public DateTime 计划完成日期{get;set;}
+            public string 退回人{get;set;}
+            public DateTime 退回时间{get;set;}
+            public string 退回原因{get;set;}
+            public string 关闭人{get;set;}
+            public DateTime 关闭时间{get;set;}
+            public string 确认人{get;set;}
+            public DateTime 确认时间{get;set;}
+            public string 不合格单号{get;set;}
+            public string 报修单号{get;set;}
+            public string 报工单号{get;set;}
+            public string 安灯编号{get;set;}
+            public int 当前状态{get;set;}
+            public int 是否推送{get;set;}
+            public int 提醒阶段{get;set;}
+            public DateTime 提醒时间{get;set;}
         }
         //按灯类别，按灯信息汇总 参数 front -> end
         public class queryPrm{

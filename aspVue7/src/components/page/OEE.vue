@@ -768,7 +768,7 @@ export default {
             })
         },
         getTab2Data(prm){
-             this.stopRec = [];
+            this.stopRec = [];
             fetch('api/Chartdata/tab2',{
                 method:'POST',
                 headers:{

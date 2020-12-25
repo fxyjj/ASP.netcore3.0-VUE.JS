@@ -83,7 +83,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<stopRes> planStop([FromBody] stopPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPlanStop @workNo='{prm.workNo}',@stopType='{prm.stopType}',@sStart='{prm.stopBegin}',@eTime='{prm.stopEnd}',@sMan='{prm.sMan}'").ToList();
+            var testData = model.Database.SqlQuery<stopRes>($"EXECUTE dbo.QforPlanStop @workNo='{prm.workNo}',@stopType='{prm.stopType}',@sStart='{prm.stopBegin}',@eTime='{prm.stopEnd}',@sMan='{prm.sMan}',@tips='{prm.tips}'").ToList();
             return testData;
         }
 
@@ -287,7 +287,7 @@ namespace aspVue7.Controllers
         [HttpPost("[action]")]
         public List<BGDViewRes> BGDView([FromBody] BGDViewPrm prm){
             var model = new BorgWarnerMisSQLContext();
-            var testData = model.Database.SqlQuery<BGDViewRes>($"select * from qforOrderDailySheetAS where 加工单元='{prm.line}' and cast(班次日期 as date) between cast(dbo.dateTransfer('{prm.pdateS}') as date) and cast(dbo.dateTransfer('{prm.pdateE}') as date) order by 班次日期").ToList();
+            var testData = model.Database.SqlQuery<BGDViewRes>($"select * from qforOrderDailySheetAS where 加工单元='{prm.line}' and cast(班次日期 as date) between cast(dbo.dateTransfer('{prm.pdateS}') as date) and cast(dbo.dateTransfer('{prm.pdateE}') as date) order by 班次日期 desc").ToList();
             return testData;
         }
         //报工单编辑信息
@@ -303,6 +303,22 @@ namespace aspVue7.Controllers
             var testData = model.Database.SqlQuery<blpStoreRes>($"execute QforBGDDelete @bgNo='{prm.bgNo}'").ToList();
             return testData;
         }
+        [HttpPost("[action]")]
+        public List<failRec> getFailLog([FromBody] tabPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<failRec>($"select * from dbo.qforFailRec where 报工编号='{prm.bgNo}'").ToList();
+            return testData;
+        }
+        [HttpPost("[action]")]
+        public List<stopRec> getStopLog([FromBody] tabPrm prm){
+            var model = new BorgWarnerMisSQLContext();
+            var testData = model.Database.SqlQuery<stopRec>($"select * from dbo.qforOrderEDownRecordBrowse where 报工编号='{prm.bgNo}'").ToList();
+            return testData;
+        }
+    }
+
+    public class tabPrm{
+        public string bgNo{get;set;}
     }
     public class BGDeditPrm{
         public  string bgNo{get;set;}
@@ -766,6 +782,7 @@ namespace aspVue7.Controllers
         public string sMan{get;set;}
         public string sbNo{get;set;}
         public string stopDesc{get;set;}
+        public string tips{get;set;}
     }
     //非/计划停机结果
     public class stopRes{

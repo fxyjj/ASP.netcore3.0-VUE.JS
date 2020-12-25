@@ -540,7 +540,7 @@ export default {
                             sts = "处理完成";
                             break;
                     }
-                    this.tableData.push({number:item.序号,status:item.是否停线,station:item.工作中心,equipNum:item.设备编号,type:item.类别描述,probDesc:item.问题描述,andonTime:item.按灯时间,respTime:item.响应时间,time:item.持续时间,currStatus:sts,respMan:item.处理人});
+                    this.tableData.push({number:item.序号,status:item.是否停线,station:item.工作中心,equipNum:item.设备编号,type:item.类别描述,probDesc:item.问题描述,andonTime:item.按灯时间.substr(0,19),respTime:item.响应时间,time:item.持续时间,currStatus:sts,respMan:item.处理人});
                 }
                 if(this.lightBuffer.length == 0){
                      console.log("if-true")

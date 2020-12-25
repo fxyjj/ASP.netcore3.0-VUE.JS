@@ -13,58 +13,59 @@
             <el-button type="primary" @click="query()">查询</el-button>
             <el-button type="primary" @click="expTab()">导出当前工单表</el-button>
         </el-card>
-        <el-card>
-            <el-table :data="bgTab" style="width: 100%" border fit>
-                <el-table-column prop="bgNo" label="报工编号" width="180"></el-table-column>
-                <el-table-column prop="prodDate" label="生产日期" width="180"></el-table-column>
-                <el-table-column prop="clsDate" label="班次日期" width="180"></el-table-column>
-                <el-table-column prop="workUnit" label="加工单元" width="120"></el-table-column>
-                <el-table-column prop="cls" label="所属班组"></el-table-column>
-                <el-table-column prop="workMan" label="加工人员"></el-table-column>
-                <el-table-column prop="workNo" label="作业单号" width="150"></el-table-column>
-                <el-table-column prop="wlNo" label="物料编号" width="150"></el-table-column>
-                <el-table-column prop="wlDesc" label="物料描述" width="220"></el-table-column>
-                <el-table-column prop="proceNo" label="工序号"></el-table-column>
-                <el-table-column prop="proceName" label="工序名称"></el-table-column>
-                <el-table-column prop="fixNum" label="定额件数"></el-table-column>
-                <el-table-column prop="testStime" label="调试开始时间" width="180"></el-table-column>
-                <el-table-column prop="testTime" label="调试时间"></el-table-column>
-                <el-table-column prop="workStime" label="作业开始时间" width="180"></el-table-column>
-                <el-table-column prop="workEtime" label="作业完工时间" width="180"></el-table-column>
-                <el-table-column prop="planStime" label="计划停机时间" width="120"></el-table-column>
-                <el-table-column prop="unplanStime" label="非计划停机时间" width="120"></el-table-column>
-                <el-table-column prop="doneNum" label="完工数量"></el-table-column>
-                <el-table-column prop="passNum" label="合格数量"></el-table-column>
-                <el-table-column prop="failNum" label="不良数量"></el-table-column>
-                <el-table-column prop="lf" label="料废"></el-table-column>
-                <el-table-column prop="jf" label="机废"></el-table-column>
-                <el-table-column prop="df" label="调废"></el-table-column>
-                <el-table-column prop="gf" label="工废"></el-table-column>
-                <el-table-column prop="dcl" label="待处理"></el-table-column>
-                <el-table-column prop="thryTime" label="理论时间"></el-table-column>
-                <el-table-column prop="pWorkTime" label="计划工作时间" width="120"></el-table-column>
-                <el-table-column prop="opsTime" label="操作时间"></el-table-column>
-                <el-table-column prop="fixProdNum" label="定额产量"></el-table-column>
-                <el-table-column prop="passRate" label="合格率"></el-table-column>
-                <el-table-column prop="manEff" label="员工效率"></el-table-column>
-                <el-table-column prop="eqpEff" label="设备开动率" width="100"></el-table-column>
-                <el-table-column prop="prodMan" label="生产人数"></el-table-column>
-                <el-table-column prop="fixMan" label="定额人数"></el-table-column>
-                <el-table-column prop="oee" label="OEE"></el-table-column>
-                <el-table-column prop="cgroup" label="工作组" width="150"></el-table-column>
-                <el-table-column prop="status" label="状态"></el-table-column>
-                <el-table-column prop="bgCate" label="报工类别"></el-table-column>
-                <el-table-column prop="testEtime" label="调试结束时间" width="180"></el-table-column>
-                <el-table-column prop="test2done" label="调试到完工" width="100"></el-table-column>
-                <el-table-column prop="work2done" label="作业到完工" width="100"></el-table-column>
-                <el-table-column prop="ordType" label="订单类型"></el-table-column>
-                <el-table-column prop="repassNum" label="返工合格数量" width="120"></el-table-column>
-                <el-table-column prop="ftt" label="一次合格率" width="100"></el-table-column>
-                <el-table-column prop="tjl" label="停机率"></el-table-column>
-                <el-table-column fixed="right" label="操作" width="150px" >
+        <el-card style="height:900px">
+            <el-table :data="bgTab" style="width: 100%;font-size:20px" border fit height="800px">
+                <el-table-column prop="bgNo" label="报工编号" width="220" align=center ></el-table-column>
+                <el-table-column prop="prodDate" label="生产日期" width="220" align=center></el-table-column>
+                <el-table-column prop="clsDate" label="班次日期" width="220" align=center></el-table-column>
+                <el-table-column prop="workUnit" label="加工单元" width="180" align=center></el-table-column>
+                <el-table-column prop="cls" label="所属班组" width="160" align=center></el-table-column>
+                <el-table-column prop="workMan" label="加工人员" width="160" align=center></el-table-column>
+                <el-table-column prop="workNo" label="作业单号" width="200" align=center></el-table-column>
+                <el-table-column prop="wlNo" label="物料编号" width="200" align=center></el-table-column>
+                <el-table-column prop="wlDesc" label="物料描述" width="280" align=center></el-table-column>
+                <el-table-column prop="proceNo" label="工序号" width="100" align=center></el-table-column>
+                <el-table-column prop="proceName" label="工序名称" width="160" align=center></el-table-column>
+                <el-table-column prop="fixNum" label="定额件数" width="160" align=center></el-table-column>
+                <el-table-column prop="testStime" label="调试开始时间" width="220" align=center></el-table-column>
+                <el-table-column prop="testTime" label="调试时间" width="160" align=center></el-table-column>
+                <el-table-column prop="workStime" label="作业开始时间" width="220" align=center></el-table-column>
+                <el-table-column prop="workEtime" label="作业完工时间" width="220" align=center></el-table-column>
+                <el-table-column prop="planStime" label="计划停机时间" width="220" align=center></el-table-column>
+                <el-table-column prop="unplanStime" label="非计划停机时间" width="250" align=center></el-table-column>
+                <el-table-column prop="doneNum" label="完工数量" width="160" align=center></el-table-column>
+                <el-table-column prop="passNum" label="合格数量" width="160" align=center></el-table-column>
+                <el-table-column prop="failNum" label="不良数量" width="160" align=center></el-table-column>
+                <el-table-column prop="lf" label="料废" align=center></el-table-column>
+                <el-table-column prop="jf" label="机废" align=center></el-table-column>
+                <el-table-column prop="df" label="调废" align=center></el-table-column>
+                <el-table-column prop="gf" label="工废" align=center></el-table-column>
+                <el-table-column prop="dcl" label="待处理" width="100" align=center></el-table-column>
+                <el-table-column prop="thryTime" label="理论时间" width="160" align=center></el-table-column>
+                <el-table-column prop="pWorkTime" label="计划工作时间" width="220" align=center></el-table-column>
+                <el-table-column prop="opsTime" label="操作时间" width="160" align=center></el-table-column>
+                <el-table-column prop="fixProdNum" label="定额产量" width="160" align=center></el-table-column>
+                <el-table-column prop="passRate" label="合格率" width="160" align=center></el-table-column>
+                <el-table-column prop="manEff" label="员工效率" width="160" align=center></el-table-column>
+                <el-table-column prop="eqpEff" label="设备开动率" width="150" align=center></el-table-column>
+                <el-table-column prop="prodMan" label="生产人数" width="160" align=center></el-table-column>
+                <el-table-column prop="fixMan" label="定额人数" width="160" align=center></el-table-column>
+                <el-table-column prop="oee" label="OEE" align=center></el-table-column>
+                <el-table-column prop="cgroup" label="工作组" width="150" align=center></el-table-column>
+                <el-table-column prop="status" label="状态" align=center></el-table-column>
+                <el-table-column prop="bgCate" label="报工类别" width="160" align=center></el-table-column>
+                <el-table-column prop="testEtime" label="调试结束时间" width="220" align=center></el-table-column>
+                <el-table-column prop="test2done" label="调试到完工" width="150" align=center></el-table-column>
+                <el-table-column prop="work2done" label="作业到完工" width="150" align=center></el-table-column>
+                <el-table-column prop="ordType" label="订单类型" width="160" align=center></el-table-column>
+                <el-table-column prop="repassNum" label="返工合格数量" width="150" align=center></el-table-column>
+                <el-table-column prop="ftt" label="一次合格率" width="150" align=center></el-table-column>
+                <el-table-column prop="tjl" label="停机率" width="160" align=center></el-table-column>
+                <el-table-column fixed="right" label="操作" width="220px" >
                     <template slot-scope="scope">
-                        <el-button @click="bgEdit(scope.row)" style="background:#F5F5F5;" size="small">编辑</el-button>
-                        <el-button size="small" style="background:#F5F5F5;" @click="bgDel(scope.row)">删除</el-button>
+                        <el-button @click="bgEdit(scope.row)" style="background:#F5F5F5;" >编辑</el-button>
+                        <el-button @click="bgView(scope.row)" style="background:#F5F5F5;" >总览</el-button>
+                        <el-button style="background:#F5F5F5;" @click="bgDel(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -209,6 +210,87 @@
             <el-button type="primary" @click="delCfm()">确定</el-button>
             <el-button @click="delCancel()">取消</el-button>
         </el-dialog>
+        <!--日报工单总览-->
+         <el-dialog :visible.sync="showTab" title="日报工单总览" :key="timer" width="1550px" :before-close="gdzlClose">
+                <div class="dialogDisp">
+                    <div class="basicInfo" style="color:#000"><!--background:#BFBFBF;border:1px solid #012468-->
+                        <el-row>
+                            <el-col :span="18">
+                                <el-row>
+                                    <el-col :span="6" ><div class="tip"> <p>报工编号：{{bgNo}}</p></div> </el-col>
+                                    <el-col :span="4"><div class="tip"><p>加工人：{{maniMan}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>物料名称：{{name}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>一次合格率(FTT)：{{ftt}}%</p></div></el-col>
+                                </el-row> 
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>生产日期：{{birth}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>所属班组：{{bclass}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>作业单号：{{workNo}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>设备开动率(A)：{{a}}%</p></div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>物料号：{{wlNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>工序：{{procedure}} {{proceName}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>待处理：{{wHandle}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>员工效率(P)：{{p}}%</p></div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>完工数量：{{doneNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>合格数量：{{passNo}}</p></div></el-col>
+                                    <el-col :span="9"><div class="tip"><p>返工合格数量：{{rePassNo}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>合格率(Q)：{{q}}%</p></div></el-col>
+                                    
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6"><div class="tip"><p>不合格数量：{{failNo}}</p></div></el-col>
+                                    <el-col :span="4"><div class="tip"><p>料废：{{lf}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>机废：{{jf}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>调废：{{df}}</p></div></el-col>
+                                    <el-col :span="3"><div class="tip"><p>工废：{{gf}}</p></div></el-col>
+                                    <el-col :span="5"><div class="tip"><p>OEE(A*P*Q)：{{apq}}%</p></div></el-col>
+                                </el-row>
+                            </el-col>
+                            <!-- <el-col :span="6">
+                                <div id="pieChart" :style='{width:"100%",height:"150px"}'></div>
+                                <i class="el-icon-info" style="-user-selection:none;cursor:pointer;"  @click="oeeFcn()"></i>
+                            </el-col> -->
+                        </el-row>
+                    </div>
+
+                    <h3>不合格记录</h3>
+                    <el-table :data="failedRec" border style="width: 100%;margin:1% 0% ;font-size:16px" height="240" highlight-current-row>
+                        <el-table-column fixed prop="label" label="序号" width="100" > </el-table-column>
+                        <el-table-column prop="txdate" label="填写日期" width="200"></el-table-column>
+                        <el-table-column prop="pline" label="生产线" width="200"></el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="150"> </el-table-column>
+                        <el-table-column prop="failDesc" label="不合格描述" width="300"> </el-table-column>
+                        <el-table-column prop="failNum" label="不良数量" width="120"> </el-table-column>
+                        <el-table-column prop="shitNo" label="报废数" width="120"></el-table-column>
+                        <el-table-column prop="rePassNo" label="返工合格数量" width="120"></el-table-column>
+                        <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
+                        <el-table-column prop="failNo" label="不合格单号" width="200"> </el-table-column>
+                        <el-table-column prop="workNo" label="作业单号" width="120"> </el-table-column>
+                        <el-table-column prop="wlNo" label="物料编号" width="120"> </el-table-column>
+                        <el-table-column prop="wlDesc" label="物料描述" width="120"> </el-table-column>
+                        <el-table-column prop="downNum" label="降级数" width="120"></el-table-column>
+                        <el-table-column prop="sftNum" label="偏差数" width="120"></el-table-column>
+                        <el-table-column prop="passNum" label="合格数" width="120"> </el-table-column>
+                        <el-table-column prop="status" label="状态" width="120"> </el-table-column>
+                        <el-table-column prop="bgNo" label="报工编号" width="200"> </el-table-column>
+                    </el-table>
+                    <h3>停机记录</h3>
+                    <el-table :data="stopRec" border style="width: 100%;margin:1% 0%;font-size:16px" height="240" highlight-current-row>
+                        <el-table-column fixed prop="stopType" label="停机类型" width="100"> </el-table-column>
+                        <el-table-column prop="sbNo" label="设备编号" width="130"></el-table-column>
+                        <el-table-column prop="stopDesc" label="停机描述" width="300"></el-table-column>
+                        <el-table-column prop="stopBegin" label="停机开始" width="300"> </el-table-column>
+                        <el-table-column prop="stopEnd" label="停机结束" width="300"> </el-table-column>
+                        <el-table-column prop="testPause" label="调试暂停" width="120"> </el-table-column>
+                        <el-table-column prop="writeMan" label="填写人" width="120"> </el-table-column>
+                        <el-table-column prop="stopTime" label="停机时间" width="120"> </el-table-column>
+                    </el-table>
+                </div>
+            </el-dialog>
     </div>
 </template>
 
@@ -350,7 +432,40 @@ export default {
                 repassNum:[{required:true,type:'number',message:'反攻合格数量不能为空',trigger:'blur'}],
                 clsDate:[{required:true,message:'班次日期不能为空',trigger:'blur'}],
                 prodMan:[{required:true,message:'生产人数不能为空！',trigger:'blur'}]
-            }
+            },
+            //工单总览弹窗控制器
+            showTab:false,
+            //工单纵览弹窗参数
+            bgNo:'',
+            maniMan:'',
+            name:'',
+            ftt:null,
+            birth:'',
+            bclass:'',
+            workNo:'',
+            a:null,
+            wlNo:'',
+            procedure:null,
+            proceName:'',
+            wHandle:null,
+            p:null,
+            doneNo:null,
+            passNo:null,
+            rePassNo:null,
+            q:null,
+            failNo:null,
+            lf:null,
+            jf:null,
+            gf:null,
+            df:null,
+            apq:null,
+            //不合格记录表格
+            failedRec:[],
+            //停机记录
+            stopRec:[],
+
+
+
         }
     },
     methods:{
@@ -655,7 +770,118 @@ export default {
             this.bgDelVis = false;
         },
         delClose(done){
-            his.$confirm('确认关闭？')
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+        },
+        bgView(row){
+            this.showTab = true;
+            this.bgNo=row.bgNo
+            this.maniMan=row.workMan
+            this.name=row.wlDesc
+            this.ftt=row.ftt
+            this.birth=row.prodDate
+            this.bclass=row.cls
+            this.workNo=row.workNo
+            this.a=row.eqpEff
+            this.wlNo=row.wlNo
+            this.procedure=row.proceNo
+            this.proceName=row.proceName
+            this.wHandle=row.dcl
+            this.p=row.manEff
+            this.doneNo=row.doneNum
+            this.passNo=row.passNum
+            this.rePassNo=row.repassNum
+            this.q=row.passRate
+            this.failNo=row.failNum
+            this.lf=row.lf
+            this.jf=row.jf
+            this.gf=row.gf
+            this.df=row.df
+            this.apq=(((row.eqpEff/100)*(row.manEff/100)*(row.passRate/100))*100).toFixed(2)
+            this.zlgetTab1(row.bgNo)
+            this.zlgetTab2(row.bgNo)
+        },
+        zlgetTab1(prm){
+            this.failedRec = [];
+            fetch('api/WorkReport/getFailLog',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    bgNo:prm
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length==0){
+                    return;
+                }
+                for(var item of data){
+                    var indx = {
+                        label:item.序号,
+                        txdate:item.填写日期,
+                        pline:item.生产线,
+                        sbNo:item.设备编号,
+                        failDesc:item.不合格描述,
+                        failNum:item.不良数量,
+                        shitNo:item.报废数,
+                        rePassNo:item.返工合格数,
+                        writeMan:item.填写人,
+                        failNo:item.不合格单号,
+                        workNo:item.作业单号,
+                        wlNo:item.物料编号,
+                        wlDesc:item.物料描述,
+                        downNum:item.降级数,
+                        sftNum:item.偏差数,
+                        passNum:item.合格数,
+                        status:item.状态,
+                        bgNo:item.报工编号
+                    }
+                    this.failedRec.push(indx)
+                }
+
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        zlgetTab2(prm){
+            this.stopRec = [];
+            fetch('api/WorkReport/getStopLog',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    bgNo:prm
+                })
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.length==0){
+                    return;
+                }
+                for(var item of data){
+                    var indx = {
+                        stopType:item.停机类型,
+                        sbNo:item.设备编号,
+                        stopDesc:item.停机描述,
+                        stopBegin:item.停机开始,
+                        stopEnd:item.停机结束,
+                        testPause:item.调试暂停,
+                        writeMan:item.填写人,
+                        stopTime:item.停机
+                    }
+                    this.stopRec.push(indx)
+                }
+
+            }).catch(data=>{
+                alert(data)
+            })
+        },
+        gdzlClose(done){
+            this.$confirm('确认关闭？')
             .then(_ => {
                 done();
             })
@@ -664,3 +890,12 @@ export default {
     }
 }
 </script>
+<style scoped>
+.tip{
+    margin:5px;
+    font-size:18px;
+    color:rgba(0,0,0,0.7)
+    /* border-bottom:5px double rgba(0,0,0,0.5); */
+}
+
+</style>

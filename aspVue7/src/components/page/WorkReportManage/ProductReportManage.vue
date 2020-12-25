@@ -101,7 +101,7 @@
                                         <el-select v-model="prodCgp" placeholder="所属班组" style="margin:10px 0px">
                                             <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
                                         </el-select>
-                                        <el-date-picker v-model="prodStime" type="date" value-format="yyyy-MM-dd" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
+                                        <el-date-picker v-model="prodStime" type="date" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
                                         <el-date-picker v-model="workStime" type="datetime" placeholder="作业开始时间" style="width:96%"></el-date-picker>
                                         <el-button type="primary" @click="prodComfirm()" style="width:100%;margin:10px 0px">确认</el-button>
                                     </el-card>
@@ -112,7 +112,7 @@
                                 <div class="bgd">作业开始时间</div>
                                 <div class="bgd">{{scStart}}</div>
                                 <div class="bgd">生产日期</div>
-                                <div class="bgd">{{scDate}}</div>
+                                <div class="bgd">{{scDate.substr(0,10)}}</div>
                             </el-card>
                         </el-col>
                         <el-col :span="1"><div style="visibility:hidden">无用工具</div></el-col>
@@ -494,11 +494,14 @@
                         <el-option v-for="item in Stype" :key="item.label" :value="item.value">{{item.value}}</el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="备注" prop="tips">
+                    <el-input v-model="planForm.tips" style="width:220px"></el-input>
+                </el-form-item>
                  <el-form-item label="停机开始" prop="planSstime">
-                   <el-date-picker v-model="planForm.planSstime" type="datetime"  placeholder="选择日期" @change="defEndT"></el-date-picker><!---->
+                   <el-date-picker v-model="planForm.planSstime" type="datetime"  value-format="yyyy-MM-ddTHH:mm:ss" placeholder="选择日期" @change="defEndT"></el-date-picker><!---->
                 </el-form-item>
                 <el-form-item label="停机结束" prop="planSetime">
-                    <el-date-picker v-model="planForm.planSetime" type="datetime"  placeholder="选择日期" :disabled="planSable"></el-date-picker>
+                    <el-date-picker v-model="planForm.planSetime" type="datetime" value-format="yyyy-MM-ddTHH:mm:ss" placeholder="选择日期" :disabled="planSable"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="填写人" prop="planMan" >
                     <el-select v-model="planForm.planMan" @change="optrchge($event,0)" style="width:220px">
@@ -878,13 +881,13 @@
         <!-- 关闭报工单弹窗，一次机会允许修改调试结束和作业开始时间 -->
         <el-dialog title="关闭确认" :visible.sync="completeVis" :before-close="cmpletClose">
             <div>现在即将关闭当前报工单，您有且仅有一次机会来修改此前可能误录入的部分时间数据，如需修改，请先勾选修改，再按需输入新的时间吗，支持修改的时间包括调试结束时间和作业开始时间。如无需修改，点击确认，报工单将直接关闭</div>
-            <div>
-                <div style="margin:2%;display:inline-block">调试结束时间: </div>
+            <div style="visibility:hidden">
+                <div style="margin:2%;display:inline-block;">调试结束时间: </div>
                 <el-date-picker v-model="lastTestTime" type="datetime"  placeholder="选择日期" :disabled="!tsTimeMdf"></el-date-picker>
                 <el-checkbox v-model="tsTimeMdf" style="margin-left:2%">修改</el-checkbox>
             </div>
-            <div>
-                <div style="margin:2%;display:inline-block">作业开始时间: </div>
+            <div style="visibility:hidden">
+                <div style="margin:2%;display:inline-block;">作业开始时间: </div>
                 <el-date-picker v-model="lastStartTime" type="datetime"  placeholder="选择日期" :disabled="!sTimeMdf"></el-date-picker>
                 <el-checkbox v-model="sTimeMdf" style="margin-left:2%">修改</el-checkbox>
             </div>
@@ -1107,7 +1110,7 @@ export default {
             //调试卡片参数
             testMan:'',
             Cgroup:'',
-            testStart:'',
+            testStart:new Date(),
             //计时器参数
             Hr:0,
             Min:0,
@@ -1195,7 +1198,8 @@ export default {
                 planStype:'',
                 planSstime:'',
                 planSetime:'',
-                planMan:''
+                planMan:'',
+                tips:''
             },
             planRule:{
                 planStype:[{required:true,message:'停机类型为必须项！',trigger:'blur'}],
@@ -1962,7 +1966,7 @@ export default {
                                 this.duration = this.testForm.testTime;
                                 this.testMan = '',
                                 this.Cgroup = '',
-                                this.testStart = null,
+                                this.testStart = new Date(),
                                 this.$refs[formName].resetFields();
                                 this.bgStage = 3;
                             }else{
@@ -2126,6 +2130,8 @@ export default {
             }
         },
         planComfirm(formName){
+            console.log(this.planForm.planSstime)
+            console.log(this.planForm.planSetime)
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu" || localStorage.getItem("ms_username") == "eandon" || localStorage.getItem("ms_username") == "sophia" || localStorage.getItem("ms_username") == "oliver" || localStorage.getItem("ms_username") == "Aron"){
@@ -2139,13 +2145,14 @@ export default {
                                 stopType:this.planForm.planStype,
                                 stopBegin:this.planForm.planSstime,
                                 stopEnd:this.planForm.planSetime,
-                                sMan:this.planForm.planMan
+                                sMan:this.planForm.planMan,
+                                tips:this.planForm.tips
                             })
                         }).then(response=>response.json())
                         .then(data=>{
                             if(data[0].resSign){
                                 this.pauseType = "计划停机";
-                                this.pauseDesc = this.planForm.planStype;
+                                this.pauseDesc = this.planForm.planStype+" : "+this.planForm.tips;
                                 this.pauseMan = this.planForm.planMan;
                                 this.$refs['planForm'].resetFields();
                                 this.planVis = false;
@@ -2330,9 +2337,24 @@ export default {
                     default:
                         break;
                 }
-                this.planForm.planSstime=new Date(tmpS);
+                Date.prototype.Format = function (fmt) { //author: meizz 
+                    var o = {
+                        "M+": this.getMonth() + 1, //月份 
+                        "d+": this.getDate(), //日 
+                        "h+": this.getHours(), //小时 
+                        "m+": this.getMinutes(), //分 
+                        "s+": this.getSeconds(), //秒 
+                        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                        "S": this.getMilliseconds() //毫秒 
+                    };
+                    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                    for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    return fmt;
+                }
+                this.planForm.planSstime=new Date(tmpS).Format("yyyy-MM-ddThh:mm:ss");;
                 const tmpT = new Date(this.planForm.planSstime)
-                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
+                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n)).Format("yyyy-MM-ddThh:mm:ss");
 
             }else{
                 this.planSable = false;
@@ -2352,9 +2374,24 @@ export default {
                 }else if(this.planForm.planStype =="晨餐"){
                     n = 45
                 }
+                Date.prototype.Format = function (fmt) { //author: meizz 
+                    var o = {
+                        "M+": this.getMonth() + 1, //月份 
+                        "d+": this.getDate(), //日 
+                        "h+": this.getHours(), //小时 
+                        "m+": this.getMinutes(), //分 
+                        "s+": this.getSeconds(), //秒 
+                        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                        "S": this.getMilliseconds() //毫秒 
+                    };
+                    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                    for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    return fmt;
+                }
                 
                 const tmpT = new Date(this.planForm.planSstime)
-                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n));
+                this.planForm.planSetime = new Date(tmpT.setMinutes(tmpT.getMinutes()+n)).Format("yyyy-MM-ddThh:mm:ss");
             }else{
                 this.wtherFix = false;
             }
@@ -2455,7 +2492,7 @@ export default {
                                 this.blpForm.blpNum = '';
                                 this.blpForm.blpPos='';
                                 this.blpForm.blpFDesc = '';
-                                this.blpForm.blpRPsNum = '';
+                                this.blpForm.blpRPsNum = 0;
                                 this.blpForm.blpPreason = '';
                                 this.blpForm.blpTip='';
                             }else{
@@ -2509,7 +2546,7 @@ export default {
                                 this.blpForm.blpNum = null
                                 this.blpForm.blpPos = ''
                                 this.blpForm.blpFDesc=''
-                                this.blpForm.blpRPsNum=null
+                                this.blpForm.blpRPsNum=0
                                 this.blpForm.blpPreason=''
                                 this.blpForm.blpTip=''
                             }else{
