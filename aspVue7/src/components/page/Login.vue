@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <img src='../../assets/img/bwlogo.png' style="width:20%;margin:20px"/>
-        <div>version:20201224</div>
+        <div>version:20201228_2</div>
         <div class="ms-login" id="loginPage">
             
             <div class="ms-title">用户登录</div>

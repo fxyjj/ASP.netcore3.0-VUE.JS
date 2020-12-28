@@ -116,13 +116,14 @@ export default {
         },
         exportDate(){
             console.log("你想导出到excel")
+            this.$message.warning("Sean已经离职了（<.*_*.>）,该功能有望下一位实习生来实现")
         },
         handleClick(row){
             console.log(row)
             if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu"){
                 // this.deladNo = row.andonNo;
                 this.editVis = true;
-                 this.$message.warning("Sean还在努力开发中！敬请期待")
+                this.$message.warning("Sean还在努力开发中！敬请期待")
              }else{
                  this.$message.error("你没有权限！")
              }
@@ -132,7 +133,7 @@ export default {
             if(localStorage.getItem("ms_username") == "Sean" || localStorage.getItem("ms_username") == "Chuck Yu"){
                 this.deladNo = row.andonNo;
                 this.delVis = true;
-                //  this.$message.warning("Sean还在努力开发中！敬请期待")
+                this.$message.warning("Sean已经离职了（<.*_*.>）,该功能有望下一位实习生来实现")
              }else{
                  this.$message.error("你没有权限！")
              }

@@ -70,7 +70,7 @@
                                 <el-select v-model="Cgroup" placeholder="班组" style="margin-top:5%">
                                     <el-option v-for="item in clsName" :key="item.name" :value="item.name.substr(0,1)">{{item.name}}</el-option>
                                 </el-select>
-                                <el-date-picker v-model="testStart" type="datetime" placeholder="选择开始时间" style="margin:5% 0%;width:96%" ></el-date-picker>
+                                <el-date-picker v-model="testStart" type="datetime" value-format="yyyy-MM-ddTHH:mm:ss" placeholder="选择开始时间" style="margin:5% 0%;width:96%" ></el-date-picker>
                                 <el-row>
                                     <el-col :span="18">
                                         <div class="clock"><strong style="font-size:28px"><div v-if="Hr.toString().length==1" style="display:inline-block">0</div>{{Hr}}:<div v-if="Min.toString().length==1" style="display:inline-block">0</div>{{Min}}:<div v-if="Sec.toString().length==1" style="display:inline-block">0</div>{{Sec}}</strong></div>
@@ -101,8 +101,8 @@
                                         <el-select v-model="prodCgp" placeholder="所属班组" style="margin:10px 0px">
                                             <el-option v-for="item in clsName" :key="item.name" :value="item.name">{{item.name}}</el-option>
                                         </el-select>
-                                        <el-date-picker v-model="prodStime" type="date" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
-                                        <el-date-picker v-model="workStime" type="datetime" placeholder="作业开始时间" style="width:96%"></el-date-picker>
+                                        <el-date-picker v-model="prodStime" type="date" value-format="yyyy-MM-dd" placeholder="生产日期" style="width:96%;margin-bottom:10px"></el-date-picker>
+                                        <el-date-picker v-model="workStime" type="datetime" value-format="yyyy-MM-ddTHH:mm:ss" placeholder="作业开始时间" style="width:96%"></el-date-picker>
                                         <el-button type="primary" @click="prodComfirm()" style="width:100%;margin:10px 0px">确认</el-button>
                                     </el-card>
                             </div>
@@ -323,7 +323,7 @@
                     <el-input v-model="testForm.workNo" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="调试结束时间" prop="testEtime">
-                    <el-date-picker v-model="testForm.testEtime" type="datetime"  placeholder="选择日期" style="width:100%"></el-date-picker>
+                    <el-date-picker v-model="testForm.testEtime" type="datetime" value-format="yyyy-MM-ddTHH:mm:ss" placeholder="选择日期" style="width:100%"></el-date-picker>
                 </el-form-item>
                  <el-form-item label="调试累计用时" prop="testTime">
                     <el-input v-model.number="testForm.testTime"></el-input>
@@ -677,7 +677,7 @@
                 </el-form-item>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="是否停线" prop="sbStop">
+                        <el-form-item label="是否停机" prop="sbStop">
                             <el-select v-model="sbForm.sbStop" :disabled="sbInputVis">
                                 <el-option  v-for="item in sbP" :key="item.value" :value="item.value">{{item.value}}</el-option>
                             </el-select>
@@ -768,7 +768,7 @@
                         </el-form-item>
                     </el-col>
                      <el-col :span="8">
-                        <el-form-item label="是否停线" prop="othStop">
+                        <el-form-item label="是否停机" prop="othStop">
                             <el-select v-model="otherForm.othStop" :disabled="othInputVis">
                                 <el-option  v-for="item in sbP" :key="item.value" :value="item.value">{{item.value}}</el-option>
                             </el-select>
@@ -825,7 +825,7 @@
                 <el-table-column prop="AdshutTime" label="关闭时间" width="180"></el-table-column>
                 <el-table-column prop="AdStation" label="工作中心" width="180"></el-table-column>
                 <el-table-column prop="AdDuration" label="处理用时" width="180"></el-table-column>
-                <el-table-column prop="AdStop" label="是否停线" width="180"></el-table-column>
+                <el-table-column prop="AdStop" label="是否停机" width="180"></el-table-column>
                 <el-table-column prop="AdFns" label="临时解决" width="180"></el-table-column>
                 <el-table-column prop="AdPlan" label="行动计划" width="180"></el-table-column>
                 <el-table-column prop="AdFreason" label="不能解决原因" width="180"></el-table-column>
@@ -1349,8 +1349,8 @@ export default {
                       {label:1,value:'急'},
                       {label:2,value:'一般'},
                       {label:3,value:'不急'}],
-            sbP:[{label:0,value:'未停线'},
-                 {label:0,value:'已停线'}],
+            sbP:[{label:0,value:'未停机'},
+                 {label:0,value:'已停机'}],
             sbForm:{
                 sbworkNo:'',
                 sbStop:'',
@@ -1875,8 +1875,8 @@ export default {
                     this.$message.success("生产已开始！")
                     this.scworkMan = this.workMan;
                     this.scBZ = this.prodCgp;
-                    this.scStart = this.dateToString(this.workStime);
-                    this.scDate = this.dateToString(this.prodStime);
+                    this.scStart = this.workStime//this.dateToString(this.workStime);
+                    this.scDate = this.prodStime//this.dateToString(this.prodStime);
                     this.workMan = '';
                     this.prodCgp = '';
                     this.workStime = new Date();
@@ -1924,7 +1924,7 @@ export default {
             if(this.Hr != 0 || this.Min != 0 || this.Sec != 0){
                 this.testForm.workNo = this.ordNo;
                 this.testForm.testEtime = new Date();
-                this.testForm.testTime = this.Hr*60 + this.Min + this.Sec/60;
+                this.testForm.testTime = Math.ceil(this.Hr*60 + this.Min + this.Sec/60);
                 this.begin = false;
                 clearInterval(this.counter);
                 this.testVis = true
@@ -1959,8 +1959,8 @@ export default {
                             if(data[0].resSign){
                                 this.$message.success("调试已结束！");
                                 this.testVis=false;
-                                this.tStime = this.dateToString(this.testStart);
-                                this.tEtime = this.dateToString(this.testForm.testEtime);
+                                this.tStime = this.testStart//.substr(0,10)// this.dateToString(this.testStart);
+                                this.tEtime = this.testForm.testEtime//.substr(0,10)//this.dateToString(this.testForm.testEtime);
                                 this.tSman = this.testMan;
                                 this.tEman = this.testForm.testMan;
                                 this.duration = this.testForm.testTime;
@@ -2704,7 +2704,7 @@ export default {
                             }).then(response=>response.json())
                             .then(data=>{
                                 if(data[0].resSign){
-                                    if(!this.wtherStop && this.sbForm.sbStop=="已停线"){
+                                    if(!this.wtherStop && this.sbForm.sbStop=="已停机"){
                                         //停机状态打开
                                         this.wtherStop = true;
                                         this.pauseType = "设备停机"
@@ -2713,7 +2713,7 @@ export default {
                                         this.wtherZLP = true;
                                         this.$refs['sbForm'].resetFields();
                                         this.newAndonVis = false;
-                                        this.$message.success("设备安灯成功,现已停线。")
+                                        this.$message.success("设备安灯成功,现已停机。")
                                     }else{
                                         this.$refs['sbForm'].resetFields();
                                         this.newAndonVis = false;
@@ -2755,7 +2755,7 @@ export default {
                             }).then(response=>response.json())
                             .then(data=>{
                                 if(data[0].resSign){
-                                    if(!this.wtherStop && this.otherForm.othStop=="已停线"){
+                                    if(!this.wtherStop && this.otherForm.othStop=="已停机"){
                                         //停机状态打开
                                         this.wtherStop = true;
                                         this.pauseType = this.otherForm.othAndonT+"停机"
@@ -2764,7 +2764,7 @@ export default {
                                         this.wtherZLP = true;
                                         this.$refs['otherForm'].resetFields();
                                         this.newAndonVis = false;
-                                        this.$message.success(this.otherForm.othAndonT+"安灯成功,现已停线。")
+                                        this.$message.success(this.otherForm.othAndonT+"安灯成功,现已停机。")
                                     }else{
                                         this.$refs['otherForm'].resetFields();
                                         this.newAndonVis = false;
@@ -3075,7 +3075,7 @@ export default {
                             AdshutMan:item.关闭人,
                             AdshutTime:item.关闭时间,
                             AdStation:item.工作中心,
-                            AdStop:item.是否停线,
+                            AdStop:item.是否停机,
                             AdFns:item.临时解决,
                             AdPlan:item.行动计划,
                             AdFreason:item.不能解决原因,
@@ -3324,7 +3324,7 @@ export default {
                     this.sbForm.sbworkNo = this.ordNo
                     this.sbForm.sbStation = this.pLine;
                     if(this.wtherStop){
-                        this.sbForm.sbStop = "已停线"
+                        this.sbForm.sbStop = "已停机"
                         this.sbInputVis = true;
                     }
                 }else{
@@ -3334,7 +3334,7 @@ export default {
                     this.otherForm.othAndonT = msg.name;
                     this.otherForm.othStation = this.pLine;
                     if(this.wtherStop){
-                        this.otherForm.othStop = "已停线"
+                        this.otherForm.othStop = "已停机"
                         this.othInputVis = true;
                     }
                 }
